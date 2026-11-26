@@ -8,7 +8,7 @@
 |------|------|
 | 文档版本 | 不单独维护；以文件头最后复核日期与 git 历史为准 |
 | 作者 | 开发团队 |
-| 最后复核 | 2026-11-25 |
+| 最后复核 | 2026-11-26 |
 | 状态 | Current；承接 PRD 职责分离回归（从 PRD 迁入 Streak/ELO/SRS/反馈补救/Drill 题库等技术实现细节） |
 
 > **文档职责**：本文件描述技术实现细节（How）。产品规格见 `PRD.md`，版本演进与执行历史见 `CHANGELOG.md`。
@@ -39,7 +39,7 @@
 - [12. 部署方案](#12-部署方案)
 - [13. 扩展性设计](#13-扩展性设计)
 - [14. 样式系统与主题](#14-样式系统与主题)
-- [15. 设计决策记录](#15-设计决策记录)
+- [15. 技术设计决策索引](#15-技术设计决策索引)
 - [16. 工程规范](#16-工程规范)
 - [17. 课程区信息架构](#17-课程区信息架构)
 - [18. 测试体系](#18-测试体系)
@@ -67,7 +67,7 @@
 │        │                                      │              │
 │        ▼                                      ▼              │
 │  ┌─────────────────────────────────────────────────────┐     │
-│  │              Feature Modules (9 个)                  │     │
+│  │              Feature Modules                      │     │
 │  │  ┌───────────┐ ┌──────────┐ ┌───────────────┐      │     │
 │  │  │ Range     │ │ Pot Odds │ │ GTO Simulator │      │     │
 │  │  │ Trainer   │ │ Calc     │ │               │      │     │
@@ -139,7 +139,7 @@ src/
 │
 ├── features/                     # 功能模块（Feature-First）
 │   ├── range-trainer/            # 范围训练模块
-│   │   ├── components/           # UI 组件（11个）
+│   │   ├── components/           # UI 组件
 │   │   ├── hooks/                # 自定义 hooks（2个）
 │   │   ├── utils/                # 工具函数（2个）
 │   │   ├── constants.ts          # 预设范围常量
@@ -148,7 +148,7 @@ src/
 │   │   └── types.ts              # 模块类型
 │   │
 │   ├── pot-odds/                 # 赔率计算模块
-│   │   ├── components/           # UI 组件（8个）
+│   │   ├── components/           # UI 组件
 │   │   ├── hooks/                # 计算 hooks（2个）
 │   │   ├── utils/                # 工具函数
 │   │   ├── constants.ts          # 默认状态常量
@@ -157,7 +157,7 @@ src/
 │   │   └── types.ts
 │   │
 │   ├── gto-simulator/            # GTO 模拟器模块
-│   │   ├── components/           # UI 组件（9个）
+│   │   ├── components/           # UI 组件
 │   │   ├── hooks/                # 场景引擎 hooks（2个）
 │   │   ├── utils/                # 策略比较工具
 │   │   ├── data/                 # 预计算策略数据（JSON）
@@ -167,7 +167,7 @@ src/
 │   │   └── types.ts
 │   │
 │   ├── hand-history/             # 手牌历史模块
-│   │   ├── components/           # UI 组件（12个）
+│   │   ├── components/           # UI 组件
 │   │   ├── hooks/                # 回放 hook
 │   │   ├── parsers/              # 多格式解析器
 │   │   │   ├── common.ts         # 公共解析工具（detectFormat / parseCardString）
@@ -180,7 +180,7 @@ src/
 │   │   └── types.ts
 │   │
 │   └── progress/                 # 进度追踪模块
-│       ├── components/           # UI 组件（31 个，按功能分组）
+│       ├── components/           # UI 组件（按功能分组）
 │       │   ├── dashboard/        # Dashboard / ModuleStatsPanel / ModuleStatsPage / AccuracyChart
 │       │   ├── stats/            # GTOStatsPage / RangeStatsPage / WeaknessAnalysis / DifficultyIndicator
 │       │   ├── streak/           # StreakTracker / StreakCelebration / StreakRail
@@ -204,13 +204,13 @@ src/
 │       └── types.ts
 │
 │   ├── onboarding/                # 新手引导模块
-│   │   ├── components/            # 6 个步骤组件
+│   │   ├── components/            # 引导步骤组件
 │   │   ├── data/                  # 定位测试题库
 │   │   ├── index.ts
 │   │   └── types.ts
 │   │
 │   ├── puzzle-trainer/            # 扑克谜题模块
-│   │   ├── components/            # 6 个组件
+│   │   ├── components/            # 谜题界面组件
 │   │   ├── data/                  # 题库（dailyPuzzles / puzzleBank / rushQuestions）
 │   │   ├── hooks/                 # usePuzzleEngine
 │   │   ├── utils/                 # dateSeed / optionOrder
@@ -690,7 +690,7 @@ interface DailyRecommendation {
 **内部结构**：
 | 层 | 文件 | 职责 |
 |----|------|------|
-| components | RangeTrainerHome, RangeGrid, RangeCell 等 11 个 | 13×13 网格渲染、学习/测验界面 |
+| components | RangeTrainerHome, RangeGrid, RangeCell 等 | 13×13 网格渲染、学习/测验界面 |
 | hooks | useQuizEngine / useTimer 2 个 | 测验引擎 / 计时器 |
 | utils | handClassifier 等 2 个 | 手牌分类、格式转换 |
 | store | store.ts | 学习状态 + 测验状态管理 |
@@ -732,7 +732,7 @@ interface DailyRecommendation {
 6. **反馈闭环接入**（v2.1 新增）：
    - `useQuizEngine` 新增 `inferRelatedLessonId(position, actionType)` 工具函数，由 position+actionType 推导 `relatedLessonId`
    - `buildRangeFeedback` 调用时传入 `relatedLessonId`，wrong/blunder 级别在 QuizCard 显示"去复习"链接
-   - 自适应难度：`useQuizEngine` 读取 `progress.shouldDownshiftDifficulty(moduleType)` 判断是否降级，连续答错 ≥3 次时 `TrainingSession` 显示降级提示 banner
+   - 自适应难度：`useQuizEngine` 读取 `progress.shouldDownshiftDifficulty()` 判断是否降级，连续答错 ≥3 次时 `TrainingSession` 显示降级提示 banner
 
 ### 5.2 Pot Odds Calculator（赔率计算器）
 
@@ -741,7 +741,7 @@ interface DailyRecommendation {
 **内部结构**：
 | 层 | 文件 | 职责 |
 |----|------|------|
-| components | PotOddsPage, OddsCalculator, EVCalculator, EquityChart 等 8 个 | 计算器 UI、图表展示 |
+| components | PotOddsPage, OddsCalculator, EVCalculator, EquityChart 等 | 计算器 UI、图表展示 |
 | hooks | useOddsCalculation | 计算逻辑封装（useEquityEstimate 已于 2026-07-31 P1-B 作为死代码删除） |
 | store | store.ts | 输入状态管理（非持久化） |
 
@@ -774,7 +774,7 @@ interface DailyRecommendation {
 
 5. **Quiz 五级反馈与自适应难度**（v2.1 新增）：
    - `PotOddsQuizPage` 接入 `buildOddsFeedback`，输出 `DecisionFeedback`，按五级评级渲染（best/correct/inaccuracy/wrong/blunder）
-   - 连续答错 ≥3 次时调用 `progress.shouldDownshiftDifficulty('pot-odds')`，显示降级提示 banner
+   - 连续答错 ≥3 次时调用 `progress.shouldDownshiftDifficulty()`，显示降级提示 banner
 
 6. **trainingEvents.emit 合规**（v2.0 新增）：
    - `PotOddsQuizPage` 完成测验后调用 `trainingEvents.emit(record)`，progress store 自动收集训练记录
@@ -787,11 +787,13 @@ interface DailyRecommendation {
 **内部结构**：
 | 层 | 文件 | 职责 |
 |----|------|------|
-| components | GTOSimulatorHome, SpotTrainer, ScenarioSetup 等 9 个 | 场景配置、训练界面、结果展示 |
+| components | GTOSimulatorHome, SpotTrainer, ScenarioSetup 等 | 场景配置、训练界面、结果展示 |
 | hooks | useScenarioEngine, useGTOComparison | 场景生成、策略比较 |
 | utils | strategyCompare.ts | 核心比较算法 |
 | data | preflop-ranges.json | 预计算 GTO 策略频率数据 |
 | store | store.ts | 会话管理、反馈状态 |
+
+**当前变体边界**：`ScenarioSetup` 只开放标准与短牌入口，Heads-Up 尚未开放；`preflop-ranges.json` 的真实策略表只覆盖标准 6-max 100bb NLHE。短牌场景不得宣称与标准 NLHE 同等的真实求解覆盖，未覆盖 spot 必须走既有回退与诚实反馈口径。
 
 **关键算法**：
 
@@ -854,7 +856,7 @@ interface DailyRecommendation {
 8. **反馈闭环接入**（v2.1 新增）：
    - `GTOSessionPage` 根据 `scenario.street` 推导 `relatedLessonId`：preflop→`l4-gto-basics`, flop→`l3-cbet`, turn/river→`l3-multistreet`
    - 调用 `buildGtoFeedback` 时传入第三参数 `relatedLessonId`，wrong/blunder 显示"去复习"链接
-   - 连续答错 ≥3 次时调用 `progress.shouldDownshiftDifficulty('gto-simulator')`，显示降级提示 banner
+   - 连续答错 ≥3 次时调用 `progress.shouldDownshiftDifficulty()`，显示降级提示 banner
 
 9. **动作术语单一来源**（`utils/actionTerms.ts`）：
    - `ACTION_TERMS` 为 Fold / Check / Call / Raise / All-In 等动作术语的**唯一**常量出口，`actionTerm(action)` 与 `actionLabel(action, amount?)` 为渲染入口，模块内禁止再散落硬编码字面量
@@ -867,7 +869,7 @@ interface DailyRecommendation {
 **内部结构**：
 | 层 | 文件 | 职责 |
 |----|------|------|
-| components | HandHistoryList, HandReplayer, AnnotationPanel 等 12 个 | 列表、回放、标注 UI |
+| components | HandHistoryList, HandReplayer, AnnotationPanel 等 | 列表、回放、标注 UI |
 | hooks | useHandReplay | 回放控制 hook |
 | parsers | common.ts, pokerstars.ts, gg-poker.ts, partypoker.ts | 多格式解析器 |
 | store | store.ts | IndexedDB 持久化（getDB 单例） + 回放状态 + dbError 错误状态 |
@@ -918,10 +920,10 @@ interface DailyRecommendation {
 **内部结构**：
 | 层 | 文件 | 职责 |
 |----|------|------|
-| components | Dashboard, ProgressPage, AccuracyChart, AchievementWall, SessionLimitGuard, OnboardingGate 等 29 个 | 仪表盘、图表、成就、门禁 |
+| components | JourneyHome, ProgressPage, AccuracyChart, AchievementWall, SessionLimitGuard, OnboardingGate 等 | 学习路径、仪表盘、图表、成就、门禁 |
 | hooks | useProgress | 数据查询 hook |
 | utils | statsAggregator.ts, streakCalc.ts, learningWeakness.ts | 统计聚合、连击计算、近 30 天主题弱项派生 |
-| store | store.ts | persist 持久化 + 事件订阅 |
+| store | store.ts | localStorage persist（跨模块状态）+ IndexedDB 训练记录 + 事件订阅 |
 
 **关键算法**：
 
@@ -951,13 +953,10 @@ interface DailyRecommendation {
    - `getWeakHands(records, module)` → 找出答错最多的手牌
    - 平均用时计算：排除 `module === 'theory-academy'` 的记录（章末小测不记录耗时，averageTime 恒为 0，参与计算会拉低整体值）；三处聚合函数（`aggregateStats` / `aggregateByDay` / `aggregateByModule`）均执行此过滤
 
-3. **Zustand persist 中间件**：
-   ```typescript
-   export const useProgressStore = create<ProgressStore>()(
-     persist((set, get) => ({ ... }), { name: 'poker-training-progress' })
-   );
-   ```
-   自动序列化到 localStorage，应用刷新后恢复。
+3. **Zustand persist 与训练记录分层**：
+   - `poker-training-progress` 只持久化 `partialize` 后的跨模块状态与偏好；`records` 排除在 localStorage 之外，避免无上限数组每次全量 JSON 序列化。
+   - 训练记录写入独立 IndexedDB `poker-training-records` / `records`，内存保留 `records[]` 供实时统计；启动时异步回填，不阻塞首屏。
+   - 保存结果以 `RecordPersistResult.ok === true` 为准，失败记录进入运行态 pending 队列；重试只重写存储，不重新 emit 或评分。
 
 4. **雷达图/成就/难度系统**：
    - 雷达图展示各模块正确率（Recharts RadarChart）
@@ -976,7 +975,7 @@ interface DailyRecommendation {
    - 实现方式：内部检查 `lastTrainingDate === today` 或 `dailyCompleted[dateKey] === true`
 
 7. **成就系统**（v2.1 新增，2026-07 理论学院扩充）：
-   - 共 26 个成就，分 4 个类别：学习（Learning，10 个，含 4 项理论学院成就）/ 连续（Streak，5 个）/ 技能（Skill，6 个）/ 里程碑（Milestone，5 个）
+   - 成就分为学习 / 连续 / 技能 / 里程碑四类，具体条目与判定条件以 `progress/data/achievements.ts` 为唯一事实源
    - 每个成就归属四档等级体系（bronze / silver / gold / diamond）中的一档
    - 成就定义数据存储在 `progress/data/achievements.ts`
    - `AchievementWall` 组件展示成就墙，已解锁成就高亮，未解锁显示解锁条件
@@ -1083,7 +1082,7 @@ interface DailyRecommendation {
 8. **选项语义排序**（`utils/optionOrder.ts`）：`parseOptionSortKey(text)` 从选项文本解析（动作类别, 尺度），类别优先级 Fold < Check < Call < Limp < Bet/C-bet < Raise/3bet/4bet/5bet < 全下类，同类按 BB 数值升序；`sortOptionsCanonically(options)` 稳定排序。题库出口 `getAllPuzzles()` / `getPuzzlesByTheme()` 逐题应用（源题库静态数据不重排），详见 5.9 选项排序治理系统。
 
 9. **课程联动反馈**（v2.1 新增）：
-   - `usePuzzleEngine` 新增 `inferPuzzleLessonId(theme)` 工具函数，将 10 个主题映射到课程 ID（如 `preflop-rfi` → `l2-rfi-basics`）
+   - `usePuzzleEngine` 的 `inferPuzzleLessonId(theme)` 将主题映射到课程 ID（如 `preflop-rfi` → `l1-hand-selection`）
    - `PuzzleAnswerRecord` 类型新增 `relatedLessonId?: string` 字段
    - `PuzzleCard` 在 wrong/blunder 级别显示"去复习"链接，跳转对应课程
 
@@ -1093,7 +1092,7 @@ interface DailyRecommendation {
    - 每条 `result.details[]` 写入 `topic = question.theme` 与 `relatedLessonId = answer.relatedLessonId`，作为速训弱项回流的数据源；不直接更新 ELO / SRS
 
 11. **自适应难度接入**（v2.0 新增）：
-    - 三种模式（Rush / Daily / ThemeDrill）均调用 `progress.shouldDownshiftDifficulty('puzzle-trainer')` 检查是否需要降级
+    - 三种模式（Rush / Daily / ThemeDrill）均调用 `progress.shouldDownshiftDifficulty()` 检查是否需要降级
     - 连续答错 ≥3 次时显示降级提示 banner（i18n key: `puzzle.common.downshiftHint`）
 
 ### 5.8 Strategy Academy（策略学院）
@@ -1153,7 +1152,7 @@ interface DailyRecommendation {
 
 6. **能力评估（v8 收敛）**：用户可见能力画像以 `progress.eloByVariant` 为单一事实源；策略侧自适应难度只读 `recentPracticeResults`（由 `recordPracticeResult` 维护，cap 50）。`abilityAssessment` 随 v8 移除，不再有第二套能力值。
 
-7. **快速训练入口**：`QuickDrill` 组件接收 `quick=true` 参数进入快速模式（固定 5 题、自适应难度），`?quick=false` 为 8 题完整练习。题源仅限策略学院课程练习题库与到期 SRS 复习项；模式语义为翻前 / 数学 / 混合。完成时调用 `recordTrainingDay` 计入 Streak，XP 计算（每题 +10 / 全对 +20 奖励），训练记录 mode 为 `quick-drill`（课程练习保持 `practice`）；进度统计与最近训练标签将速训独立展示，不与课程练习合并。
+7. **快速训练入口**：`QuickDrill` 组件接收 `quick=true` 参数进入快速模式（固定 5 题、自适应难度），`?quick=false` 为 8 题完整练习。5 题速训从策略学院课程新题池抽取并按学习状态混入到期 SRS；8 题完整练习只从课程新题池按手选难度抽取，不混 SRS。模式语义为翻前 / 数学 / 混合。完成时调用 `recordTrainingDay` 计入 Streak，XP 计算（每题 +10 / 全对 +20 奖励），训练记录 mode 为 `quick-drill`（课程练习保持 `practice`）；进度统计与最近训练标签将速训独立展示，不与课程练习合并。
 
 7b. **谜题弱项回流**：`progress/utils/learningWeakness.ts` 从训练明细的 `topic` / `relatedLessonId` 派生近 30 天、至少 3 次、正确率低于 70% 的前 3 个弱项；按正确率升序、样本量降序、最近训练时间降序稳定排序。`QuickDrill` 经 progress 公共入口读取弱项课程 ID，并在难度匹配前提下优先抽取对应课程题；无弱项时回退 ELO 维度。谜题成绩只作为弱项信号，不直接折算 ELO。
 
@@ -1167,22 +1166,20 @@ interface DailyRecommendation {
    - 当前已声明 prerequisite 的课程：`l2-4bet-strategy` / `l2-squeeze`（均依赖 `l2-3bet-basics`）
 
 9. **QuickDrill 自动降级**（v2.1 新增）：
-   - 连续答错 ≥3 次时调用 `progress.shouldDownshiftDifficulty('strategy-academy')`，自动降级难度（不低于 beginner）
+   - 连续答错 ≥3 次时调用 `progress.shouldDownshiftDifficulty()`，自动降级难度（不低于 beginner）
    - 降级后的题目从更低难度池抽取
 
-10. **dailyPlan 职责区分**（v2.1 新增）：
-    - 项目内存在两个 `generateDailyPlan` 函数，职责不同：
-      - `strategy-academy/utils/dailyPlan.ts`：生成学院焦点课程计划（当日学习目标）
-      - `progress/utils/dailyPlan.ts`（或类似）：跨模块推荐计划（基于五维能力弱项推荐训练模块）
-    - 两者通过注释明确职责，避免功能混淆
-    - `ABILITY_LESSON_MAP` 已修正 5 个错误 lesson ID（如 `l2-3bet` → `l2-3bet-basics`）
+10. **每日计划职责区分**：
+    - `strategy-academy/utils/dailyPlan.ts` 的 `generateDailyPlan` 返回学院焦点计划 `DailyPlan`（一个新课 + 复习 + 练习）。
+    - `progress/utils/dailyTrainingPlan.ts` 的 `generateCrossModuleDailyPlan` 返回跨模块推荐列表 `DailyRecommendation[]`，覆盖训练模块与理论复习/下一章。
+    - 两者命名与返回类型已区分，禁止混用；`ABILITY_LESSON_MAP` 的错误 lesson ID 已修正。
 
 10b. **课程内容渲染层 key 覆盖**（2026-08 全量迁移）：
     - **背景**：课程正文/题库/例题/实战数据（data/** 约 1.5MB 中文）保持硬编码中文原文，全量重写数据层成本极高且破坏引用完整性。
     - **方案**：渲染层 key 覆盖——模块级 `utils/contentKeys.ts`（strategy-academy 与 theory-academy 各一份，命名空间隔离）提供 key 生成函数，消费组件统一 `t(key, { defaultValue: <数据层中文> })`；英文界面命中 i18n key，中文界面回退数据层原文（行为零变化）。
     - **key 命名**：正文段落（section 无稳定 id）用 `lessonId + content 数组索引` 派生（`academy.lessonContent.<lessonId>.<i>` / `theory.content.<chapterId>.<i>`）；quiz/example/practice/drill 均有稳定 id 直接用 id 派生（`academy.lessonQuiz|lessonExample|lessonPractice|drill|opponentDrill.<id>.*` / `theory.quiz.<id>.*`）；术语 `academy.term.<id>.*`；对手档案 `academy.opponent.<id>.*`（跨模块共享）；Basics `academy.basicsContent.<stepId>.<i>`；unit 标题 `academy.unitTitle.<lessonId>.<unitId>`；theory 学习目标 `theory.chapterObjectives.<chapterId>.<i>`。
     - **命名空间冲突规避**：`academy.content/quiz/practice` 已被 UI chrome 占用，课程内容统一用 `lesson*` 前缀（`lessonContent/lessonQuiz/lessonPractice`）；`theory.objectives` 被 UI 标签占用，改用 `chapterObjectives`；quiz 题库并入现有 UI `quiz` 对象（UI 标签 + 题目共存）。
-    - **翻译文件组织**：`locales/{zh,en}/academy-course/` 子目录按课程代码文件拆分（`level1~8.json` + `short-deck.json` + `heads-up.json` + `local-lessons.json` + 专题文件），由 `i18n/academyCourse.ts` 按文件懒加载并 deep 合并注入 `academy` 命名空间，`t()` 路径不变；academy.json 瘦身为 UI chrome。路由入口不再整批加载（详见第 12 条）。
+    - **翻译文件组织**：`locales/{zh,en}/academy-course/` 子目录按课程代码文件拆分（`level1~8.json` + `short-deck.json` + `heads-up-l3~l8.json` + `local-lessons.json` + 专题文件），由 `i18n/academyCourse.ts` 按文件懒加载并 deep 合并注入 `academy` 命名空间，`t()` 路径不变；academy.json 瘦身为 UI chrome。路由入口不再整批加载（详见第 12 条）。
     - **选项排序治理**：quiz/practice/drill 的 resolve 函数先 `t()` 解析（option 用原始索引派生 key），再由调用方走既有排序出口（`orderQuizQuestion` / `orderPracticeOptions` / `orderTheoryQuizQuestion` / `orderDrillOptions`）重排；种子只依赖 id，zh/en 顺序一致，correctIndex 同步重映射。
     - **守卫**：`src/i18n/contentI18n.test.ts` 强化为全量遍历断言——从数据模块（`ALL_VARIANT_LESSONS` / `LOCAL_LESSONS` / `BASICS_STEPS` / `GLOSSARY_TERMS` / `OPPONENT_PROFILES` / `OPPONENT_DRILL_QUESTIONS` / `ALL_VARIANT_THEORY_LEVELS`）遍历生成全部渲染消费点 key（expectedCount ≈ 12948），断言 zh/en 双语 JSON 均存在；localeParity / curriculumIntegrity / theoryIntegrity / 排序分布守卫保持绿。存在性检查**不覆盖**"文案已改而译文陈旧 / 下标错位"，对齐由 `src/i18n/contentAlignment.test.ts` 逐字镜像断言（见本节第 17 条）
 
@@ -1206,7 +1203,7 @@ interface DailyRecommendation {
 
 15. **理论支撑引用完整性守卫（反向死链）**：`data/theoryReferenceIntegrity.test.ts` 扫描策略课时中 `type: 'theory-reference'` 段落，断言其 `data.theoryChapterId` 指向的理论章节真实存在，且**每个** theory-reference 段落都带可跳转 id（无 id 者只能渲染为纯文本标签）。目标 id 全集经 Vite 原生 `import.meta.glob(..., '?raw')` 读取 theory-academy 数据源码正则扫描得出——两模块互相 import 被 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 禁止，引用只能是 ID 字符串，故目标存在性必须由守卫保证；不维护手工镜像清单，章节增删不引入漂移。与 §5.8b 的 `CROSS_MODULE_LESSON_IDS`（理论→实践方向）互补，两个方向的悬空引用各有断言。
 
-16. **理论桥接可点化**：`components/content/TheoryReferenceBlock.tsx` 的跳转解析优先 `data.theoryChapterId` → `/theory/chapter/:id`，回退旧形态 `data.lessonId`（`data.target === 'theory'` 走理论章节路径，否则 `/academy/lesson/:id`），二者皆无时渲染纯文本标签，不生成死链。
+16. **理论桥接可点化**：`components/content/TheoryReferenceBlock.tsx` 的跳转解析优先 `data.theoryChapterId` → `/theory/chapter/:id`，回退旧形态 `data.lessonId`（`data.target === 'theory'` 走理论章节路径，否则 `/lesson/:id`），二者皆无时渲染纯文本标签，不生成死链。
 
 17. **内容与测验的原子变更守卫**（落在 `src/i18n/`，两学院共享）：新增单源生成器 `contentKeyEntries.ts`（遍历课程数据产出 key ↔ 原文映射），由 `contentI18n.test.ts`（key **是否存在**）与新增 `contentAlignment.test.ts`（key ↔ 原文**是否对齐**）共同消费，消除两处重复遍历。对齐守卫断言分三层——① 索引族长度对齐与 orphan（locale 残留的下标条目即错位信号）② zh 逐字镜像（locale 值 === 数据层原文）③ en 非空且不含汉字（术语卡 `chinese` 字段例外）。历史漂移冻结在独立文件 `contentAlignment.baseline.ts` 的**棘轮基线**：只允许减少、修复一条删一条，守卫内置「基线卫生」断言禁止为跑绿新增条目。规则口径见 PRD §6.7.4 / §10 R11。
 
@@ -1216,11 +1213,11 @@ interface DailyRecommendation {
 
 20. **ELO 统一写入**：课时测验首考逐题 `progress.updateElo(lessonMeta.eloDimension, correct, difficulty)` + `recordAnswer`；重考不写 ELO/情绪计数。`PracticeDrill` 每答写 ELO（维度取 `relatedLessonId` → `lessonMeta`，兜底 postflop），并以 `recordPracticeResult` 只维护 `recentPracticeResults`（cap 50）作为自适应难度窗口——v8 起不再维护 `abilityAssessment`。基础 Drill 完成时按正确率写一次；认证不写 ELO（凭证不是学习）；Level Checkpoint 首轮写 ELO、重考不写（见第 27 条）。`dailyPlan` 读 `EloRating`；`store.bootstrap` 改调 progress store 的 `seedEloFromOnboardingAbility(onboarding.initialAbility)`（仅 `gamesPlayed === 0` 时播种），`syncEloFromAcademyAbility` 已随 v8 移除。用户可见能力画像以 `eloByVariant` 为单一事实源。
 
-21. **题级 SRS**：`utils/strategySrs.ts` 薄包装 shared `buildQuestionReviewItems`；id 前缀 `strategy:`（与 theory 的 `theory:`、旧 lessonId 裸键隔离），label/front/back 存 `academy.lessonQuiz.<qid>.question/.explanation`，metadata 带 `/academy/lesson/<lessonId>`。`completeCourse` 在每次尝试都 emit + `recordTrainingDay`，按 `wrongQuestionIds` 写题级 SRS；满分或 Drill 保留课时级复习项。`useEnsureReviewSourceI18n` 从 strategy 题级复习项的 route 反解 lessonId，按需加载 `academy-course` 文件。
+21. **题级 SRS**：`utils/strategySrs.ts` 薄包装 shared `buildQuestionReviewItems`；id 前缀 `strategy:`（与 theory 的 `theory:`、旧 lessonId 裸键隔离），label/front/back 存 `academy.lessonQuiz.<qid>.question/.explanation`，metadata 带 `/lesson/<lessonId>`。`completeCourse` 在每次尝试都 emit + `recordTrainingDay`，按 `wrongQuestionIds` 写题级 SRS；满分或 Drill 保留课时级复习项。`useEnsureReviewSourceI18n` 从 strategy 题级复习项的 route 反解 lessonId，按需加载 `academy-course` 文件。
 
 22. **lessonMeta 与双向桥接**：`data/lessonMeta/` 覆盖 92 门标准课（含 Drill/本土课）与 12 门单挑课（`headsUp.ts`），每课 `eloDimension` + `theoryAnchors`（≥1 理论章 id）。标准与单挑分表导出、运行时合并查询：标准锚点只允许 `t<n>-*`，单挑锚点只允许 `t<n>hu-*`；`lessonMeta.integrity.test.ts` 用 raw glob 分别扫描理论标准/单挑数据断言锚点存在且不跨变体，`theoryReferenceIntegrity.test.ts` 同时校验 inline `theory-reference` 与 lessonMeta 锚点（按课时 id 前缀分流）。策略首页/课程完成页/认证失败页用 `TheoryBridgeCard`（薄包装 shared `AcademyBridgeCard`）链到 `/theory/chapter/<id>`；理论 Checkpoint 完成后提供 `/academy/certification/<mappedLevel>` CTA。跨模块只传路由/ID 字符串。
 
-23. **两院共享层（2026-11）**：`shared/types/academy.ts` 统一 `AcademyQuizQuestion` / `AcademyBridgeItem` / `AcademySearchItem` / `MasterySummary`；`shared/utils/academyQuizBank.ts`（`mergeQuizBank`）、`academyQuizDraw.ts`（`drawByAttempt`）、`academySrs.ts`（`buildQuestionReviewItems`）、`academyMastery.ts`（`summarizeMastery`）；`shared/components/academy/` 提供 `AcademyBridgeCard` / `AcademyMasteryCard` / `AcademySearchShell` / `AcademyBookmarksPanel`（strip / panel 两形态）/ `AcademyNotesPanel`（受控草稿 + 字数上限 + 显式保存）/ `ContentIssueReportDialog`（mailto / 剪贴板降级）/ `AcademyReadingPlane`（阅读页双栏骨架：主列 768 + xl 学习导轨，导轨内容由两院注入）。理论 S2、策略 T3/T4 与 P2 工具均以薄包装消费，shared 层只接收 items / labels / callbacks，禁止读 store、查目录、拼路由或 import feature；理论原有 ARIA/文案/视觉保持不变。
+23. **两院共享层（2026-11）**：`shared/types/academy.ts` 统一 `AcademyQuizQuestion` / `AcademyBridgeItem` / `AcademySearchItem` / `MasterySummary`；`shared/utils/academyQuizBank.ts`（`mergeQuizBank`）、`academyQuizDraw.ts`（`drawByAttempt`）、`academySrs.ts`（`buildQuestionReviewItems`）；掌握度派生 `academyMastery.ts`（`summarizeMastery`）因单消费位于 `strategy-academy/utils/`；`shared/components/academy/` 提供 `AcademyBridgeCard` / `AcademyMasteryCard` / `AcademySearchShell` / `AcademyBookmarksPanel`（strip / panel 两形态）/ `AcademyNotesPanel`（受控草稿 + 字数上限 + 显式保存）/ `ContentIssueReportDialog`（mailto / 剪贴板降级）/ `AcademyReadingPlane`（阅读页双栏骨架：主列 768 + xl 学习导轨，导轨内容由两院注入）。理论 S2、策略 T3/T4 与 P2 工具均以薄包装消费，shared 层只接收 items / labels / callbacks，禁止读 store、查目录、拼路由或 import feature；理论原有 ARIA/文案/视觉保持不变。
 
 24. **persist v5 → v8**（`migrateStrategyAcademyState` 纯函数，按 `fromVersion` 逐版顺序执行）：**v6** 由 `firstAttemptScores` / `lastAttemptScores` / `quizScores` / `completedLessons` 反推 `lessonAttempts`，已完成但无分数的课时补 `attempts=1`（避免重考被误判首次），已有 `lessonAttempts` 不覆盖；**v7** 注入 P2 字段默认值（`placement: null` / `checkpoints: {}` / `bookmarkedLessons: []` / `lessonNotes: {}`）；**v8** 删除 `abilityAssessment`、`firstAttemptScores` / `lastAttemptScores` 镜像与 legacy `attemptCertification`（只删字段，不动 `progress` / `certifications` / `lessonAttempts`）。迁移为原地合并，进度 / 认证 / lessonAttempts / P2 字段全程保留；老存档零丢失，回滚只丢失新增字段。
 
@@ -1267,7 +1264,7 @@ interface DailyRecommendation {
    - **目录摘要透传**：`pnpm theory:manifest` 的章节投影增加条件字段 `supplemental` / `pathTags`（无值不写键），`manifest.parity.test.ts` 同步断言，故摘要层足以支撑 core/增补进度、掌握度与路径展示；数据层改动后必须重跑
 
 3. **Store**（`store.ts`，persist name `theory-academy-progress`，version 以该文件 persist 配置为唯一事实源）：
-   - 状态（v4）：`progress: { completedChapters / quizScores / chapterAttempts / checkpoints / placement / bookmarkedChapters / chapterNotes / currentChapter / startedAt / flaggedQuestions / activeVariant / variantMetadata }`
+   - 状态（v5）：`progress: { completedChapters / quizScores / chapterAttempts / checkpoints / placement / bookmarkedChapters / chapterNotes / currentChapter / startedAt / flaggedQuestions / activeVariant / variantMetadata / legacyUnlockedLevels }`
    - `recordChapterAttempt(id, score, total, correct)`：总是记录 attempts/best/last；首次写 `completedChapters`、`firstScore` 与 `quizScores` 并 `trainingEvents.emit`（module `'theory-academy'`）；重考只做练习（不更新 ELO/recordAnswer/掌握度，仍可进 SRS）。`completeChapter` 已移除
    - `recordPlacement` / `recordCheckpointAttempt` / `toggleBookmark` / `saveChapterNote`：分别写定位免修（creditLevels 并集）、checkpoint 成绩、书签、笔记（上限 2000 字）
    - `isTheoryLevelUnlocked(levelId)`：首行 `isDebugUnlockActive()` 短路；T1 默认解锁，Tn 需 T(n-1) 全部**核心**章节完成，或前一 Level 在 `placement.creditLevels` 内（增补章不参与判定，完成增补章不回锁）
@@ -1280,16 +1277,16 @@ interface DailyRecommendation {
 
 6. **成就集成**：`achievements.ts` 新增 `theoryChapters` / `theoryLevel` 两个 condition type 与 4 项成就；progress store `checkCondition` 通过动态 import `getTheoryStore()`（复刻 `getAcademyStore` 缓存模式）读取进度。
 
-7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁）/ `/theory/review`（疑难清单），以及 2026-11 新增的 `/theory/placement`、`/theory/checkpoint/:levelId`、`/theory/glossary`、`/theory/search`、`/theory/bibliography`；均 lazy + LazyWrapper，复用 `/theory` i18n 分组；章节页按 chapterId 所属 Level 动态加载该 Level 完整数据，Home 只载摘要；侧边栏“研习”分组入口（`nav.theory`，Library 图标，紧邻策略学院并列，2026-07-30 导航 IA 重构后两学院与牌局复盘同属研习分组），MobileNav 底部导航同步含理论学院项。
+7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁）/ `/theory/review`（疑难清单），以及 2026-11 新增的 `/theory/placement`、`/theory/checkpoint/:levelId`、`/theory/glossary`、`/theory/search`、`/theory/bibliography`；均 lazy + LazyWrapper，复用 `/theory` i18n 分组；章节页按 chapterId 所属 Level 动态加载该 Level 完整数据，Home 只载摘要；主导航「课程」覆盖 `/lesson`、`/academy`、`/theory` 三个前缀，桌面与移动端共用 `isCourseSectionPath`；`/theory` 页名为「理论地图」。
 
 8. **数据守卫**：`data/theoryIntegrity.test.ts`（ID 唯一与前缀、小测合法性、eloDimension、实践推荐结构）/ `utils/quizOrder.test.ts`（重映射 + 分布守卫 <50%）/ `store.persist-shape.test.ts`；实践推荐课程 ID 悬空由 strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS` 守卫，反方向（策略课时 `theory-reference` → 理论章节）由 strategy-academy `data/theoryReferenceIntegrity.test.ts` 守卫（见 §5.8 第 15 条）。
 
-9. **理论→实践桥接**：两级粒度并存——Level 粒度在各 Level 的 `practiceRecommendations` 声明、`PracticeBridgeCard` 于本级全部章节完成时展示（定向推荐仅指向 track-beginner / track-gto / track-cash-game）；章节粒度集中在 `data/levels/variants/standard/chapterPracticeMap.ts`，由 `standard/index.ts` 的 `withChapterPractice()` 在聚合时附加到章节对象，`TheoryChapterView` 优先展示章节卡、当章节推荐被 Level 推荐覆盖且本级已完成时不重复渲染。章节映射刻意只复用 Level 已登记的课时白名单，故 `data/theoryIntegrity.test.ts` 对章节粒度用**子集**断言（并断言非空，防聚合链被误删后静默失效），Level 粒度的等值断言保持不变。**白名单扩容须三处同一 commit 同步**：目标 Level 的 `practiceRecommendations.lessons`、`theoryIntegrity.test.ts` 的 `EXPECTED_PRACTICE_LESSON_IDS`、strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS`（对面断言每个登记 id 真实存在于 `LEVELS`）。课时 id 命名空间有两种——`l<level>-*` 与本土课 `local-*`（后者已由「LOCAL_LESSONS 全部并入 LEVELS」断言保证可解析，路由同为 `/academy/lesson/:id`）；变体课时 id 两种清单都不得登记。strategy-academy `learningTracks.ts` 的 `track-theory-bridge`（“理论到实践”轨道）为经 `/academy/tracks` 泛浏览发现的通用衔接入口（按理论支柱顺序串联实战课程），不是各 Level 的定向推荐目标（P1F-05 定性，专批 A 2026-07-31）。**变体章节同样逐章桥接**：`data/levels/variants/{heads-up,short-deck}/chapterPracticeMap.ts` 各覆盖本变体全部章节，由同名 `variants/<v>/index.ts` 的 `withChapterPractice(levels)`（浅拷贝 Level 与章节后附加字段）接入，视图层与标准侧共用 `PracticeBridgeCard` 的 done 阶段分支、无变体分支。因变体课时进不了任何白名单，这一层的守卫结构换成两条替代断言（见第 15 条）。
+9. **理论→实践桥接**：两级粒度并存——Level 粒度在各 Level 的 `practiceRecommendations` 声明、`PracticeBridgeCard` 于本级全部章节完成时展示（定向推荐仅指向 track-beginner / track-gto / track-cash-game）；章节粒度集中在 `data/levels/variants/standard/chapterPracticeMap.ts`，由 `standard/index.ts` 的 `withChapterPractice()` 在聚合时附加到章节对象，`TheoryChapterView` 优先展示章节卡、当章节推荐被 Level 推荐覆盖且本级已完成时不重复渲染。章节映射刻意只复用 Level 已登记的课时白名单，故 `data/theoryIntegrity.test.ts` 对章节粒度用**子集**断言（并断言非空，防聚合链被误删后静默失效），Level 粒度的等值断言保持不变。**白名单扩容须三处同一 commit 同步**：目标 Level 的 `practiceRecommendations.lessons`、`theoryIntegrity.test.ts` 的 `EXPECTED_PRACTICE_LESSON_IDS`、strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS`（对面断言每个登记 id 真实存在于 `LEVELS`）。课时 id 命名空间有两种——`l<level>-*` 与本土课 `local-*`（后者已由「LOCAL_LESSONS 全部并入 LEVELS」断言保证可解析，路由同为 `/lesson/:id`）；变体课时 id 两种清单都不得登记。strategy-academy `learningTracks.ts` 的 `track-theory-bridge`（“理论到实践”轨道）为经 `/academy/tracks` 泛浏览发现的通用衔接入口（按理论支柱顺序串联实战课程），不是各 Level 的定向推荐目标（P1F-05 定性，专批 A 2026-07-31）。**变体章节同样逐章桥接**：`data/levels/variants/{heads-up,short-deck}/chapterPracticeMap.ts` 各覆盖本变体全部章节，由同名 `variants/<v>/index.ts` 的 `withChapterPractice(levels)`（浅拷贝 Level 与章节后附加字段）接入，视图层与标准侧共用 `PracticeBridgeCard` 的 done 阶段分支、无变体分支。因变体课时进不了任何白名单，这一层的守卫结构换成两条替代断言（见第 15 条）。
 
 10. **章末错题接入 SRS**：`utils/theorySrs.ts` 纯函数 `buildTheoryReviewItems(chapter, wrongQuestionIds)` 把章末错题转为复习项，由 `TheoryChapterView` 在小测完成回调里逐项 `progress.addReviewItem`。三条实现约束：
     - **id 命名空间**：复习项 id 一律 `theory:<questionId>`（`addReviewItem` 按 id 整体 upsert，裸 questionId 会与策略学院以 lessonId 为键的复习项互相吞并）
     - **载荷语言中立**：`label` / `metadata.front` / `metadata.back` 存 `theory.quiz.<questionId>.question` / `.explanation` i18n key（复用 `utils/contentKeys.ts` 单源生成函数），禁止写入任何语言的原文或译文；双语齐备性由 `contentI18n.test.ts` 与 `contentAlignment.test.ts` 断言，渲染层 `t()` 解析（见 §5.9 SRS 段）
-    - **重测可入队**：SRS 记录写在 `completeChapter` 的 `alreadyCompleted` 早退之外（视图层），故首次答错与重测答错均可入队；`metadata.route` 指向所属章节页，`metadata.options` 刻意不传，使复习走自评模式而非多选
+    - **重测可入队**：SRS 记录写在首次完成早退之外（视图层），故首次答错与重测答错均可入队；`metadata.route` 指向所属章节页，`metadata.options` 刻意不传，使复习走自评模式而非多选
     - **本模块 persist version 未变更**：SRS 状态归 progress store 持有，理论侧只在视图层写入，不新增持久化字段
 
 11. **量化口径单源**（`utils/theoryFormulas.ts`，模块内自持）：`calculateAlpha` / `calculateMDF` / `requiredEquity` / `kellyFraction`（+ `halfKellyFraction`）/ `requiredHandsForEdge` / `riskOfRuin` / 多人三式（`multiwayAllFold` / `perDefenderRequiredDefense` / `multiwayBluffEv`）/ 演练回填四式（`outsToEquity` / `pairTierCombos` / `aggressionFactor` / `vpipPercent`）共 13 个纯函数，是正文公式段与 `standardQuantAudit.test.ts` 复算块的共同口径源（锚点断言见 `utils/theoryFormulas.test.ts`）。**不下沉 shared**：shared 层不设通用扑克数学模块（`pokerMath` 归 `pot-odds/utils/pokerMath.ts`，仅赔率模块消费），本模块公式口径自持；若策略学院（`MDFVisualizer` 等）将来复用，先评估与 pot-odds 版合并再上收。参数语义须与审计口径一致——`betSize` 指该街下注总额，跟注类门槛一律用「需补入额 ÷ 跟注后底池」，死钱（前注 / Straddle）一律计入 `potBeforeBet` 而不计入 `betSize`。**牌堆参数显式化**：`outsToEquity(outs, cardsToCome, unknownCards = [47, 46])` 的第三个参数承载未知牌数，标准主线三处调用点依赖默认值零改动，短牌传导出的常量 `SHORT_DECK_UNKNOWN_CARDS = [31, 30]`（= 36 − 2 手牌 − 3 公共牌，再减转牌）；`utils/theoryFormulas.test.ts` 用「outs 1-20 逐位等于旧硬编码式」锁死默认口径不被参数化改动，`variantQuantAudit.test.ts` 的短牌 outs 复算一律调函数而非重写分数，非法上界随牌堆下移（32 outs 在 31 张口径下即 NaN）。
@@ -1307,7 +1304,7 @@ interface DailyRecommendation {
 15. **变体桥接的双层守卫（无白名单可用时的替代结构）**：标准侧靠"白名单等值 + 子集"两断言约束跨模块引用面，变体课时（`l<n>hu|sd-*`）与三变体共享地基课（`l<n>-*`）都进不了那两个清单——前者因不在 `LEVELS` 内会使对面的存在性断言必红，后者因本就不是变体专属课。故改由一内一外两层保证：
     - **内层（理论侧，覆盖率）** `data/levels/variants/theoryIntegrity.test.ts`：断言每个变体章节都带非空 `practiceRecommendations.lessons`（漏章或聚合链 `withChapterPractice` 被误删即红），并断言引用 id 只属两种命名空间之一，防止把标准 Level 白名单里的 id 误抄进变体表
     - **外层（策略侧，存在性）** strategy-academy `data/theoryVariantBridgeIntegrity.test.ts`：经 `import.meta.glob(..., '?raw')` 扫描变体 Level 文件与 chapterPracticeMap 的引用点，变体专属 id 断言存在于 `ALL_VARIANT_LESSONS` 且**不在** `LEVELS`（这条正是"它们为何不能进 `CROSS_MODULE_LESSON_IDS`"的事实化），共享地基课 id 断言**在** `LEVELS` 内可解析；引用点自带的回退标题与 `academy.lessonTitle.*` 权威值比对（剥掉尾部消歧括号后取等），定位统一为 `目录/文件:行号`（两变体的 chapterPracticeMap.ts 同名，只留 basename 会歧义）
-    - 渲染面另有一条组件级证据：`components/PracticeBridgeCard.variant.test.tsx` 逐个挂载全部变体章节推荐，断言课时卡数量、标题实际取到 i18n 权威值（回退字面量静默生效 = key 缺失，两侧数据守卫都看不见）、跳转拼装为 `/academy/lesson/:id`，en 侧无汉字与键面字泄漏
+    - 渲染面另有一条组件级证据：`components/PracticeBridgeCard.variant.test.tsx` 逐个挂载全部变体章节推荐，断言课时卡数量、标题实际取到 i18n 权威值（回退字面量静默生效 = key 缺失，两侧数据守卫都看不见）、跳转拼装为 `/lesson/:id`，en 侧无汉字与键面字泄漏
     - **新增变体章节必须同批登记桥接**：内层覆盖率断言会立刻拦住未登记的章节；`theoryVariantBridgeIntegrity` 的按来源分档断言（章节级 map 与 Level 级各 ≥ 下限）防止整张 map 失配
 
 16. **变体规则性事实的方向守卫**：`src/guards/huPositionOrderGuard.test.ts`（全局不变式目录 `src/guards/`，与 `designTokenGuard` 同级）。防的缺陷类型是**规则性事实写反**而非数值近似——单挑的「翻后谁先行动 / 谁持有位置」曾在两学院正文里同时存在正反两种陈述（实测 152 处含 locale），读者看到的是自相矛盾。实现要点：
@@ -1345,9 +1342,9 @@ interface DailyRecommendation {
     - 增补章语义由副标题承载（「6-max 现金局补强（可选，不影响解锁）」），`TheoryChapterView` 的门禁逻辑不变（Level 解锁即可读），避免在已到行数上限的视图里加分支
 
 20. **掌握度与学习路径**（产品规格见 PRD §5.27.12，展示层不门禁）：
-    - `utils/theoryMastery.ts`：`MASTERY_THRESHOLDS = { mastered: 80, passing: 60 }` 与 `getMasteryState(score)`（≥80 已掌握 / 60–79 通过 / <60 待复习 / 无分未测）；`summarizeMastery(coreChapters, quizScores, chapterAttempts?)` 返回 mastered / passing / needsReview / untested / total / weakestChapterId（同分按 manifest 顺序取前者）。**优先读首次成绩 `firstScore`，无记录回退 `quizScores`**（`resolveFirstScore`）；练习最佳分另列展示。不调用任何门禁函数
+    - `strategy-academy/utils/academyMastery.ts`：`MASTERY_THRESHOLDS` 与 `summarizeMastery(coreChapters, quizScores, chapterAttempts?)` 统一派生两院掌握度；**优先读首次成绩 `firstScore`，无记录回退 `quizScores`**（`resolveFirstScore`），练习最佳分另列展示。该工具因单消费回迁策略学院，shared 不再保留 `theoryMastery` / `academyMastery` 第二实现
     - `data/theoryPaths.ts`：三条静态路径 `sixmax-cash-core` / `postflop-deep` / `mtt-bridge`（id + 主题标签 + 成员章节 id），成员由 `pathTags` 聚合，**不新增解锁条件**，也不扩大跨模块引用面
-    - 组件：`TheoryMasteryCard`（四项计数 + 最低分章复习 CTA，无分时空态改为继续学习）、`TheoryLearningPaths`（仅标准变体渲染、`x/y` 进度、CTA 指向首个未完成且已解锁的成员章、下一章锁定显示锁定提示、全完成显示已完成）；两者只在 Home 展示，不参与路由门禁
+    - 组件：两院掌握度统一由课程枢纽 `CourseMasteryDualCard` 展示（含双泳道最弱项导航），理论地图不再保留独立掌握度卡；`TheoryLearningPaths` 仅标准变体渲染，展示 `x/y` 进度与下一章入口，不参与路由门禁
     - 守卫：路径完整性（路径 id 唯一、单路径成员不重复、成员都带对应 `pathTags`、标题与描述 key 双语齐备）+ 掌握度边界用例（79 / 80、59 / 60、无分、weakest 同分 tie-break）
 
 21. **新增守卫与持久化边界**：
@@ -1359,7 +1356,7 @@ interface DailyRecommendation {
 22. **2026-11 标准课程整改（题库独立 / 尝试语义 / 定位与工具）**：
     - **题库独立与行数豁免**：全部 quiz 从 `standardLevelN.ts` / `chapters/t*.ts` 迁入 `data/levels/variants/standard/quizBank/t1..t9.ts`（每文件 `Record<chapterId, TheoryQuizQuestion[]>`）；`applyStandardQuizBank` 按 chapterId 注入、按题号排序、去重并校验 `<chapterId>-q<n>`。运行时 `loaders.ts` 用 `import.meta.glob('./variants/standard/quizBank/t*.ts')` 按 Level 懒加载；静态聚合 `variants/standard/index.ts` 直接 import 全部 9 个文件（仅测试/静态路径）。level/chapter 文件保留 `quiz: []` 占位。quizBank 为课程内容数据文件，按 §16 的课程内容豁免不做行数限制（逻辑文件仍受 ≤300 / >400 约束）
     - **抽题**：`utils/quizDraw.ts` 以 `hash(chapterId#attemptNumber)` 为种子，从完整题库抽 5 题（T1–T3）/6 题（T4–T9）；attemptNumber = 已持久化 attempts + 1，刷新稳定、重考换题；选项重排仍走 `quizOrder.ts`
-    - **尝试与掌握度**：`TheoryProgress` v4 增 `chapterAttempts`（attempts/firstScore/firstCorrect/firstTotal/bestScore/lastScore/lastAt）、`checkpoints`、`placement`、`bookmarkedChapters`、`chapterNotes`。`recordChapterAttempt` 总是记录尝试；首次写 `completedChapters`/`firstScore`/`quizScores` 并 emit；重考只更新 best/last 与 SRS，不更新 ELO/recordAnswer/掌握度。`theoryMastery` 优先读 firstScore，老数据回退 quizScores
+    - **尝试与掌握度**：`TheoryProgress` v4 增 `chapterAttempts`（attempts/firstScore/firstCorrect/firstTotal/bestScore/lastScore/lastAt）、`checkpoints`、`placement`、`bookmarkedChapters`、`chapterNotes`。`recordChapterAttempt` 总是记录尝试；首次写 `completedChapters`/`firstScore`/`quizScores` 并 emit；重考只更新 best/last 与 SRS，不更新 ELO/recordAnswer/掌握度。`academyMastery` 优先读 firstScore，老数据回退 quizScores
     - **定位测评**：`data/placementQuestions.ts`（16 题）+ `utils/placement.ts`；分档 0–5/6–10/11–13/14–16 → T1/T2/T4/T6；`placement.creditLevels` 为推荐起点之前的 Level 并集，只放宽解锁、不写 completedChapters；解锁唯一入口 `isLevelUnlockedByCompleted(levelId, completed, creditLevels)`
     - **Level checkpoint**：`utils/checkpoint.ts` 从该级核心章抽 12 题并标注来源章/维度；仅 `isLevelFullyCompleted` 可进；`recordCheckpointAttempt` 持久化 score/questionIds；首轮按题更新 ELO，重考不更新；错题按来源章进 SRS；不解锁、不发证
     - **跨模块数据源**：`shared/types/theoryDataSource.ts` + `shared/stores/theoryDataSourceRegistry.ts`；`theory-academy/store.bootstrap.ts` 注册 `findNextChapter` / `getRecommendedChapter` / `subscribe`。理论 store 的完成态是权威，调用方传入列表仅作补充（progress 传的是策略课时 id）；progress 每日计划消费 registry，不 import theory
@@ -1414,8 +1411,9 @@ interface DailyRecommendation {
 - 阶段投影：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成；四段归并/状态/下一课纯函数位于 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`，由 progress 与 strategy 两个消费者复用。
 - 理论只读：`TheoryDataSource.getLearningSnapshot()` 与 `getChapterCatalog(variant)` 由 theory bootstrap 注册；未注册时消费方降级为未知，不阻塞实战/下一步。
 - 变体上下文（批次 2）：`TheoryDataSource` 增加可选 `getActiveVariant()` / `switchVariant(variant)`；枢纽顶部为变体 canonical 切换入口，调用切换命令后由两院各自既有 action 落地（标准 / 短牌 / 单挑），地图与执行页只读当前变体。registry 机制不变（仍由 theory bootstrap 注册，progress 只经接口消费）；未实现该可选方法的实现方下，消费方降级为只读展示（地图不提供切换、枢纽保留策略侧既有入口）。不新增 store / registry，不改两院 persist schema / version / migrate。
-- nextAction：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → done；跳过推荐仅会话内轮换，不新增持久字段。
+- nextAction：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → done；当前不提供跳过/ dismiss 后的推荐轮换，也不新增持久字段。
 - 来源感知返回（2026-11，IA 基线见 §17）：纯函数 `shared/utils/courseBack.ts` 持有 `COURSE_FROM_KEY`（`courseFrom`）、`hubFrom(stageIndex?)` / `theoryMapFrom()` / `academyMapFrom()` 与 `resolveCourseBack(state)`。枢纽前进链接（阶段卡概念 / 实战 chip）携带来源 state；执行页（`CourseView` / `TheoryChapterView` 及 Drill 退出）统一经 `resolveCourseBack` 取得 `{ to, labelKey }`：主线来源回 `/lesson`（带阶段序号时回 `/lesson#hub-stage-N`），理论 / 实战地图来源分别回 `/theory` / `/academy`，缺失、非法 state 与深链刷新兜底 `/lesson`。文案键复用 core `nav.backToCourseHub` / `nav.backToTheoryMap` / `nav.backToAcademyMap`，跨院只传 state 与 id 字符串。
+- 来源覆盖边界：当前枢纽阶段卡、`LevelLadder` 与地图工具页已携带来源；概念图谱、轨道页、课时导轨与理论检索等入口尚未全部携带 `courseFrom`，这些入口目前会兜底回 `/lesson`。产品目标仍是来源可达时返回所属地图，补齐链接 state 前不得宣称全覆盖。
 - 锚点回位：`CourseHub` 在带 hash 时对 `#hub-stage-N` 调 `scrollIntoView`，`prefers-reduced-motion: reduce` 降级为 `auto`，短延迟等待阶段卡挂载；阶段卡以 `id=hub-stage-N` + `data-hub-stage` 暴露锚点，不引入新路由。
 - 地图角色：`/academy` 与 `/theory` 在壳层页名与目录入口中统一为「实战地图 / 理论地图」（`nav.academy` / `nav.theory`），地图根只提供返回课程主线，不承担下一步语义。
 - 覆盖报告与评估区（批次 3）：`CourseCoverageCard` 只读汇总理论↔实战映射（`hubStages` + `lessonMeta.theoryAnchors`，短牌降级「概念关联待补充」）；两张地图的「评估」区聚合检查点 / 认证 / 定位入口，不改变门禁与评估行为；地图不再重复续学 Hero / 每日计划。
@@ -1562,7 +1560,7 @@ UI 组件：`Dashboard` 段位徽章按钮、`WeaknessAnalysis` 五维雷达图�
 - 训练模块记录器（答题后注册/更新复习项）：range-trainer `useQuizEngine.recordSrsForAnswer` / pot-odds `useOddsSrsRecorder` / gto-simulator `useGtoSrsRecorder` / theory-academy `TheoryChapterView` 经 `utils/theorySrs.ts`（见 §5.8b 第 10 条）；题目 ID 规范 `range:{position}:{hand}` / `odds:{questionId}` / `gto:{scenarioId}` / `theory:{questionId}`
 - **复习项载荷的语言契约**：`label` 与 `metadata.front|back|options[].text` 存的是 **i18n key**（语言中立，随 localStorage 长期存活），渲染层 `t()` 解析；禁止写入任何语言的原文（英文环境会直接回显中文）。产品口径见 PRD §12.4.3
 - **来源包按需补加载**（与上一条配对，只做其一比原状更糟）：复习队列 / 复习会话渲染于 Dashboard 与 progress 路由，而 `i18n/moduleRegistry.ts` 为控制首屏体积刻意不把 theory / rangeTrainer / potOdds / gto 归入这些分组，冷启动直达首页时 `t(key)` 原样回显 key 字面量。故 `features/progress/components/srs/useEnsureReviewSourceI18n.ts` 按当前复习项的 `metadata.source` 收集来源模块并调 `preloadI18n`（幂等，注入后经 `config.ts` 的 `bindI18nStore: 'added'` 自动重渲染，无需本地 loading 态；`strategy` 的 academy 属 CORE_MODULES 故不列出）。缓存语义遵循 §9.1 的「成功才入缓存、失败可重试、并发共享句柄」
-- **跳转路由解析**：`features/progress/utils/reviewRoute.ts` 的 `getReviewRoute(item)` 为纯函数（自 `SpacedRepetitionPanel` 内联 switch 提取以便单测）：`metadata.route` 以 `/` 开头时优先，其后按 `category` 映射；`theory` 缺 route 时回退 `/theory` 主页（禁止落到 default 拼出 `/academy/lesson/theory:...` 死链），default 落 `/academy/lesson/<id>`，任何分支不得抛错（存量复习项可能没有 `metadata.route`）
+- **跳转路由解析**：`features/progress/utils/reviewRoute.ts` 的 `getReviewRoute(item)` 为纯函数（自 `SpacedRepetitionPanel` 内联 switch 提取以便单测）：`metadata.route` 以 `/` 开头时优先，其后按 `category` 映射；`theory` 缺 route 时回退 `/theory` 主页（禁止落到 default 拼出 `/academy/lesson/theory:...` 死链），default 落 `/lesson/<id>`，任何分支不得抛错（存量复习项可能没有 `metadata.route`）
 - puzzle-trainer 不注册 SRS（2026-07-31 专批 C 定性，P1D-11）：题库短 id（如 `rfi-001`）仅为模块内部标识（全库唯一由 `data/puzzleBank.ids.test.ts` 守卫），不进入 SRS 键空间，无跨模块碰撞风险；若未来接入 SRS，在**注册处**拼接 `puzzle:{theme}:{questionId}` 作为 key，题库静态数据不改 id、存量 ReviewItem 零迁移。当前仅通过训练明细的 `topic` / `relatedLessonId` 向 progress 提供弱项信号，不写 SRS / ELO
 - QuickDrill 复习题回写闭环（专批 B，P1E-05）：快速训练混入的 `review-*` 复习题答完后，由 `strategy-academy/utils/quickDrillSrs.ts` 纯函数（`computeReviewWriteBacks`）按逐题作答明细（`PracticeResult.answers`，不入 persist）调用 `processReview` 推进 ReviewItem，再逐项 `updateReviewItem` 回写 progress store（quality 映射同下表；非 review-* 忽略，复习项已清理静默跳过）
 
@@ -1652,16 +1650,22 @@ export const useFeatureStore = create<FeatureStore>((set, get) => ({
 
 ### 6.2 persist 中间件使用
 
-共 5 个 store 使用 persist 中间件持久化到 localStorage：progress（训练记录与跨模块状态中枢）、puzzle-trainer、strategy-academy、theory-academy、debugMode（调试解锁）；range-trainer / pot-odds / gto-simulator 为纯内存 store；hand-history 用 IndexedDB：
+5 个 store 使用 Zustand persist：progress、puzzle-trainer、strategy-academy、theory-academy、debugMode。localStorage 保存跨模块状态、偏好与学院进度；progress 的 `records` 经 `partialize` 排除后独立写入 IndexedDB，hand-history 也使用独立 IndexedDB。range-trainer / pot-odds / gto-simulator 为纯内存 store。
 
 ```typescript
 persist(
   (set, get) => ({
-    records: [],
     settings: { theme: 'dark', language: 'zh', ... },
-    // ...
+    // records 不进入 localStorage
   }),
-  { name: 'poker-training-progress', version: 8, migrate }  // localStorage key
+  {
+    name: 'poker-training-progress',
+    // version 与 migrate 以 store.ts 配置为唯一事实源
+    partialize: (state) => {
+      const { records, ...rest } = state;
+      return rest;
+    },
+  }
 )
 ```
 
@@ -1688,10 +1692,10 @@ persist(
 | `usePotOddsStore` | `oddsState` + `evState` | 否（内存） |
 | `useGTOSimulatorStore` | `config` + `session` + `feedback` + `lastResult` | 否（内存） |
 | `useHandHistoryStore` | `hands[]` + `currentHand` + `replayState` + `filter` | IndexedDB |
-| `useProgressStore` | `records[]` + `settings` + `onboarding` + `streak` + `eloByVariant` + `activeVariant` + `quickDrillStreak` + `quickDrillBest` + `mentorStyle` + `emotion` + `unlockedAchievements` + `achievementUnlockDates` + `freezeCardFragments` + `lastFragmentDate` + `fragmentsEarnedToday` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
+| `useProgressStore` | `records[]`（内存）+ `settings` + `onboarding` + `streak` + `eloByVariant` + `activeVariant` + `quickDrillStreak` + `lastQuickDrillDate` + `quickDrillBest` + `mentorStyle` + `emotion` + `unlockedAchievements` + `achievementUnlockDates` + `freezeCardFragments` + `focusModule` + `reviewItems` | localStorage 保存 `partialize` 后的跨模块状态；IndexedDB `poker-training-records` 保存 records（版本以 store.ts 为唯一事实源） |
 | `usePuzzleTrainerStore` | `rushBest` + `dailyBest` + `themeBest` + `dailyCompleted` + `history` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 | `useStrategyAcademyStore` | `progress` + `practiceResults`（cap 200） + `basicsProgress` + `adaptiveConfig` + `recentPracticeResults` + `dailyPlan` + `certifications` + `lessonAttempts` + `placement` + `checkpoints` + `bookmarkedLessons` + `lessonNotes` + `activeTrackId` + `activeVariant`（v8 起无 `abilityAssessment` / `firstAttemptScores` / `lastAttemptScores`） | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
-| `useTheoryAcademyStore` | `progress`（completedChapters / quizScores / currentChapter / startedAt） | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
+| `useTheoryAcademyStore` | `progress`（completedChapters / quizScores / chapterAttempts / checkpoints / placement / bookmarkedChapters / chapterNotes / currentChapter / startedAt / flaggedQuestions / activeVariant / variantMetadata / legacyUnlockedLevels） | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 | `useDebugModeStore` | `unlockAll` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 
 ---
@@ -1700,7 +1704,7 @@ persist(
 
 ### 7.1 React Router v7 配置
 
-使用 `createBrowserRouter` 创建路由，支持嵌套布局和数据加载。
+使用 `createBrowserRouter` 创建路由，支持嵌套布局和数据加载；`basename` 取 `import.meta.env.BASE_URL`，使路由与静态资源适配 GitHub Pages 子路径部署。
 
 ### 7.2 路由表
 
@@ -1833,33 +1837,33 @@ Zustand v5 内置 selector 机制，仅当选中字段变化时触发组件重�
 
 ```typescript
 manualChunks(id) {
-  // 大型数据文件独立分包
-  if (id.includes('/strategy-academy/data/levels/')) {
-    return id.match(/level[1-4]/) ? 'academy-levels-early' : 'academy-levels-late';
+  if (id.includes('/strategy-academy/data/lessons/manifest/')) return 'academy-manifest';
+  if (id.includes('/strategy-academy/data/lessons/variants/short-deck/')) return 'academy-lessons-short-deck';
+  if (id.includes('/strategy-academy/data/lessons/variants/heads-up/')) return 'academy-lessons-heads-up';
+  if (id.includes('/strategy-academy/data/lessons/variants/standard/')) {
+    const level = /standardLevel([1-8])([ab])?/i.exec(id);
+    return level ? `academy-lesson-l${level[1]}${(level[2] ?? '').toLowerCase()}` : 'academy-lessons-standard-index';
   }
-  if (id.includes('/strategy-academy/data/')) return 'strategy-academy-data';
+  if (id.includes('/strategy-academy/data/localLessons/')) return 'academy-lessons-local';
+  if (id.includes('/strategy-academy/data/learningTracks') || id.includes('/strategy-academy/data/localTrack')) return 'academy-tracks-data';
+  if (id.includes('/strategy-academy/data/basicsContent')) return 'academy-basics-data';
+  if (id.includes('/strategy-academy/data/conceptNodes')) return 'academy-concepts-data';
   if (id.includes('/puzzle-trainer/data/puzzleBank')) return 'puzzle-data';
-  // Vendor 库分包
-  if (id.includes('node_modules')) {
-    // 不要为 recharts 建手动 chunk：其依赖 clsx / use-sync-external-store 被
-    // cn() 与 react-i18next 共享，手动 chunk 会把整库拖进首屏静态图
-    if (id.includes('framer-motion')) return 'vendor-framer';
-    if (id.includes('react-dom')) return 'vendor-react-dom';
-  }
+  if (isPackage(id, 'framer-motion')) return 'vendor-framer';
+  if (isPackage(id, 'react-dom')) return 'vendor-react-dom';
 }
 ```
 
-- 主 chunk 从 1204 kB 降至约 291 kB；2026-10 移除 recharts 手动分包、解耦学院摘要链后，首屏预载包为 **234.7KB gzip / 37 个文件**
 - 图表库交由 Rolldown 自动拆分，只出现在使用图表的路由 chunk；`check-bundle-size.mjs` 断言首屏静态图不得包含 recharts
-- 不要为 `strategy-academy/data/` 剩余模块建泛化手动 chunk：Vite 的动态 import 预载 helper / mapDeps 会被并入该 chunk，启动层经 `academyCourse` 连带整条学院摘要链；现有规则只按 manifest / 单 Level / 变体等明确边界拆分
-- 课程/题库大数据文件独立 chunk，按需加载
+- 禁止为 `strategy-academy/data/` 建泛化 `strategy-academy-data` chunk：动态 import 预载 helper / mapDeps 会被并入该 chunk，启动层经 `academyCourse` 连带整条学院摘要链；只按 manifest / 单 Level / 单变体 / local / tracks 等明确边界拆分
+- 课程与题库大数据按 Level/变体独立 chunk，按需加载；具体体积以 `pnpm size:check` 与构建产物为唯一事实源
 
 ### 8.4 IndexedDB 大容量存储
 
-手牌历史数据量大（单条手牌含完整动作序列），使用 IndexedDB 而非 localStorage：
-- 无 5MB 容量限制
-- 支持异步批量读写
-- 原生事务支持
+训练记录与手牌历史使用 IndexedDB：records 避免无上限数组拖慢 localStorage 全量序列化，手牌历史避免完整动作序列占满小额存储。两者使用独立数据库，支持异步批量读写与原生事务：
+- `poker-training-records` / `records`：训练记录，progress store 持有内存镜像并异步回填
+- `hand-history-db` / `hands`：牌局与批注
+- 写操作以事务提交为成功边界；失败进入可见错误或 pending 重试，不静默丢弃
 
 ### 8.5 启动非阻塞与图表懒载（2026-10）
 
@@ -1877,9 +1881,9 @@ manualChunks(id) {
 
 | 存储 Key | 内容 | 来源 |
 |-----------|------|------|
-| `poker-training-progress` | 训练记录 + 用户设置 + Streak/ELO/SRS/Emotion/Mentor 跨模块状态 | Zustand persist（progress store） |
+| `poker-training-progress` | 用户设置 + Streak/ELO/SRS/Emotion/Mentor + QuickDrill + 成就等跨模块状态（不含 records） | Zustand persist（progress store `partialize`） |
 | `puzzle-trainer-store` | 谜题 Best Record / 每日完成态 / 历史记录 | Zustand persist（puzzle-trainer store） |
-| `strategy-academy-progress` | 课程进度 / 能力评估 / 认证记录 | Zustand persist（strategy-academy store） |
+| `strategy-academy-progress` | 课程进度 / lessonAttempts / 定位与 Checkpoint / 书签笔记 / 认证记录 / 变体上下文 | Zustand persist（strategy-academy store） |
 | `theory-academy-progress` | 理论章节完成态 / 小测得分 | Zustand persist（theory-academy store） |
 | `poker-debug-mode` | 调试解锁状态 | Zustand persist（debugMode store） |
 
@@ -1897,9 +1901,10 @@ manualChunks(id) {
 
 | 数据库 | 版本 | Object Store | keyPath | 内容 |
 |--------|------|-------------|---------|------|
-| `hand-history-db` | 1 | `hands` | `id` | 完整 HandHistory 对象 |
+| `poker-training-records` | 1 | `records` | `id` | TrainingRecord；progress store 内存镜像 + pending 重试 |
+| `hand-history-db` | 1 | `hands` | `id` | 完整 HandHistory 对象与批注 |
 
-操作封装为 4 个函数：`dbGetAll`、`dbPut`、`dbDelete`、`dbClear`。v2.0 重构为 `getDB()` 单例模式（缓存已打开的数据库连接，避免重复 `openDB`），并新增 `classifyDBError` 错误分类与 `dbError` 状态字段。
+records 操作以事务提交为成功边界，`addIfAbsent` 在同一 readwrite 事务内判重与插入；删除/清空先取消在途与 pending 写入并补偿删除，防止旧任务复活。hand-history 操作封装为 `dbGetAll` / `dbPut` / `dbDelete` / `dbClear`，由 `getDB()` 单例缓存连接，并提供 `classifyDBError` 与 `dbError` 状态。
 
 ### 9.3 Zustand persist 中间件配置
 
@@ -1907,9 +1912,12 @@ manualChunks(id) {
 persist(
   (set, get) => ({ /* store body */ }),
   {
-    name: 'poker-training-progress',  // localStorage key
-    // 默认使用 JSON.stringify/parse
-    // 默认序列化全部状态
+    name: 'poker-training-progress', // localStorage key
+    // version / migrate 以 store.ts 为唯一事实源
+    partialize: (state) => {
+      const { records, ...rest } = state;
+      return rest; // records 独立写入 IndexedDB
+    },
   }
 )
 ```
@@ -1920,12 +1928,14 @@ persist(
 
 | Store | persist name | version | 关键字段 |
 |---|---|---|---|
-| progress | `poker-training-progress` | 以 `store.ts` persist 配置为唯一事实源 | records / settings / onboarding / streak / eloByVariant / activeVariant / quickDrillStreak / quickDrillBest / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
+| progress | `poker-training-progress` | 以 `store.ts` persist 配置为唯一事实源 | settings / onboarding / streak / eloByVariant / activeVariant / quickDrillStreak / lastQuickDrillDate / quickDrillBest / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / focusModule / reviewItems（records 不进 localStorage） |
 | puzzle-trainer | `puzzle-trainer-store` | 以 `store.ts`persist 配置为唯一事实源 | rushBest / dailyBest / themeBest / dailyCompleted / history（上限 50 条）|
 | strategy-academy | `strategy-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedLessons / quizScores / currentLesson / startedAt / **completedUnits**）/ practiceResults（cap 200） / basicsProgress / adaptiveConfig / recentPracticeResults（cap 50） / dailyPlan / certifications（含 variant/totalQuestions/poolSize/questionIds）/ **lessonAttempts** / **placement**（recommendedLevelId / creditLevels / correct / total / takenAt）/ **checkpoints**（attempts / firstScore / bestScore / lastScore / questionIds / lastAt）/ **bookmarkedLessons** / **lessonNotes**（text / updatedAt，2000 字上限）/ activeTrackId / activeVariant。v8 已移除 abilityAssessment、firstAttemptScores / lastAttemptScores 镜像与 legacy attemptCertification |
-| theory-academy | `theory-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedChapters / quizScores / currentChapter / startedAt / **flaggedQuestions**）/ activeVariant / variantMetadata |
+| theory-academy | `theory-academy-progress` | 以 `store.ts` persist 配置为唯一事实源 | progress（completedChapters / quizScores / chapterAttempts / checkpoints / placement / bookmarkedChapters / chapterNotes / currentChapter / startedAt / flaggedQuestions / activeVariant / variantMetadata / legacyUnlockedLevels） |
 | debugMode | `poker-debug-mode` | 以 `store.ts`persist 配置为唯一事实源 | unlockAll |
 
+> records 外迁 IndexedDB 不属于 localStorage persist version 迁移：`store.bootstrap` 通过 legacy bridge 幂等迁移 v13 前遗留在 localStorage 的 records，迁移确认前保留旧字段，成功后删除；延迟加载用 `epoch` + `removedIds` 防止清空/删除后被旧快照回填。
+>
 > version 数值与字段清单以各 store.ts 实现为唯一事实源，本表仅作结构示意，不维护数值副本（避免漂移）。
 
 > 自适应难度的连续答错计数使用 `emotion.consecutiveWrongCount`（v6 情绪系统字段，全局计数），不存在按模块拆分的计数字段。
@@ -1979,6 +1989,13 @@ persist(
 | progress v1 → v6 | 历次防御性注入：v1 onboarding / v2 streak（补发 2 张冻结卡） / v3 elo / v4 quickDrill 字段 / v5 mentorStyle / v6 emotion |
 | v6 → v7 | 成就系统迁移：注入 `unlockedAchievements: []` 和 `achievementUnlockDates: {}` 默认值 |
 | v7 → v8 | 冻结卡碎片系统迁移：注入 `freezeCardFragments: 0`、`lastFragmentDate: ''`、`fragmentsEarnedToday: 0` 默认值 |
+| progress v8 → v9 | 注入 `pendingMilestone: null`，全局里程碑庆典改为运行态消费 |
+| progress v9 → v10 | ELO 按变体分离：`elo` 迁入 `eloByVariant.standard`，短牌/单挑使用独立初始评级 |
+| progress v10 → v11 | 清洗 GTO 复习项 label 尾部硬编码中文「决策」 |
+| progress v11 → v12 | 注入 `quickDrillBest: null`，速训最佳记录归 progress |
+| progress v12 → v14 | 删除顶层 `elo` 兼容字段并再次清理可能回写的镜像，统一 `eloByVariant` |
+| progress v14 → v15 | 注入 `focusModule: null`，支持速训模式维度筛选 |
+| progress v15 → v18 | 理论 / 策略 / 赔率复习项载荷依次归一为完整 i18n key，保留 SRS 调度字段 |
 | puzzle-trainer v1 → v2 | 快速训练 Best Record：注入 `quickDrillBest: null` 默认值 |
 | puzzle-trainer v2 → v3 | quickDrillBest 迁至 progress store：清理本模块存量字段 |
 | strategy-academy v0 → v1 | 进步回放得分记录迁移：注入 `firstAttemptScores: {}` 和 `lastAttemptScores: {}` 默认值（两镜像已于 v8 删除，事实源改为 `lessonAttempts`） |
@@ -1990,6 +2007,10 @@ persist(
 | strategy-academy v6 → v7 | P2 字段：注入 `placement: null` / `checkpoints: {}` / `bookmarkedLessons: []` / `lessonNotes: {}`（保留 lessonAttempts 与认证） |
 | strategy-academy v7 → v8 | 技术债清理：删除 `abilityAssessment`、`firstAttemptScores` / `lastAttemptScores` 镜像与 legacy `attemptCertification`；progress / certifications / lessonAttempts / P2 字段原样保留 |
 | theory-academy v0 → v1 | 首版兜底：防御性合并 progress 默认值（新 store，无存量迁移负担） |
+| theory-academy v1 → v2 | 注入 `flaggedQuestions` 等缺失进度字段 |
+| theory-academy v2 → v3 | 注入 `activeVariant` / `variantMetadata` 变体上下文 |
+| theory-academy v3 → v4 | 新增 `chapterAttempts` / `checkpoints` / `placement` / 书签 / 笔记；用 `quizScores` 种子化首次尝试 |
+| theory-academy v4 → v5 | 新增 `legacyUnlockedLevels`，按历史快照宽限单挑存量用户，不写 `completedChapters` |
 
 ---
 
@@ -2004,9 +2025,10 @@ persist(
 
 ### 10.2 数据导出/导入机制
 
-- 手牌历史支持通过 `HandImporter` 组件从文本导入
-- 可解析 PokerStars / GGPoker 标准格式
-- 支持手动录入（`site: 'manual'`）
+- 设置页导出当前内存中的 `records`、白名单 `settings` 与已加载 `hands`；不包含 ELO / SRS / 学院进度。牌局加载失败时省略 `hands` 并标记 `partial: true`，不得写空数组冒充完整。
+- 导入逐条校验训练记录，重复 id 通过 `submitRecord` 返回 `exists` 并跳过；非法记录与落库失败分别计数。设置只接受白名单字段，牌局单独写入 IndexedDB。
+- 清除只删除训练记录，先取消在途/pending 写入再清库；清库失败回滚内存并呈现 `cleanup` 错误，不伪装成功。
+- 手牌历史另支持通过 `HandImporter` 从 PokerStars / GGPoker / PartyPoker 文本导入，并支持手动录入（`site: 'manual'`）。
 
 ### 10.3 数据版本迁移策略
 
@@ -2041,7 +2063,7 @@ Node 环境测 zustand persist migrate 需 stub `window.localStorage`（`src/sha
 
 E2E 已落地：用例位于仓库根 `e2e/**/*.test.ts`，跑生产构建（`vite preview`，base `/dezhou/`），由 `playwright.config.ts` 收集；PR CI 与 deploy 在发布前执行 `pnpm typecheck:e2e`、E2E lint 与 `pnpm test:e2e`。
 
-当前覆盖学习闭环、首页习惯任务与离线深层路由；GTO 会话、手牌导入与课程深链仍属扩面缺口。编写约束（真实 UI、零噪声、禁止 `.only` / `.skip` / 重试变绿）与完整执行矩阵见 §18。
+当前覆盖学习闭环、首页习惯任务、课程枢纽→理论章节→来源返回与离线深层路由；策略课时深链、GTO 会话与手牌导入仍属扩面缺口。编写约束（真实 UI、零噪声、禁止 `.only` / `.skip` / 重试变绿）与完整执行矩阵见 §18。
 
 ## 12. 部署方案
 
@@ -2065,7 +2087,7 @@ pnpm build    # tsc -b && vite build
 - 全量预缓存：install 时 shell 三件套以 `cache:'reload'` 强制拉新，其余清单按 32 条/批串行 `addAll`，失败重试一次后抛出（不容忍 404）；首次打开后全部路由离线可用
 - 缓存名为 `poker-training-<版本号>-<清单hash>`：版本号经 SW 注册 URL 查询参数 `v` 传入（`APP_VERSION` 常量，由 `main.tsx` 在注册时动态注入）；清单 hash 为排序去重清单 JSON 的 sha256 前 8 位，同版本重部署也会更换缓存名
 - 更新与保留：新 SW 不跳过等待、不立即接管，旧标签页全部关闭后才激活；activate 经 `poker-training-meta` 缓存记录上一版，仅保留当前 + 上一版 + meta，删除其余 `poker-training-*` 缓存，杜绝部署后旧标签页懒加载 chunk 失败
-- fetch 三规则：导航 network-first（仅 `response.ok` 回写 shell 缓存，离线回退缓存首页）；`assets/` 哈希资产 cache-first（匹配 `ignoreVary`：模块请求带 Origin 头而预缓存请求没有，兼容服务器 `Vary: Origin`）；其余同源 GET network-first 不缓存
+- fetch 三规则：导航 network-first（仅 `response.ok` 回写 shell 缓存，离线回退缓存首页）；`assets/` 哈希资产 cache-first（匹配 `ignoreVary`：模块请求带 Origin 头而预缓存请求没有，兼容服务器 `Vary: Origin`）；其余同源 GET network-first 且成功响应不回写，网络失败时先回退全量预缓存（manifest / icon / public 资源），仍未命中才返回 503
 - dev 直接服务模板：占位符降级为空清单 + `dev` hash，不污染生产缓存
 - 守卫：`src/guards/swPrecache.guard.test.ts`（模板不变式 / 注入确定性 / 插件钩子 / 接线与扫描面自检）
 
@@ -2105,15 +2127,11 @@ pnpm build    # tsc -b && vite build
 4. 如需跨模块通信，通过 `trainingEvents` 事件总线发布训练结果
 5. Progress store 自动收集，无需额外修改
 
-### 13.2 后端 API 集成预留
+### 13.2 架构边界与扩展触发
 
-当前纯前端架构预留了以下扩展点：
+当前产品明确排除服务端账号、云同步、在线排行榜、实时对战与实时 GTO 求解器（见 ADR-0001）。这些不是已预留的产品路线，任何引入都需要先变更 PRD 范围并新增架构决策，不得在实现层悄然加入网络依赖。
 
-- **数据同步层**：可在 store 的 `addRecord` / `addHands` 中插入 API 调用
-- **认证模块**：可新增 `features/auth/` 模块，使用 OAuth/JWT
-- **排行榜**：当前 `Leaderboard` 为本地数据，可扩展为在线排行
-- **GTO Solver 数据**：当前 JSON 为简化数据，可接入真实 solver API
-- **多人对战**：通过 WebSocket 实现实时多人训练
+现有可独立演进的技术边界仅包括：替换预计算 GTO 数据、增加本地训练模块、调整 IndexedDB/localStorage 结构；变化仍需遵守模块隔离、persist 迁移与发布门禁。
 
 ### 13.3 插件化训练模式设计
 
@@ -2193,7 +2211,7 @@ Token 别名（保持组件兼容）：
 
 ### 14.2 字体配置
 
-通过 Google Fonts CDN 引入三套字体：
+三套字体均以 woff2 自托管于 `src/fonts/`，由 Vite 输出哈希资产并纳入 Service Worker 预缓存；`font-display: swap`，无第三方 CDN 依赖：
 
 | 变量 | 字体 | 用途 |
 |------|------|------|
@@ -2298,34 +2316,18 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 
 ---
 
-## 15. 设计决策记录
+## 15. 技术设计决策索引
 
-> 架构决策（ADR-0001 至 ADR-0004）见 [`docs/DECISIONS.md`](./DECISIONS.md)；本节只保留设计风格类决策。
+> 架构决策（ADR-0001 至 ADR-0004）见 [`docs/DECISIONS.md`](./DECISIONS.md)；视觉风格、字体与组件契约见 [`DESIGN.md`](../DESIGN.md)。本节只保留实现层选型，避免复制产品设计理由。
 
-### 15.1 为什么选择经典牌桌风格？
+### 15.1 CSS 变量与 Tailwind 语义 token
 
-- 目标用户是德州扑克玩家，牌桌氛围能增强沉浸感和使用意愿
-- 深色主题减少长时间训练的视觉疲劳
-- 浅色「白天牌室」用于日间/强光环境：页面与面板转为羊皮纸/浅木，绿呢牌桌、牌背与场景卡保持深色物理物件，不是简单反相
-- 绿色背景与扑克牌形成自然对比，提升可读性
+- 颜色与材质以 CSS 变量定义，Tailwind v4 通过 `@theme inline` 映射为语义 token；组件使用 `bg-card` / `text-foreground` 等语义类，不散落任意值。
+- 主题切换只覆盖 token 与少量登记补丁，具体白名单与视觉契约以 DESIGN.md 为准。
 
-### 15.2 为什么使用 Fraunces 作为标题字体？
+### 15.2 字体本地交付
 
-- 衬线体增强品牌辨识度和专业感
-- Fraunces 是 Google Fonts 中品质优秀的现代衬线体
-- 与 Inter Tight（无衬线正文）形成清晰的视觉层级
-
-### 15.3 为什么黄铜金作为强调色而非翡翠绿？
-
-- 黄铜金在深绿背景上对比度更高（符合 WCAG AA）
-- 金色传递“价值”和“奖励”的心理暗示，适合训练平台
-- 与牌桌绿色形成经典的“赌场”配色组合
-
-### 15.4 CSS 变量 vs Tailwind 任意值？
-
-- 使用 CSS 变量保持语义化和主题一致性
-- 通过 Tailwind v4 的 `@theme inline` 将 CSS 变量映射为语义 token（如 bg-card、text-foreground）
-- 组件直接使用 Tailwind 语义类，无需 `bg-[var(--xxx)]` 任意值写法
+- Fraunces / Inter Tight / JetBrains Mono 均自托管 woff2，避免第三方字体网络请求，并随构建产物进入离线预缓存。
 
 ---
 
@@ -2391,10 +2393,10 @@ CSS 单文件上限 800 行，由 `src/guards/cssLineCountGuard.test.ts` 守卫�
 
 #### Zustand + persist
 
-- 全局状态用 `create()` + `persist()` 中间件，持久化到 `localStorage`
-- 禁止裸调 `localStorage.getItem / setItem`；所有持久化经 zustand persist（自动版本化 + migrate）
-- 大数据（牌局）用 IndexedDB
-- 每个 store 必须有 `name` 与 `version` 字段
+- 全局状态用 `create()` + `persist()` 中间件；localStorage 保存跨模块状态与偏好，训练记录与牌局等大数据使用 IndexedDB
+- 禁止裸调 `localStorage.getItem / setItem`；localStorage 持久化经 zustand persist（自动版本化 + migrate），IndexedDB 写入以事务提交为成功边界
+- progress 的 `records` 必须经 `partialize` 排除在 localStorage 之外，写入独立 `poker-training-records` 数据库
+- 每个 persist store 必须有 `name` 与 `version` 字段；version 数值以 store 代码为唯一事实源
 
 persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事实源，本文档不维护数值副本。下表 `name` 仅作快速索引，不替代代码事实源：
 
@@ -2467,7 +2469,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 - 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `AcademyReadingPlane` / `FormulaDerivation` / `AcademyTakeawayCard` / `AcademyPeek` / `AcademyStickyCta`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyVariantRules` / `academyTakeaway`）；掌握度派生 `academyMastery` 单消费，位于 `strategy-academy/utils/`。
 - 理论学院与策略学院只允许薄包装消费：路由拼接、数据适配、i18n 文案留在 feature 内；shared 组件只接收 props/callbacks，禁止 import 任何 feature。
-- 理论侧 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheorySearch*` / `theorySrs` / `applyStandardQuizBank` / `quizDraw` 与策略侧对应实现均改为薄包装；行为/视觉/文案以原测试为回归基线。
+- 理论侧 `PracticeBridgeCard` / `TheorySearch*` / `theorySrs` / `applyStandardQuizBank` / `quizDraw` 与策略侧对应实现均改为薄包装；两院掌握度统一由课程枢纽 `CourseMasteryDualCard` 消费 `strategy-academy/utils/academyMastery.ts`，不再保留 `TheoryMasteryCard` / `theoryMastery`。
 - **阅读页双栏骨架**：`AcademyReadingPlane` 只负责「主阅读列（上限 768px）+ xl 学习导轨」的布局与 sticky 行为，导轨内容与文案由理论 `TheoryChapterRail` / 策略 `CourseStudyRail` 注入；shared 不读 store、不拼路由。
 - **P2 学习工具同源**：`AcademyBookmarksPanel`（strip / panel 两形态）/ `AcademyNotesPanel`（受控草稿 + 字数上限 + 显式保存）/ `ContentIssueReportDialog`（内容纠错弹层）由 shared 提供，理论 `TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport` 与策略 `StrategyBookmarksPanel` / `StrategyNotesPanel` / `StrategyContentIssueReport` 只做文案与数据适配；shared 不读 store、不拼路由。
 - **课程阅读页四件同源（2026-11）**：消费者均为 strategy-academy + theory-academy。
@@ -2488,7 +2490,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 - **正向（训练→课程）**：range-trainer / pot-odds / gto-simulator / puzzle-trainer 的答题反馈必须携带 `relatedLessonId`，wrong/blunder 显示「去复习」链接。推导入口：`inferRelatedLessonId(position, actionType)`、GTO 按 `scenario.street`、`inferPuzzleLessonId(theme)`。
 - **反向（数据→难度）**：`progress.shouldDownshiftDifficulty()`（无参）是自适应难度唯一入口，禁止模块自行判定；数据源为 `progress.emotion.consecutiveWrongCount`（由 `recordAnswer(isCorrect)` 维护）。
-- **相关课程 chip 路由**：shared `RelatedLessonChip` 只回传 `lessonId`（`onOpen` / `onRelatedLessonOpen`），目标路由由各 feature 注入；禁止在 `src/shared` 硬编码 `/academy/lesson/`。
+- **相关课程 chip 路由**：shared `RelatedLessonChip` 只回传 `lessonId`（`onOpen` / `onRelatedLessonOpen`），目标路由由各 feature 注入；禁止在 `src/shared` 硬编码课程路由。
 
 #### 训练弱项回流
 
@@ -2605,10 +2607,10 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 | 层级 | 载体 | 计分影响 | 是否能力凭证 |
 |---|---|---|---|
 | 形成性 | 课时测验、课后 Drill、理论章末小测、Level Checkpoint | 首考计 ELO 与掌握度；重考只更新 best / last 并进 SRS | 否 |
-| 终结性 | 策略 Level 认证（仅标准变体） | 首考计 ELO；通过即解锁下一级 | 是（唯一凭证出口） |
+| 终结性 | 策略 Level 认证（仅标准变体） | 不写 ELO；通过只发证，不解锁下一级 | 是（唯一凭证出口） |
 | 诊断性 | 策略定位测评、理论定位 | 只放宽解锁（写 `creditLevels`），不写完成态、不计 ELO / 掌握度 / SRS | 否 |
 
-口径统一为「首考定能力、重考定复习」：重考不得重复累加 ELO；错题按题级进入 SRS 并能回跳所属课时 / 章节。
+形成性评估统一为「首考定能力、重考定复习」：重考不得重复累加 ELO；错题按题级进入 SRS 并能回跳所属课时 / 章节。认证是凭证出口，不参与 ELO 与解锁计算。
 
 ---
 
@@ -2651,7 +2653,7 @@ graph TD
 | **R5 变体 canonical 在主线** | 变体（标准 / 短牌 / 单挑）的唯一 canonical 切换点在课程主线；地图与执行页只读当前变体，不各自持久化第二份选择。批次 2 落地：主线经 `TheoryDataSource.switchVariant` 发出唯一切换命令，地图只读显示 | `shared/types/theoryDataSource.ts`（`getActiveVariant` / `switchVariant`）+ `CourseHub` |
 | **R6 前进带 state** | 枢纽 → 执行页的前进链接必须携带来源 state（`courseFrom`），执行页不靠 referrer 猜来源 | `courseBack` 的 `COURSE_FROM_KEY`；阶段卡 chip |
 | **R7 显式返回** | 课程区的返回一律是显式控件（回到确定目标），不依赖浏览器返回键；浏览器返回键仅作为额外通路 | `BackLink` |
-| **R8 返回入口单源** | 返回入口只用 `shared/components/layout/BackLink`（`to` / `onClick` / `historyBack` 三选一，文本 / 胶囊 / 按钮三变体）；icon-only 必填 `aria-label`；触摸目标 ≥44px | `BackLink.tsx` + DESIGN §13.7 |
+| **R8 返回入口单源（目标）** | 返回入口统一使用 `shared/components/layout/BackLink`（`to` / `onClick` / `historyBack` 三选一，文本 / 胶囊 / 按钮三变体）；icon-only 必填 `aria-label`；触摸目标 ≥44px。当前 `TheoryChapterView` 面包屑仍使用原生 `<button>`，属待收敛例外，不得宣称已全覆盖 | `BackLink.tsx` + DESIGN §13.7 |
 | **R9 地图角色文案** | 两张地图在导航、页名、目录入口中统一称「实战地图」「理论地图」，不复用「学院」作为地图名 | `nav.academy` / `nav.theory`（core nav 单源文案） |
 | **R10 课程激活覆盖 01 组** | 导航「课程」项指向主线，但 `/lesson`、`/academy`、`/theory` 三个前缀都点亮该项：桌面侧栏与移动底栏共用同一判定（`isCourseSectionPath`），其他导航项仍按自身前缀判定 | `src/layouts/navSections.ts`（`COURSE_SECTION_PREFIXES` / `isCourseSectionPath`）+ `AppLayout` / `MobileNav` |
 
