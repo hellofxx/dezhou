@@ -1,6 +1,6 @@
 # 贡献指南
 
-> 状态：Current · 最后复核：2026-11-25
+> 状态：Current · 最后复核：2026-11-26
 
 本文件只提供入口与最短路径；规则正文以 [`AGENTS.md`](./AGENTS.md)、[`docs/README.md`](./docs/README.md) 与 [`docs/TDD.md`](./docs/TDD.md) §18 为准。
 
