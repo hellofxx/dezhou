@@ -19,7 +19,7 @@
 |---|---|---|---|---|---|---|
 | `gto-simulator` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 26 | `progress` | 21 |
 | `hand-history` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 28 | — | 23 |
-| `help-center` | `HelpHome` | — | `help` | 4 | — | 10 |
+| `help-center` | `HelpHome` | — | `help` | 6 | — | 12 |
 | `onboarding` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |
 | `pot-odds` | `OddsStation` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
 | `progress` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 71 | — | 84 |

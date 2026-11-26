@@ -24,7 +24,7 @@ export interface HelpArticle {
   modulePath: string;
   titleKey: string;
   introKey: string;
-  icon: 'target' | 'calculator' | 'gamepad2' | 'graduation-cap' | 'library' | 'puzzle' | 'clipboard-list' | 'bar-chart3' | 'book-open';
+  icon: 'target' | 'calculator' | 'gamepad2' | 'graduation-cap' | 'library' | 'zap' | 'puzzle' | 'clipboard-list' | 'bar-chart3' | 'book-open' | 'settings';
   accent: HelpAccent;
   sections: HelpSection[];
 }

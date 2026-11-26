@@ -1,10 +1,6 @@
-/**
- * 帮助中心纯数据层 — 只存 i18n key，不含硬编码文案。
- * 所有用户可见文本通过 `help.*` 命名空间在 zh.json / en.json 中维护。
- */
+/** 帮助中心纯数据层：用户可见文案全部经 help.* i18n key 解析。 */
 import type { HelpArticle, FaqItem, ConceptCard } from '../types';
 
-/** 9 篇教程文章（8 模块 + 平台总览） */
 export const HELP_ARTICLES: HelpArticle[] = [
   {
     id: 'overview',
@@ -43,7 +39,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     accent: 'info',
     sections: [
       { type: 'paragraph', key: 'articles.pot-odds.s0' },
-      { type: 'steps', key: 'articles.pot-odds.s1', stepKeys: ['articles.pot-odds.s1-steps.0', 'articles.pot-odds.s1-steps.1', 'articles.pot-odds.s1-steps.2'] },
+      { type: 'steps', key: 'articles.pot-odds.s1', stepKeys: ['articles.pot-odds.s1-steps.0', 'articles.pot-odds.s1-steps.1', 'articles.pot-odds.s1-steps.2', 'articles.pot-odds.s1-steps.3'] },
       { type: 'tip', key: 'articles.pot-odds.s2' },
       { type: 'link', key: 'articles.pot-odds.s3', to: '/drill/odds' },
     ],
@@ -64,7 +60,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
   {
     id: 'academy',
-    modulePath: '/academy',
+    modulePath: '/lesson',
     titleKey: 'articles.academy.title',
     introKey: 'articles.academy.intro',
     icon: 'graduation-cap',
@@ -85,9 +81,23 @@ export const HELP_ARTICLES: HelpArticle[] = [
     accent: 'brass',
     sections: [
       { type: 'paragraph', key: 'articles.theory.s0' },
-      { type: 'steps', key: 'articles.theory.s1', stepKeys: ['articles.theory.s1-steps.0', 'articles.theory.s1-steps.1', 'articles.theory.s1-steps.2'] },
+      { type: 'steps', key: 'articles.theory.s1', stepKeys: ['articles.theory.s1-steps.0', 'articles.theory.s1-steps.1', 'articles.theory.s1-steps.2', 'articles.theory.s1-steps.3'] },
       { type: 'tip', key: 'articles.theory.s2' },
       { type: 'link', key: 'articles.theory.s3', to: '/theory' },
+    ],
+  },
+  {
+    id: 'quick-drill',
+    modulePath: '/quick',
+    titleKey: 'articles.quick-drill.title',
+    introKey: 'articles.quick-drill.intro',
+    icon: 'zap',
+    accent: 'info',
+    sections: [
+      { type: 'paragraph', key: 'articles.quick-drill.s0' },
+      { type: 'steps', key: 'articles.quick-drill.s1', stepKeys: ['articles.quick-drill.s1-steps.0', 'articles.quick-drill.s1-steps.1', 'articles.quick-drill.s1-steps.2', 'articles.quick-drill.s1-steps.3'] },
+      { type: 'tip', key: 'articles.quick-drill.s2' },
+      { type: 'link', key: 'articles.quick-drill.s3', to: '/quick' },
     ],
   },
   {
@@ -115,7 +125,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       { type: 'paragraph', key: 'articles.hand-history.s0' },
       { type: 'steps', key: 'articles.hand-history.s1', stepKeys: ['articles.hand-history.s1-steps.0', 'articles.hand-history.s1-steps.1', 'articles.hand-history.s1-steps.2', 'articles.hand-history.s1-steps.3'] },
       { type: 'tip', key: 'articles.hand-history.s2' },
-      { type: 'link', key: 'articles.hand-history.s3', to: '/hand-history' },
+      { type: 'link', key: 'articles.hand-history.s3', to: '/hand-history/import' },
     ],
   },
   {
@@ -127,23 +137,35 @@ export const HELP_ARTICLES: HelpArticle[] = [
     accent: 'info',
     sections: [
       { type: 'paragraph', key: 'articles.progress.s0' },
-      { type: 'steps', key: 'articles.progress.s1', stepKeys: ['articles.progress.s1-steps.0', 'articles.progress.s1-steps.1', 'articles.progress.s1-steps.2'] },
+      { type: 'steps', key: 'articles.progress.s1', stepKeys: ['articles.progress.s1-steps.0', 'articles.progress.s1-steps.1', 'articles.progress.s1-steps.2', 'articles.progress.s1-steps.3'] },
       { type: 'tip', key: 'articles.progress.s2' },
       { type: 'link', key: 'articles.progress.s3', to: '/progress' },
     ],
   },
+  {
+    id: 'settings',
+    modulePath: '/settings',
+    titleKey: 'articles.settings.title',
+    introKey: 'articles.settings.intro',
+    icon: 'settings',
+    accent: 'frost',
+    sections: [
+      { type: 'paragraph', key: 'articles.settings.s0' },
+      { type: 'steps', key: 'articles.settings.s1', stepKeys: ['articles.settings.s1-steps.0', 'articles.settings.s1-steps.1', 'articles.settings.s1-steps.2', 'articles.settings.s1-steps.3'] },
+      { type: 'tip', key: 'articles.settings.s2' },
+      { type: 'link', key: 'articles.settings.s3', to: '/settings' },
+    ],
+  },
 ];
 
-/** 5 步快速上手路径 */
 export const QUICK_START_STEPS: { key: string; to: string }[] = [
-  { key: 'quickStart.steps.0', to: '/onboarding' },
+  { key: 'quickStart.steps.0', to: '/academy/placement' },
   { key: 'quickStart.steps.1', to: '/lesson' },
   { key: 'quickStart.steps.2', to: '/quick' },
-  { key: 'quickStart.steps.3', to: '/' },
+  { key: 'quickStart.steps.3', to: '/drill/puzzle' },
   { key: 'quickStart.steps.4', to: '/progress' },
 ];
 
-/** 6 个系统概念卡片 */
 export const CONCEPT_CARDS: ConceptCard[] = [
   { key: 'concepts.elo', iconKey: 'gauge' },
   { key: 'concepts.streak', iconKey: 'flame' },
@@ -153,7 +175,6 @@ export const CONCEPT_CARDS: ConceptCard[] = [
   { key: 'concepts.dataStorage', iconKey: 'database' },
 ];
 
-/** 8 条 FAQ */
 export const FAQ_ITEMS: FaqItem[] = [
   { questionKey: 'faq.q0.question', answerKey: 'faq.q0.answer' },
   { questionKey: 'faq.q1.question', answerKey: 'faq.q1.answer' },
@@ -163,4 +184,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   { questionKey: 'faq.q5.question', answerKey: 'faq.q5.answer' },
   { questionKey: 'faq.q6.question', answerKey: 'faq.q6.answer' },
   { questionKey: 'faq.q7.question', answerKey: 'faq.q7.answer' },
+  { questionKey: 'faq.q8.question', answerKey: 'faq.q8.answer' },
+  { questionKey: 'faq.q9.question', answerKey: 'faq.q9.answer' },
+  { questionKey: 'faq.q10.question', answerKey: 'faq.q10.answer' },
 ];

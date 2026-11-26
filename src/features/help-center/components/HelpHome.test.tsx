@@ -1,8 +1,3 @@
-/**
- * HelpHome 组件冒烟测试（jsdom）：
- * 验证 Hero eyebrow 渲染、模块卡片数 = 9、FAQ 展开 / 收起交互、Hero 锚点滚动目标，
- * 以及 Design QA 修复项（Link 语义 / §5.18 右侧箭头 / data-accent 变体）不回归。
- */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
@@ -11,10 +6,9 @@ import HelpHome from './HelpHome';
 
 type ScrollCall = { el: Element; options?: ScrollIntoViewOptions | boolean };
 
-describe('HelpHome 冒烟测试', () => {
+describe('HelpHome 组件测试', () => {
   let container: HTMLDivElement;
   let root: Root;
-  // jsdom 未实现 scrollIntoView，注入记录桩以断言 Hero 锚点的滚动目标与参数
   let scrollCalls: ScrollCall[];
   let originalScrollIntoView: Element['scrollIntoView'] | undefined;
 
@@ -53,129 +47,133 @@ describe('HelpHome 冒烟测试', () => {
     });
   };
 
-  it('渲染 Hero eyebrow 与 9 张模块卡片', () => {
-    renderHelp();
-
-    // Hero eyebrow 渲染（HOUSE RULES 玩家须知）
-    expect(container.textContent).toContain('玩家须知');
-
-    // 9 张模块卡片（module-card 类由 ModuleEntryCard 持有）
-    const cards = container.querySelectorAll('.module-card');
-    expect(cards.length).toBe(9);
-  });
-
-  it('FAQ 折叠交互：点击展开显示答案', () => {
-    renderHelp();
-
-    // 找到 FAQ 按钮（HELP-05：限定在 #help-faq 容器内查询 aria-expanded，
-    // 避免误匹配其它可能使用该属性的交互元素）
-    const faqSection = container.querySelector('#help-faq');
-    expect(faqSection).not.toBeNull();
-    const faqButtons = faqSection!.querySelectorAll('button[aria-expanded]');
-    expect(faqButtons.length).toBeGreaterThanOrEqual(8);
-
-    const firstBtn = faqButtons[0] as HTMLButtonElement;
-    expect(firstBtn.getAttribute('aria-expanded')).toBe('false');
-
-    // 点击展开
+  const typeSearch = (value: string) => {
+    const input = container.querySelector<HTMLInputElement>('#help-search');
+    expect(input).not.toBeNull();
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
     act(() => {
-      firstBtn.click();
+      setter?.call(input, value);
+      input?.dispatchEvent(new Event('input', { bubbles: true }));
     });
+  };
 
-    expect(firstBtn.getAttribute('aria-expanded')).toBe('true');
-    // 展开态才建立 button ↔ panel 的 aria-controls 关联
-    expect(firstBtn.getAttribute('aria-controls')).toBe('faq-panel-0');
-  });
-
-  it('FAQ 折叠交互：再次点击收起，且同时只展开一条', () => {
+  it('渲染 Hero、真实数量承诺与 11 张模块卡片', () => {
     renderHelp();
 
-    const faqButtons = Array.from(
+    expect(container.textContent).toContain('玩家须知');
+    expect(container.textContent).toContain('11 篇模块教程 · 6 项系统概念 · 11 条常见问答');
+    expect(container.querySelectorAll('.module-card')).toHaveLength(11);
+  });
+
+  it('快速上手使用当前 canonical 路由', () => {
+    renderHelp();
+
+    const hrefs = Array.from(container.querySelectorAll<HTMLAnchorElement>('.quick-path-node'))
+      .map((node) => node.getAttribute('href'));
+    expect(hrefs).toEqual(['/academy/placement', '/lesson', '/quick', '/drill/puzzle', '/progress']);
+  });
+
+  it('FAQ 展开后显示答案，收起后进入退出动画并保留 aria-controls', () => {
+    renderHelp();
+
+    const first = container.querySelector<HTMLButtonElement>('#help-faq button[aria-expanded]');
+    expect(first).not.toBeNull();
+    const panelId = 'faq-panel-faq.q0.question';
+    expect(first?.getAttribute('aria-expanded')).toBe('false');
+    expect(first?.getAttribute('aria-controls')).toBe(panelId);
+
+    act(() => first?.click());
+    expect(first?.getAttribute('aria-expanded')).toBe('true');
+    expect(document.getElementById(panelId)?.textContent).toContain('localStorage');
+
+    act(() => first?.click());
+    expect(first?.getAttribute('aria-expanded')).toBe('false');
+    expect(first?.getAttribute('aria-controls')).toBe(panelId);
+    expect(document.getElementById(panelId)?.getAttribute('style')).toContain('height: 0px');
+  });
+
+  it('FAQ 同时只展开一条', () => {
+    renderHelp();
+
+    const buttons = Array.from(
       container.querySelectorAll<HTMLButtonElement>('#help-faq button[aria-expanded]'),
     );
-    const first = faqButtons[0] as HTMLButtonElement;
-    const second = faqButtons[1] as HTMLButtonElement;
+    const first = buttons[0] as HTMLButtonElement;
+    const second = buttons[1] as HTMLButtonElement;
 
-    // 展开 → 收起
-    act(() => first.click());
-    expect(first.getAttribute('aria-expanded')).toBe('true');
-    act(() => first.click());
-    expect(first.getAttribute('aria-expanded')).toBe('false');
-    expect(first.getAttribute('aria-controls')).toBeNull();
-
-    // 单开语义：展开另一条会把前一条收起
     act(() => first.click());
     act(() => second.click());
     expect(first.getAttribute('aria-expanded')).toBe('false');
     expect(second.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('Hero 主 CTA 与三条规则各自滚动到对应 section', () => {
+  it('Hero 链接滚动到对应 section，并把焦点移入目标', () => {
     renderHelp();
 
-    const cta = container.querySelector('.help-hero-cta') as HTMLButtonElement;
-    const rules = Array.from(container.querySelectorAll<HTMLButtonElement>('.house-rules-item'));
-    const [rule01, rule02, rule03] = rules as [HTMLButtonElement, HTMLButtonElement, HTMLButtonElement];
+    const cta = container.querySelector<HTMLAnchorElement>('.help-hero-cta');
+    const rules = Array.from(container.querySelectorAll<HTMLAnchorElement>('.house-rules-item'));
+    expect(cta).not.toBeNull();
+    expect(rules).toHaveLength(3);
 
-    act(() => cta.click());
-    act(() => rule02.click());
-    act(() => rule03.click());
-    act(() => rule01.click());
+    act(() => cta?.click());
+    act(() => rules[1]?.click());
+    act(() => rules[2]?.click());
 
-    // 目标 section 与 HelpHero 的锚点映射逐一对应（顺序即点击顺序）
     expect(scrollCalls.map((call) => call.el.id)).toEqual([
       'help-quickstart',
       'help-articles',
       'help-faq',
-      'help-quickstart',
     ]);
-    // 未开启减弱动态偏好时走平滑滚动，且对齐到 section 顶部
+    expect(document.activeElement?.id).toBe('help-faq');
     for (const call of scrollCalls) {
       expect(call.options).toEqual({ behavior: 'smooth', block: 'start' });
     }
   });
 
-  it('模块卡为 a[href] 而非 button（Link 语义：中键/新标签可用）', () => {
+  it('模块卡与上手节点保持真实链接语义', () => {
     renderHelp();
 
     const cards = container.querySelectorAll('.module-card');
-    expect(cards).toHaveLength(9);
+    expect(cards).toHaveLength(11);
     for (const card of cards) {
       expect(card.tagName).toBe('A');
       expect(card.getAttribute('href')?.startsWith('/help/article/')).toBe(true);
+      expect(card.querySelector('.module-icon')?.getAttribute('aria-hidden')).toBe('true');
     }
   });
 
-  it('上手路径节点为 a[href]', () => {
+  it('全文检索按多个关键词同时匹配文章正文', () => {
     renderHelp();
+    typeSearch('冻结 导出');
 
-    const nodes = container.querySelectorAll('.quick-path-node');
-    expect(nodes).toHaveLength(5);
-    for (const node of nodes) expect(node.tagName).toBe('A');
+    const cards = Array.from(container.querySelectorAll<HTMLAnchorElement>('.module-card'));
+    expect(cards).toHaveLength(1);
+    expect(cards[0]?.getAttribute('href')).toBe('/help/article/settings');
+    expect(container.querySelector('#help-quickstart')).toBeNull();
+    expect(container.querySelector('[role="status"]')?.textContent).toContain('找到 1 条匹配内容');
   });
 
-  it('模块图标走 data-accent 变体而非内联 style（底色事实源在 CSS）', () => {
+  it('检索无结果时显示空态，清除后恢复全部内容', () => {
     renderHelp();
+    typeSearch('not-a-real-help-keyword');
 
-    const icons = container.querySelectorAll('.module-icon');
-    expect(icons).toHaveLength(9);
-    for (const icon of icons) {
-      expect(icon.getAttribute('style'), '.module-icon 不应残留内联 style').toBeNull();
-      expect(icon.getAttribute('data-accent')).toBeTruthy();
-    }
+    expect(container.textContent).toContain('没有找到匹配内容');
+    expect(container.querySelectorAll('.module-card')).toHaveLength(0);
+
+    const clear = container.querySelector<HTMLButtonElement>('button[aria-label="清除搜索"]');
+    act(() => clear?.click());
+    expect(container.querySelectorAll('.module-card')).toHaveLength(11);
+    expect(container.querySelector('#help-quickstart')).not.toBeNull();
   });
 
-  it('模块卡携带 §5.18 规定的右侧箭头', () => {
+  it('Escape 清除搜索', () => {
     renderHelp();
+    typeSearch('GTO');
+    const input = container.querySelector<HTMLInputElement>('#help-search');
+    expect(input?.value).toBe('GTO');
 
-    for (const card of container.querySelectorAll('.module-card')) {
-      expect(card.querySelector('svg.lucide-arrow-right'), '模块卡缺少右侧箭头').not.toBeNull();
-    }
-  });
-
-  it('Hero CTA 仍是 button（锚点滚动而非路由跳转）', () => {
-    renderHelp();
-
-    expect(container.querySelector('.help-hero-cta')?.tagName).toBe('BUTTON');
+    act(() => input?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })));
+    expect(input?.value).toBe('');
+    expect(container.querySelectorAll('.module-card')).toHaveLength(11);
   });
 });

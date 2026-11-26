@@ -12,7 +12,7 @@ export default function QuickStartPath() {
   return (
     <div className="quick-path" role="list">
       {QUICK_START_STEPS.map((step, idx) => (
-        <div key={idx} className="quick-path-step" role="listitem">
+        <div key={step.to} className="quick-path-step" role="listitem">
           <Link
             to={step.to}
             className="quick-path-node"

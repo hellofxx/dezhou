@@ -3,37 +3,38 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FAQ_ITEMS } from '../data/helpContent';
+import type { FaqItem } from '../types';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 
-/**
- * FAQ 折叠面板 — 编号 01-08 + brass 左侧描边 + framer-motion 动效。
- * 左侧 brass 描边在 hover / 展开时由 walnut-border 提亮至 brass。
- */
-export default function FaqAccordion() {
+interface FaqAccordionProps {
+  items?: readonly FaqItem[];
+}
+
+export default function FaqAccordion({ items = FAQ_ITEMS }: FaqAccordionProps) {
   const { t } = useTranslation();
-  // MotionConfig 的 reducedMotion 只降级 transform，height 展开需显式置零时长
   const prefersReducedMotion = useReducedMotion();
   const panelTransition = {
     duration: prefersReducedMotion ? 0 : MOTION_DURATION.fast,
     ease: MOTION_EASE.standard,
   };
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openKey, setOpenKey] = useState<string | null>(null);
 
   return (
     <div className="faq-list">
-      {FAQ_ITEMS.map((item, idx) => {
-        const isOpen = openIndex === idx;
-        const panelId = `faq-panel-${idx}`;
-        const buttonId = `faq-button-${idx}`;
-        const num = String(idx + 1).padStart(2, '0');
+      {items.map((item) => {
+        const isOpen = openKey === item.questionKey;
+        const panelId = `faq-panel-${item.questionKey}`;
+        const buttonId = `faq-button-${item.questionKey}`;
+        const sourceIndex = FAQ_ITEMS.indexOf(item);
+        const num = String(sourceIndex + 1).padStart(2, '0');
         return (
-          <div key={idx} className={`faq-item${isOpen ? ' open' : ''}`}>
+          <div key={item.questionKey} className={`faq-item${isOpen ? ' open' : ''}`}>
             <button
               id={buttonId}
               type="button"
               aria-expanded={isOpen}
-              aria-controls={isOpen ? panelId : undefined}
-              onClick={() => setOpenIndex(isOpen ? null : idx)}
+              aria-controls={panelId}
+              onClick={() => setOpenKey(isOpen ? null : item.questionKey)}
               className="faq-item-button"
             >
               <span className="faq-item-num" aria-hidden="true">
@@ -49,7 +50,7 @@ export default function FaqAccordion() {
               />
             </button>
             <AnimatePresence initial={false}>
-              {isOpen && (
+              {isOpen ? (
                 <motion.div
                   id={panelId}
                   role="region"
@@ -64,7 +65,7 @@ export default function FaqAccordion() {
                     {t(`help.${item.answerKey}`)}
                   </div>
                 </motion.div>
-              )}
+              ) : null}
             </AnimatePresence>
           </div>
         );

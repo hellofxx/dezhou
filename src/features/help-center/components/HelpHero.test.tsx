@@ -1,14 +1,8 @@
-/**
- * HelpHero 组件测试（jsdom）：
- * 锁定 House Rules 台卡的 4 个跳转入口（主 CTA + 01/02/03 三条规则）到
- * HelpHome section 锚点的映射契约 —— 锚点写错时用户点击会滚到错误分区或毫无反应。
- */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import HelpHero, { type HelpHeroAnchor } from './HelpHero';
 
-/** 规则卡编号 ↔ 锚点映射（顺序与源码 rules 数组一致） */
 const RULE_ANCHORS: ReadonlyArray<{ index: number; num: string; anchor: HelpHeroAnchor }> = [
   { index: 0, num: '01', anchor: 'quickstart' },
   { index: 1, num: '02', anchor: 'articles' },
@@ -38,67 +32,69 @@ describe('HelpHero 组件测试', () => {
     return onRuleClick;
   };
 
-  const ruleButtons = () =>
-    Array.from(container.querySelectorAll<HTMLButtonElement>('.house-rules-item'));
+  const ruleLinks = () =>
+    Array.from(container.querySelectorAll<HTMLAnchorElement>('.house-rules-item'));
 
-  it('视觉标题保留 h2，且组件内不渲染 h1（全站唯一 h1 归壳层）', () => {
+  it('视觉标题保留 h2，组件内不渲染 h1', () => {
     renderHero();
-
-    const title = container.querySelector('h2.help-hero-title');
-    expect(title?.tagName).toBe('H2');
-    expect(title?.textContent?.trim().length).toBeGreaterThan(0);
+    expect(container.querySelector('h2.help-hero-title')?.textContent?.trim().length).toBeGreaterThan(0);
     expect(container.querySelector('h1')).toBeNull();
   });
 
-  it('渲染 01/02/03 三条编号规则与 zh 文案', () => {
+  it('渲染 3 条编号规则与 zh 文案', () => {
     renderHero();
-
-    const buttons = ruleButtons();
-    expect(buttons).toHaveLength(RULE_ANCHORS.length);
-    expect(buttons.map((btn) => btn.querySelector('.house-rules-num')?.textContent)).toEqual([
-      '01',
-      '02',
-      '03',
+    const links = ruleLinks();
+    expect(links).toHaveLength(3);
+    expect(links.map((link) => link.querySelector('.house-rules-num')?.textContent)).toEqual(['01', '02', '03']);
+    expect(links.map((link) => link.querySelector('.house-rules-text-title')?.textContent)).toEqual([
+      '快速上手',
+      '模块教程',
+      '常见问答',
     ]);
-    expect(
-      buttons.map((btn) => btn.querySelector('.house-rules-text-title')?.textContent),
-    ).toEqual(['快速上手', '模块教程', '常见问答']);
   });
 
-  it('台卡容器带 role=group + aria-label，且内部按钮全部显式 type=button', () => {
+  it('快捷导航使用真实锚点链接并具备可访问名称', () => {
     renderHero();
-
     const card = container.querySelector('.house-rules-card');
     expect(card?.getAttribute('role')).toBe('group');
     expect(card?.getAttribute('aria-label')).toBe('台卡快捷导航');
+    expect(container.querySelectorAll('button')).toHaveLength(0);
 
-    // 03 条规则 + 1 个主 CTA
-    const buttons = Array.from(container.querySelectorAll('button'));
-    expect(buttons).toHaveLength(RULE_ANCHORS.length + 1);
-    for (const btn of buttons) {
-      expect(btn.getAttribute('type'), 'Hero 内按钮须显式 type=button').toBe('button');
-    }
+    const links = Array.from(container.querySelectorAll<HTMLAnchorElement>('.help-hero a'));
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '#help-quickstart',
+      '#help-quickstart',
+      '#help-articles',
+      '#help-faq',
+    ]);
+    for (const link of links) expect(link.textContent?.trim().length).toBeGreaterThan(0);
+  });
+
+  it('数量承诺由真实清单插值生成', () => {
+    renderHero();
+    expect(container.querySelector('.help-hero-meta')?.textContent).toBe(
+      '11 篇模块教程 · 6 项系统概念 · 11 条常见问答',
+    );
+    expect(ruleLinks()[1]?.querySelector('.house-rules-text-body')?.textContent).toBe('11 篇模块与系统教程');
   });
 
   it.each(RULE_ANCHORS)('点击规则 $num 回传 $anchor 锚点', ({ index, anchor }) => {
     const onRuleClick = renderHero();
+    const target = ruleLinks()[index] as HTMLAnchorElement;
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+    act(() => target.dispatchEvent(event));
 
-    const target = ruleButtons()[index] as HTMLButtonElement;
-    act(() => target.click());
-
+    expect(event.defaultPrevented).toBe(true);
     expect(onRuleClick).toHaveBeenCalledTimes(1);
     expect(onRuleClick).toHaveBeenCalledWith(anchor);
   });
 
-  it('点击主 CTA 回传 quickstart（与规则 01 同一锚点）', () => {
+  it('点击主 CTA 回传 quickstart', () => {
     const onRuleClick = renderHero();
+    const cta = container.querySelector<HTMLAnchorElement>('.help-hero-cta');
+    expect(cta?.textContent).toContain('从快速上手开始');
 
-    const cta = container.querySelector('.help-hero-cta') as HTMLButtonElement;
-    expect(cta.textContent).toContain('从快速上手开始');
-
-    act(() => cta.click());
-
-    expect(onRuleClick).toHaveBeenCalledTimes(1);
+    act(() => cta?.click());
     expect(onRuleClick).toHaveBeenCalledWith('quickstart');
   });
 });

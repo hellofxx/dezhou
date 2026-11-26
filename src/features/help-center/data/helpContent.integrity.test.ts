@@ -7,8 +7,8 @@ import helpZh from '@/i18n/locales/zh/help.json';
 import helpEn from '@/i18n/locales/en/help.json';
 
 const VALID_ICONS = new Set([
-  'target', 'calculator', 'gamepad2', 'graduation-cap', 'library',
-  'puzzle', 'clipboard-list', 'bar-chart3', 'book-open',
+  'target', 'calculator', 'gamepad2', 'graduation-cap', 'library', 'zap',
+  'puzzle', 'clipboard-list', 'bar-chart3', 'book-open', 'settings',
 ]);
 
 const VALID_ACCENTS = new Set<HelpAccent>(['brass', 'info', 'success', 'frost', 'leather']);
@@ -42,12 +42,18 @@ describe('helpContent integrity', () => {
       expect(article.sections.length).toBeGreaterThan(0);
       for (const section of article.sections) {
         expect(section.key.length).toBeGreaterThan(0);
+        if (section.type === 'steps') {
+          expect(section.stepKeys?.length, `${article.id} 缺少步骤 key`).toBeGreaterThan(0);
+        }
+        if (section.type === 'link') {
+          expect(section.to?.startsWith('/'), `${article.id} 链接缺少路由`).toBe(true);
+        }
       }
     }
   });
 
-  it('HELP_ARTICLES 共 9 篇', () => {
-    expect(HELP_ARTICLES.length).toBe(9);
+  it('HELP_ARTICLES 共 11 篇', () => {
+    expect(HELP_ARTICLES.length).toBe(11);
   });
 
   it('QUICK_START_STEPS 长度 = 5', () => {
@@ -74,8 +80,8 @@ describe('helpContent integrity', () => {
     }
   });
 
-  it('FAQ_ITEMS >= 8', () => {
-    expect(FAQ_ITEMS.length).toBeGreaterThanOrEqual(8);
+  it('FAQ_ITEMS 共 11 条', () => {
+    expect(FAQ_ITEMS.length).toBe(11);
   });
 
   it('FAQ_ITEMS key 非空', () => {
@@ -134,22 +140,17 @@ describe('helpContent i18n key 存在性', () => {
 });
 
 // ===== 文案数量与数据源绑定 =====
-// hero.meta 以「9 篇模块教程 · 6 项系统规则 · 8 条常见问答」向用户承诺内容规模。
-// 数组长度有上述断言把守，文案数字却无任何绑定：加一篇教程而忘了改 meta，
-// 用户看到的仍是旧数字（AGENTS.md「单点事实源」禁止数值副本漂移）。
-// 断言提取数字而非硬编码期望，措辞调整不会脆断。
+// hero.meta 通过 i18n 插值读取清单长度，禁止在文案中维护第二份数字副本。
 
 describe('hero.meta 数量与数据源一致', () => {
-  const expected = [HELP_ARTICLES.length, CONCEPT_CARDS.length, FAQ_ITEMS.length];
-
-  it('zh 侧数字与数组长度一致', () => {
-    const nums = (helpZh.hero.meta.match(/\d+/g) ?? []).map(Number);
-    expect(nums, `hero.meta=${helpZh.hero.meta} 期望含 ${expected.join('/')}`).toEqual(expected);
-  });
-
-  it('en 侧数字与数组长度一致', () => {
-    const nums = (helpEn.hero.meta.match(/\d+/g) ?? []).map(Number);
-    expect(nums, `hero.meta=${helpEn.hero.meta} 期望含 ${expected.join('/')}`).toEqual(expected);
+  it.each([
+    ['zh', helpZh.hero.meta],
+    ['en', helpEn.hero.meta],
+  ])('%s 侧使用数据源插值而非硬编码数字', (_locale, meta) => {
+    expect(meta).toContain('{{articles}}');
+    expect(meta).toContain('{{concepts}}');
+    expect(meta).toContain('{{faq}}');
+    expect(meta).not.toMatch(/\d+/);
   });
 });
 

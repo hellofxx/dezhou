@@ -1612,6 +1612,16 @@ UI 组件：
 
 文案模板：模板存储在 `shared/constants/mentorStyles.ts`（`MENTOR_FEEDBACK_TEMPLATES`，三种风格 × 五个评级），由 `renderMentorFeedback(mentorStyle, grade, params, t)` 渲染——模板值改为 i18n key 引用，实际文案在 `zh.json` / `en.json` 的 `mentor.feedback.*` 下，由 `t` 函数解析后替换占位符；QuizCard / GTOFeedback 优先调用，模板缺省时降级到通用 i18n 文案；反馈颜色与图标不随风格变化（统一由 `GRADE_DISPLAY_CONFIG` 控制）。
 
+### 5.10 Help Center（帮助中心，2026-11）
+
+- **模块边界**：`features/help-center` 是纯静态教程与检索模块，无 store、无 persist、无 `trainingEvents`；仅经路由字符串跳转其他 feature，不引入跨模块状态。
+- **内容单源**：`data/helpContent.ts` 持有教程、快速上手、概念与 FAQ 清单；`zh/en/help.json` 持有全部用户文案。Hero 数量承诺由清单长度经 i18n 插值生成，完整性测试同时校验双语 key、段落结构与数量占位符。
+- **全文检索**：`utils/helpSearch.ts` 对查询与语料执行 NFKC、trim、小写归一化；空白分词后要求所有词命中。检索范围包含教程标题、简介、正文、步骤、概念标题/正文与 FAQ 问答；空查询返回全量，组件按命中结果分区渲染并播报数量。
+- **交互与可访问性**：搜索框使用共享 `Input`，提供清除按钮与 Escape 清空；Hero 使用真实 hash 链接，点击后按 reduced-motion 选择滚动行为并把焦点移入 `tabIndex=-1` 的目标 section。FAQ 以 `questionKey` 作为展开状态与 ARIA id 的稳定键，折叠态保留 `aria-controls`，筛选后编号仍取原清单顺序。
+- **文章导航**：`HelpArticle` 使用 `article` 语义与 `aria-labelledby`，按清单顺序提供上一篇/下一篇真实链接；未知 id 复用共享 `EmptyState`。
+- **内容边界**：每日谜题描述为本地日期种子的固定题库，不宣称真实联网排名；手牌偏差描述为规则化参考，不宣称求解器级精确分析；数据清除区分训练记录与浏览器站点数据。
+- **验证**：检索纯函数、内容完整性、Hero/FAQ/文章/首页组件测试覆盖正常、空态、筛选、键盘与 ARIA；Playwright 覆盖检索到文章、锚点焦点、FAQ 展开、Escape 与移动端横向溢出。
+
 ---
 
 ## 6. 状态管理架构

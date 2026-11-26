@@ -1,29 +1,23 @@
+import type { MouseEvent } from 'react';
 import { motion } from 'framer-motion';
-// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
-import { SLIDE_DOWN } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
+import { Button } from '@/shared/components/ui/button';
+import { SLIDE_DOWN } from '@/shared/utils/motion';
+import { HELP_ARTICLES, CONCEPT_CARDS, FAQ_ITEMS } from '../data/helpContent';
 
-export type HelpHeroAnchor = 'quickstart' | 'articles' | 'concepts' | 'faq';
+export type HelpHeroAnchor = 'quickstart' | 'articles' | 'faq';
 
 interface HelpHeroProps {
-  /** 锚点跳转回调：接收 rule 关联的 section id */
   onRuleClick: (anchor: HelpHeroAnchor) => void;
 }
 
-/**
- * 帮助中心 Hero — 签名元素「House Rules 台卡」
- *
- * 设计语言：扑克牌桌中央立着的「House Rules」规则牌，是真实存在的牌室文化物件。
- * 象牙卡面（casino-plaque 同源稳定 anchor）+ 黄铜顶部饰条 + 3 条编号规则
- * + 黄铜底座阴影 + 轻微 3D 倾斜（hover 时回正）。
- *
- * 与既有 Hero 家族差异化：
- * - academy-hero：brass 桌布径向渐变 + 进度环（学习）
- * - theory-hero：ivory 纸感径向渐变（理论）
- * - rank-plaque-hero：横向战绩牌匾（战绩）
- * - help-hero：立体立牌 + 底部 brass 底座（指引）
- */
+const ANCHOR_IDS: Record<HelpHeroAnchor, string> = {
+  quickstart: 'help-quickstart',
+  articles: 'help-articles',
+  faq: 'help-faq',
+};
+
 export default function HelpHero({ onRuleClick }: HelpHeroProps) {
   const { t } = useTranslation();
 
@@ -32,6 +26,11 @@ export default function HelpHero({ onRuleClick }: HelpHeroProps) {
     { anchor: 'articles', num: '02' },
     { anchor: 'faq', num: '03' },
   ];
+
+  const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>, anchor: HelpHeroAnchor) => {
+    event.preventDefault();
+    onRuleClick(anchor);
+  };
 
   return (
     <motion.section
@@ -42,7 +41,6 @@ export default function HelpHero({ onRuleClick }: HelpHeroProps) {
       aria-label={t('help.hero.ariaLabel')}
     >
       <div className="help-hero-grid">
-        {/* 左：文案 + 主 CTA */}
         <div className="help-hero-copy">
           <p className="font-numeric text-[9px] uppercase tracking-[0.2em] text-[var(--brass-text)]">
             {t('help.hero.eyebrow')}
@@ -50,19 +48,22 @@ export default function HelpHero({ onRuleClick }: HelpHeroProps) {
           <h2 className="help-hero-title">{t('help.hero.title')}</h2>
           <p className="help-hero-sub">{t('help.hero.subtitle')}</p>
           <div className="help-hero-actions">
-            <button
-              type="button"
-              onClick={() => onRuleClick('quickstart')}
-              className="help-hero-cta"
-            >
-              {t('help.hero.cta')}
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <span className="help-hero-meta">{t('help.hero.meta')}</span>
+            <Button asChild className="help-hero-cta">
+              <a href={`#${ANCHOR_IDS.quickstart}`} onClick={(event) => handleAnchorClick(event, 'quickstart')}>
+                {t('help.hero.cta')}
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </a>
+            </Button>
+            <span className="help-hero-meta">
+              {t('help.hero.meta', {
+                articles: HELP_ARTICLES.length,
+                concepts: CONCEPT_CARDS.length,
+                faq: FAQ_ITEMS.length,
+              })}
+            </span>
           </div>
         </div>
 
-        {/* 右：House Rules 立牌（视觉签名） */}
         <div className="help-hero-plaque-wrap">
           <div className="house-rules-card" role="group" aria-label={t('help.hero.cardAria')}>
             <div className="house-rules-rail" aria-hidden="true" />
@@ -71,21 +72,21 @@ export default function HelpHero({ onRuleClick }: HelpHeroProps) {
             <ol className="house-rules-list">
               {rules.map((rule) => (
                 <li key={rule.anchor}>
-                  <button
-                    type="button"
-                    onClick={() => onRuleClick(rule.anchor)}
+                  <a
+                    href={`#${ANCHOR_IDS[rule.anchor]}`}
+                    onClick={(event) => handleAnchorClick(event, rule.anchor)}
                     className="house-rules-item"
                   >
-                    <span className="house-rules-num">{rule.num}</span>
+                    <span className="house-rules-num" aria-hidden="true">{rule.num}</span>
                     <span className="house-rules-text">
                       <span className="house-rules-text-title">
                         {t(`help.hero.rules.${rule.num}.title`)}
                       </span>
                       <span className="house-rules-text-body">
-                        {t(`help.hero.rules.${rule.num}.body`)}
+                        {t(`help.hero.rules.${rule.num}.body`, { articles: HELP_ARTICLES.length })}
                       </span>
                     </span>
-                  </button>
+                  </a>
                 </li>
               ))}
             </ol>

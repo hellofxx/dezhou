@@ -96,29 +96,82 @@
   margin-top: 12px; flex-wrap: wrap;
 }
 .help-hero-cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 9px 18px;
-  border-radius: var(--poker-radius-md);
-  background: linear-gradient(180deg, var(--brass-bright) 0%, var(--brass) 100%);
-  color: var(--primary-foreground);
-  font-size: 13px; font-weight: 600;
-  border: 1px solid var(--brass-dark);
-  box-shadow: 0 3px 10px color-mix(in srgb, var(--brass) 25%, transparent), inset 0 1px 0 rgba(255,240,200,0.55);
+  min-height: 44px;
+  text-decoration: none;
   transition: transform var(--poker-duration-fast) var(--poker-ease-standard),
               box-shadow var(--poker-duration-fast) var(--poker-ease-standard),
               filter var(--poker-duration-fast) var(--poker-ease-standard);
-  cursor: pointer;
-  min-height: 44px;
 }
 .help-hero-cta:hover {
   filter: brightness(1.08);
   transform: translateY(-1px);
-  box-shadow: 0 5px 14px color-mix(in srgb, var(--brass) 32%, transparent), inset 0 1px 0 rgba(255,240,200,0.55);
 }
 .help-hero-meta {
   font-size: 11px; color: var(--ivory-muted);
   letter-spacing: 0.05em;
 }
+
+/* ---- Help Search ---- */
+.help-search {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+}
+.help-search-main { min-width: 0; }
+.help-search-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ivory);
+}
+.help-search-hint {
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ivory-muted);
+}
+.help-search-control {
+  position: relative;
+  flex: 1 1 360px;
+  max-width: 520px;
+  min-width: 0;
+}
+.help-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ivory-muted);
+  pointer-events: none;
+}
+.help-search-input {
+  padding-left: 36px;
+  padding-right: 44px;
+  background: color-mix(in srgb, var(--felt-raised) 72%, transparent);
+}
+.help-search-input::-webkit-search-cancel-button { display: none; }
+.help-search-clear {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.help-search-status {
+  margin: -10px 2px 0;
+  font-size: 11px;
+  color: var(--ivory-muted);
+}
+.help-section-count {
+  font-size: 10px;
+  color: var(--ivory-muted);
+}
+.help-anchor {
+  scroll-margin-top: 84px;
+}
+.help-anchor:focus { outline: none; }
 
 /* ---- House Rules 立牌（签名元素） ---- */
 .help-hero-plaque-wrap {
@@ -181,6 +234,7 @@
   background: rgba(26,19,8,0.08);
   border: 1px solid color-mix(in srgb, var(--brass) 20%, transparent);
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition: background var(--poker-duration-fast) var(--poker-ease-standard),
               border-color var(--poker-duration-fast) var(--poker-ease-standard),
@@ -456,6 +510,37 @@
   line-height: 1.7;
 }
 
+/* ---- Help Article ---- */
+.help-article-shell { display: flex; flex-direction: column; gap: 20px; }
+.help-article-title { line-height: 1.3; }
+.help-article-intro { max-width: 65ch; }
+.help-article-content { border-top: 1px solid var(--walnut-border); padding-top: 18px; }
+.help-article-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  border-top: 1px solid var(--walnut-border);
+  padding-top: 16px;
+}
+.help-article-nav-link {
+  min-width: 0;
+  min-height: 44px;
+  white-space: normal;
+  text-align: left;
+}
+.help-article-nav-label,
+.help-article-nav-title { display: block; }
+.help-article-nav-label {
+  font-size: 10px;
+  color: var(--ivory-muted);
+}
+.help-article-nav-title {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ---- Help Light Theme ---- */
 html[data-theme="light"] .puzzle-card {
   border-color: color-mix(in srgb, var(--brass) 18%, transparent);
@@ -476,6 +561,13 @@ html[data-theme="light"] .quick-path-node-num { background: var(--stable-ivory);
 
 /* ---- Help Responsive ---- */
 @media (max-width: 767px) {
+  .help-search { align-items: stretch; flex-direction: column; gap: 10px; padding: 12px; }
+  .help-search-control { flex-basis: auto; max-width: none; }
+  .help-search-status { margin-top: -8px; }
+  .help-section-count { order: 3; width: 100%; margin-left: 32px; }
+  .help-article-nav { grid-template-columns: 1fr; }
+  .faq-item-panel { padding-left: 14px; }
+
   .help-hero { padding: 8px 12px 10px; }
   .help-hero-grid { grid-template-columns: 1fr; gap: 10px; }
   .help-hero-title { font-size: 19px; }
