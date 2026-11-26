@@ -1,25 +1,9 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.14.0
+> 状态：Current · 最后复核：2026-11-25 · 设计契约版本 v1.14.0
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
-> v1.14.0 更新：课程 IA 收口 — `/lesson` 为唯一课程主线，`/academy`/`/theory` 改为实战地图 / 理论地图（§5.25.1）；来源感知显式返回、`#hub-stage-N` 锚点回位、主线 canonical 变体入口；§13.7.5 返回与地图导航可访问性
-> v1.12.0 更新：训练二级站（/drill/range|odds|puzzle）与恢复的学院/理论深链；速训默认 5 题；结果统一为 ResultSlip 发牌员纸条（overlay / page）
-> v1.11.1 更新：首页按基准图重排 — 牌桌左右象牙铭牌（ELO / 连续训练）+ 状态注、细黄铜速训横幅、四段旅程横向轨道、胡桃木面板、周条小圆点
-> v1.11.0 更新：IA 收编为 5 视图（学习路径 / 课程 / 训练 / 速训 / 进度中心，§5.24）；168px 木纹侧栏 + 56px 木梁顶栏 + 12px 桌沿；程序化无缝胡桃木纹理（`--wood-h/--wood-v`）；真椭圆牌桌；学习旅程 3×3 阶段网格；侧栏 6 项 / 移动底栏 5 项
-> v1.10.1 更新：功能性微文字下限契约 — §3.3 Caption/微文字改「11px 起」、Eyebrow 限定装饰性分组标签保留 9px；§13.3.3 追加「功能信息微文字 ≥11px / 范围矩阵单元格 11px+容器横向滚动」；§13.3.2 公式展示块追加结构化推导形态 `.formula-display--structured`（不改既有规格）
-> v1.10.0 更新：阅读页学习导轨（§6.5）— 理论章节页 / 策略课时页在 xl 起采用「768px 阅读列 + 264px 学习导轨」双栏（`AcademyReadingPlane`），导轨承载本级目录与进度，<xl 回落居中单栏
-> v1.9.2 更新：浮层收口 — Select/Tooltip 统一 z-100（§6.4）、明确下拉/提示为房间面控件不属纸条（§1.5）、新增「禁止手写 fixed inset-0 模态」反模式与守卫（§10.6）
-> v1.9.0 更新：新增浅色主题「白天牌室」token 架构（§2.8）、Hero 高度契约（§6.6）、Puzzle ActionTier 语义与防答案暗示（§5.5）、内容区 h2 保留例外（§5.7/§10.6）、Emoji 内容白名单扫描面（§7）
-> v1.8.0 更新：确立材质契约（§1.5 房间/画布/纸条/镶嵌）与纸张色板（§2.6）；新增发牌员纸条 `.dealer-slip`（§5.23）；修订按钮金属族（§5.5）、顶栏胡桃梁与壳层 h1/导航序号（§5.7）、进度条（§5.11）、移动触摸目标与 Z 轴（§6.3/§6.4）、SVG token 锚定（§12.1）、移动端反馈 Sheet 纸张化（§13.7.2）
-> v1.7.0 更新：新增 §13 教育学习设计规范 — 学习进度可视化、课程内容排版增强、反馈教育脚手架、模块教育目的视觉区分、渐进式信息披露、移动端教育体验、教育场景动效
-> v1.6.0 更新：内容宽度分级（§6.5）— 新增三档容器宽度（L1 默认收敛 1400 / L2 概览展宽 1680 / L3 阅读作答收敛），策略学院概览视图走 L2 展宽消除超宽屏 felt 留白（§9 页面模式 7）
-> v1.5.0 更新：动效章节全量规范（§8）— 新增动效 token（缓动/时长）、触发方式、动画类型定义（淡入/滑动/缩放/旋转）、组件状态动画行为矩阵，React 侧共享动效规范 `src/shared/utils/motion.ts` 为单一事实源
-> v1.4.0 更新：课程阅读排版契约（§3.3 Lesson Reading/Heading 字号）、新增 §5.22 教学内容块（content-block 视觉词汇）、课程内 Tab 图标化+sticky（§5.6）、场景卡复用（§5.16）、模块级 Emoji→Lucide 图标约定
-> v1.3.2 更新：实现层合规修复（五级反馈牌室化、霓虹色板清零、牌背胡桃化）、新增 §5.21 交互状态矩阵、§2.2 语义色 hover 变体规则、token 登记（gold/bronze/indigo-bright/terra-bright）、设计 token 守卫测试机制
-> v1.3 更新：移动端响应式重构（streak-rail 上移至 arena 下方、训练场二列、arena 紧凑三分区、纵向压缩）、CSS `!important` 特异性规则
-> v1.2 更新：导航权威统一（侧边栏单一导航）、仪表盘 5 段叙事、训练场模块网格、今日推荐/场景卡/live 呼吸点等新组件、底部黄铜打卡条
-> v1.1 更新：语义色低饱和化、跨 Tab 桌沿签名元素、黄铜雕刻铭文、组件质感统一
+> 历史版本摘要见 git 历史；当前契约以本文正文为准。
 
 ---
 
@@ -1044,101 +1028,7 @@ box-shadow: var(--poker-shadow-brass);
 border-radius: var(--poker-radius-md); /* 8px */
 ```
 
-## 附录 B：v1.2 变更摘要
-
-- **导航权威统一**：移除桌面端顶部 Tab 栏（与侧边栏 7 项完全重复），侧边栏成为桌面唯一导航权威；移动端底栏保留 <768px；新增"导航冗余禁令"
-- **仪表盘 5 段叙事重构**：落座（Arena）→ 开局（Quick-drill 黄铜尺）→ 训练中（今日题+SRS 双列）→ 数据+计划（趋势+今日推荐）→ 训练场（6 模块网格）+ 底部 streak-rail
-- **Arena 精简**：3 铭牌→2 大铭牌+1 小黄铜筹码章，避免重复数据；中心卡堆+A♠+筹码柱+12 黄铜筹码保留
-- **新组件**：`.scenario-card`（绿呢微观场景）、`.rec-item`（带优先级色条的推荐项）、`.module-card`（模块入口卡）、`.streak-rail`（底部打卡条）、`.live-dot`（呼吸点）、`.streak-dot`（紧凑打卡圆点）
-- **模块主题色体系**：6 大模块各赋主题色（黄铜/鼠尾草/霜钢/苔藓/黄铜/皮革赭），图标方块径向渐变
-- **等高布局规则**：`grid-auto-rows:1fr` + `h-full flex flex-col` + `mt-auto` 保证双列底部对齐
-- **内容区去重**：移除 5 个内容面板中与顶栏 H1 重复的 H2 大标题（v1.9.0 起改为保留 h2，见 §5.7 / §10.6）
-- **反模式扩充**：新增多层导航禁令、标题重复禁令、双列不等高禁令、绿色滥用禁令
-
-## 附录 C：v1.1 变更摘要
-
-- **色彩**：语义色全面低饱和化（霓虹绿/红/蓝/黄 → 苔藓绿/陶土红/鼠尾草灰绿/黄铜同色）；新增霜钢蓝 `--poker-freeze`
-- **组件质感**：`.path-banner`/`.quick-drill-card` 升级为雕刻黄铜板（深投影+顶高光+拉丝纹理）；`.theme-card` 加顶边黄铜发线；`.freeze-chip` 改为霜钢冷色
-- **按钮色阶**：`.act-fold` 陶土红 / `.act-call` 深胡桃（去蓝）/ `.act-raise` 黄铜 / `.act-allin` 深胡桃金属
-- **新签名元素**：`.table-rail`（桌沿铜钉）跨 Tab 锚点；`.motto-engraved`（黄铜雕刻铭文）替代中文斜体
-- **状态系统**：导师头像低饱和（石板靛/陶土赭/苔藓松绿）；情绪按钮默认象牙灰仅 active 着色；"已完成"改用钢印戳记而非绿对勾
-- **规范强化**：中文斜体禁令、反 SaaS 饱和色禁令、重复数据展示禁令、table-rail 保留规则
-- **圆角统一**：卡片/面板统一 8px（原 10/8 混用）
-- **页面新增**：策略学院、谜题训练补入 §9
-
-## 附录 D：v1.3 变更摘要（移动端响应式重构）
-
-- **Streak-rail 位置上移**：从仪表盘底部（训练场之后）整体上移至 arena 椭圆牌桌下方，用 `margin-top:-14px` 骑在椭圆下缘，首屏即可见本周打卡记录；桌面/平板同步
-- **Arena 移动端三分区紧凑布局**：border-radius `50%/28%`，min-height 100px（480px 下 88px），padding `4px 16px 10px`；内部上（eyebrow+h2+motto）/中（左plaque-卡堆A♠筹码-右plaque 水平一行）/下（小字）
-- **Arena 元素可见性调整**：手机端隐藏 ELO 徽章和 daily-progress-chip（避免遮挡标题）；恢复 A♠ 今日挑战卡和第二块 plaque 的显示（此前被误隐藏），两块 plaque 对称在 `top:38%` 左右各 3%
-- **训练场模块网格强制 2 列**：`.grid.grid-cols-2.md\:grid-cols-3` 在手机端必须 `grid-template-columns:repeat(2,1fr) !important`，覆盖 `.md\:grid-cols-3 { 1fr !important }` 的特异性
-- **取消手机端等高拉伸**：`grid-auto-rows:auto` + `.panel.h-full { height:auto }` + `.panel .mt-auto { margin-top:12px }`，避免单列下面板被强行等高拉长产生中部空白
-- **全局纵向压缩**：panel padding 20→12px；gap-5→12px、gap-4→10px、gap-3→8px；module-card padding 10px 12px、icon 28px；quick-drill padding 10px 14px、gap 6px、按钮 min-height 32px；scenario-card padding 10px 12px；rec-item padding 8px 10px；图表 canvas max-height 180px
-- **Streak-rail 手机端紧凑化**：padding 8px 10px、gap 6px；隐藏"连续天数/冻结卡/今日正确率"文字标签只保留图标+数字；streak-dot 缩小（padding 3px 2px，span 8px，em 6px）；`flex-wrap:nowrap` + `overflow:visible` 保证不横向滚动
-- **Action 按钮手机端 2×2 grid**：fold/call/raise/all-in 四按钮改 `grid-template-columns:1fr 1fr`，gap 6px，min-height 44px
-- **CSS 特异性规则沉淀**：新增 §10.5，明确在媒体查询内覆盖带 `!important` 的 Tailwind 断点类时必须同步加 `!important`，调试用 `getComputedStyle` 验证最终值
-- **反模式扩充**：新增手机端等高空白、1 列模块网格、streak-rail 置底、横向滚动、媒体查询忘加 !important 五条禁令
-
----
-
-## 附录 E：v1.3.1 变更摘要（色板权威源反向对齐）
-
-- **背景**：UI 审查（S2）发现 DESIGN.md §2.1 主色板、§2.3 花色与 `src/styles/globals.css`、`poker-ui-demo/colors_and_type.css` 三份色值长期分歧。本次以 `globals.css` 实现值为权威，反向更新本规范文档，消除三份分歧。
-- **主色板对齐**：§2.1 全部 HEX 改为 globals.css 实现值（felt-deep `#0e1a14`、felt `#15301f`、felt-raised `#1d4029`、felt-light `#245035`、walnut `#241a10`、walnut-raised `#3a2a18`、walnut-border `#4a3825`、walnut-light `#4d3a24`、ivory `#f3ebd9`、ivory-dim `#cabf9f`、ivory-muted `#8a8068`、brass-deep `#a07d3d`、brass-dark `#8a6b30`）；新增 `--poker-brass-muted #b09050`。
-- **花色修订**：§2.3 ♣♠ 由深棕近黑 `#1a1308` 改为象牙白 `#f3ebd9`（暗底可见性优先，对比度 ≥7:1）；♥♦ 对齐实现值 `#d04545`。
-- **三不原则引用更新**：§1.2 felt-deep/ivory 引用值同步更新。
-- **新增 token 登记**：§2.4 补 `--poker-leather #c08a5a`（hand-history 模块主题色，§5.18）。
-- **渐变/组件示例对齐**：§2.5 暗角 rgba 与胡桃面板渐变、§4.3 边框、§5.4 铭牌、§5.5 pill、§5.6 面板——所有硬编码示例色值同步对齐新色板。
-- **权威源声明**：`src/styles/tokens.css` 的 `:root` 为色彩 token 唯一实现权威（经入口 `globals.css` 引入）；本规范 §2 为设计定义权威；`poker-ui-demo/colors_and_type.css` 为 demo 单页 token，须与 `tokens.css` 保持一致。三者任一变更须同步其余两处。
-
----
-
-## 附录 F：v1.3.2 变更摘要（实现层合规修复）
-
-- **背景**：Design QA 审查（2026-07-30）发现实现层 156 处 Tailwind 霓虹调色板类（21 文件）违反 §1.3，五级反馈事实源 `GRADE_DISPLAY_CONFIG` 使用 `bg-emerald-600`/`text-white` 等违规类。本次全量修复并建立防回流机制。
-- **五级反馈牌室化**：`GRADE_DISPLAY_CONFIG.color` 改为引用 globals.css `.grade-best`~`.grade-blunder` 类（样式单一事实源）；`textColor` 改为 token 文字色；range-trainer / gto-simulator / puzzle-trainer 三消费方零改动生效。
-- **霓虹色板清零**：strategy-academy / theory-academy / progress / range-trainer 全量替换为 `--poker-*` token 类；映射规则：green/emerald→success、red→danger、yellow/amber→brass/warning、orange→terra、blue→info、purple→indigo。
-- **测验按钮色阶对齐 §5.5**：range-trainer QuizCard fold=陶土 12% 透底 / call=深胡桃半透 / raise=黄铜渐变（原为 clay/sage 实底）。
-- **牌背胡桃化**：`CardBack.tsx` 与 `public/cards/back.svg` 由酒红菱格改为 §5.1 规定的胡桃底+45°黄铜条纹+2px 黄铜边+内描金；SVG 描边直接引用 `var(--brass)` 消除 `#c8a456` 漂移。
-- **Token 登记**：新增 `--poker-bronze #cd7f32`、`--poker-indigo-bright #8ea4c4`、`--poker-terra-bright #c98a63`；`--poker-gold #d4a84b` 落地 globals.css（此前仅存在于文档与 demo 镜像）。
-- **杂项修复**：成就墙四档徽章 token 化（金/铜/暖银/霜钢）；`var(--clay-bright)` 失效引用修复（2 处）；CardSVG 近黑描边改胡桃调；范围网格文案"绿色"→"金色"（对齐 §5.11 黄铜色阶实现）。
-- **新章节**：§5.21 交互状态矩阵、§2.2 hover/active 变体规则与暗底文字亮阶、§12.1 React 落地形态。
-- **守卫机制**：新增 `src/guards/designTokenGuard.test.ts`（vitest 门禁），断言 src 零霓虹类/零纯黑白类与 hex；豁免白名单只删不加。
-
----
-
-## 附录 G：v1.4.0 变更摘要（课程阅读排版与内容块词汇）
-
-- **背景**：P2-01 排版可读性增强落地于 strategy-academy 模块（`LessonContent.tsx` 理论 Tab + `components/content/` 私有组件），本附录登记已实现规范。
-- **阅读排版契约**：理论 Tab 内容区 `max-w-prose mx-auto`（65ch 阅读列宽）+ `space-y-4`（16px 段落距）；正文 `text-sm leading-[1.7] tracking-[0.01em]` ivory-dim；内容标题 font-display 20px + tracking-wide + `mt-6 first:mt-0`（首段无上距）。§3.3 新增 Lesson Reading / Lesson Heading 两行字号层级。
-- **内容块视觉词汇**：新增 §5.22，统一骨架（rounded-lg p-4 + 20px 语义色图标 + text-xs font-semibold 标签 + text-sm ivory-dim 正文）+ 九种类型表（highlight / key-point / pro-tip / formula / theory-reference / counter-intuitive / example / diagram / hand-example），全部引用 §2 token（含 `--poker-terra`/`--poker-terra-bright`/`--poker-success-bg`），无霓虹。
-- **Tab 图标化 + sticky**：课程内 Tab 栏 `sticky top-0 z-20` + Lucide 图标+短词（<640px 仅图标），推进 CTA「进入{下一段}」；登记于 §5.6。
-- **场景卡复用**：PracticeDrill 场景面板复用 `.scenario-card`（`p-5 md:p-6` 覆盖 padding 保持宽松；压力模式 `border-[var(--danger)]/30`）；登记于 §5.16。
-- **Emoji→Lucide 模块级约定**：课程内容区图标统一替换为 Lucide 线性图标（1.5px stroke，语义色跟随 §7），禁止以 Emoji 作为内容装饰图标。
-- **Emoji 白名单与交互图标边界（收口）**：§7 已登记唯一白名单——成就 / 分享卡 / 庆祝插画 / 课程正文（含 i18n 既有文案）；交互与首屏一律 Lucide，不再以 emoji 充当可点击或状态图标。五级反馈配置的 `icon` 已改为 `iconId`（`GradeIcon` 唯一渲染出口），后续新增等级/徽章须沿用同一模式。
-
----
-
-## 附录 H：v1.5.0 变更摘要（动效规范全量化）
-
-- **背景**：动效参数长期散落于各组件内联 framer-motion 字面量（duration 0.15–1.2s 混用、ease 混用 `easeOut`/`linear`/`spring`），无统一 token 出口，动效行为与设计文档 §8 存在漂移。本次将 §8 由「典型动效清单」升级为「全量规范」，并建立单一事实源。
-- **动效原则（§8.1）**：新增缓动 token 表（standard / out / in / spring，对应 `--poker-ease-*`）、时长 token 表（fast / standard / slow / loop，对应 `--poker-duration-*`）、触发方式表（hover / press / focus / state-change / mount / unmount / loop）与使用规则（进场退场成对、循环动效尊重 reduced-motion、hover 用 transform 不抖布局）。
-- **动画类型定义（§8.2）**：新增 9 类常用动画的规范定义（fade / slide-up / slide-down / slide-left / slide-right / scale-in / rotate / pop / shake），每类含关键属性、时长、缓动、用途；组合规则（位移+缩放可叠、双向位移禁止）。
-- **组件状态矩阵（§8.3）**：12 类组件 × 状态（hover / press / active / mount / unmount / 反馈循环）的动画行为权威映射表。
-- **实现约定（§8.4）**：React 侧统一 `src/shared/utils/motion.ts`（`MOTION_DURATION` / `MOTION_EASE` / 预置 variants）为单一事实源；CSS 侧 keyframes 与 `animate-*` 类用 token 变量；路由过渡统一 page-transition variants。
-- **实现层落地**：`src/shared/utils/motion.ts` 新增（导出 `MOTION_DURATION` / `MOTION_EASE` / `PAGE_TRANSITION` 等预置 variants）；`globals.css` 新增 `--poker-ease-*` / `--poker-duration-*` 变量与 `animate-*` 工具类；核心组件（PokerCard / QuizCard / FaqAccordion / LevelLadder / LessonQuiz / TheoryQuiz / StatsOverview / AchievementBadges / SettingsPage / ResultSummary / AppLayout）统一引用共享动效规范。
-- **守卫**：设计 token 守卫（designTokenGuard）不扫描动效参数；动效一致性靠共享规范单一事实源 + 组件引用收口，新组件动效须按 §8.3 矩阵登记。
-
----
-
-## 附录 I：v1.6.0 变更摘要（内容宽度分级与策略学院自适应布局）
-
-- **背景**：实测 1920×1080 全屏下，侧边栏 240px + 主内容盒 `max-w-[1400px]` 居中，导致 `main` 宽 1680px 而内容盒仅 1400px，**左右各留白 140px**；同时 Home 的 `lg:grid-cols-3` 让侧栏（Daily Plan / Study Tools）以 `1fr` 膨胀到约 450px 巨宽空洞。两者叠加使策略学院在宽屏上"两侧大片留白 + 侧栏过度拉宽"，与「3 秒落座、克制的场域感」背道而驰。
-- **新增 §6.5 内容宽度分级**：统一由 AppLayout 依路由判定三档容器宽度——L1 默认收敛 1400（操作台/交互页）、L2 概览展宽 1680（策略学院概览视图）、L3 阅读作答收敛（模块内部 max-w-prose / max-w-3xl）。
-- **策略学院响应式布局（§9 页面模式 7）**：概览视图走 L2 展宽，内部自适应分栏承接横向空间——Home 改 `lg:grid-cols-[minmax(0,1fr)_340px]`（主列阶梯自适应、侧栏固定 340px）；Tracks 改 `xl:grid-cols-2`；ConceptGraph 概念卡 `xl:grid-cols-4`；阅读/作答视图维持在 L3 收敛，不随概览展宽。
-- **职责**：宽度档位归属 AppLayout（`src/layouts/**`），分栏归属各 feature 模块（`src/features/strategy-academy/**`），视觉一致性由共享层视觉所有者复核。
-
----
+> 历史版本摘要（原附录 B–K）已移出 Current，见 git 历史。
 
 ## 13. 教育学习设计规范（v1.7.0）
 
@@ -1710,30 +1600,3 @@ CSS 参考：
 ```
 
 ---
-
-## 附录 J：v1.7.0 变更摘要（教育学习设计规范）
-
-- **背景**：德州扑克训练平台（PokerLab）现有设计语言 v1.6.0 在棋牌风格一致性上已达专业水准，但教育学习场景（课程阅读、答题反馈、进度追踪、模块引导）缺乏统一的视觉语言规范。本次新增 §13 教育学习设计规范，在不引入新基础 token 的前提下，为教育场景建立完整的视觉语言体系。
-- **新增 §13.1 教育设计原则**：五大原则——学习目标可见性、进步可量化、反馈即教学、渐进式披露、扫读友好。
-- **新增 §13.2 学习进度可视化**：4 个新组件——`progress-ring`进度环（SVG circle stroke-dasharray，三色状态）、`sparkline`微图（8px 迷你折线图，7 日趋势）、`milestone-marker`里程碑标记（菱形标记点+ELO 标注）、`daily-goal-card`今日学习目标卡（象牙铭牌样式）。
-- **新增 §13.3 课程内容排版增强**：4 个新组件——`lesson-takeaway`要点总结卡（walnut-raised 底+brass 竖线）、`formula-display`公式展示块（brass 6% 底+mono 字体）、课程标题编号系统（§2.1 格式+eyebrow 标签）、`reading-progress-bar`阅读进度条（顶部 fixed 2px brass 线，仅移动端）。
-- **新增 §13.4 反馈教育脚手架**：4 个新组件——决策分析区（可折叠，展开显示 GTO 对比+原因+课程链接）、`comparison-view`对比视图（左右分栏，你的决策 vs GTO 最优）、`try-again-btn`再看一题按钮（btn-ghost+RefreshCw）、`related-lesson-chip`相关课程标签（pill 样式+ExternalLink）。
-- **新增 §13.5 模块教育目的视觉区分**：6 模块图标方块增加微纹理（CSS repeating-linear-gradient，不透明度 5-8%，各模块纹理不同）+ `last-training-badge`最近训练标记（右下角"X天前"）。
-- **新增 §13.6 渐进式信息披露**：3 个机制——新手仪表盘收敛（totalSessions<5 隐藏模块网格，单一学习路径卡）、`learning-focus-mode`学习焦点模式（Pin 锁定模块）、`session-count-filter`入口逐步解锁（第 1/3/5 次分阶段解锁模块）。
-- **新增 §13.7 移动端教育体验**：4 项适配——reading-progress-bar（§13.3）、答题反馈底部 Sheet（替代 Modal）、概念图纵向列表（替代横向节点图）、答题按钮 44px 触摸目标（重申）。
-- **新增 §13.8 教育场景动效扩展**：4 个新动效——正确率数字递增（600ms ease-out）、知识节点解锁（POP+brass 辉光 300ms）、段位晋升（庄码 D 360° 旋转+放大+辉光扩散）、课程完成（checkmark 描边动画 500ms）。所有动效沿用 §8 动效 token。
-- **版本号**：v1.6.0 → v1.7.0。
-- **兼容性**：所有新增组件沿用 §2 色彩 token、§3 字体、§4 间距/圆角/阴影、§8 动效 token，不引入新的基础设计 token，与牌室品牌主题无缝衔接。
-
----
-
-## 附录 K：v1.9.0 变更摘要（白天牌室 / Hero / ActionTier）
-
-- **背景**：2026-11-03 UI/UX 全链路整改后，浅色主题仍是「token 翻转 + 37 处组件补丁」的混合态；首屏 Hero 偏高；Puzzle ActionTier 的 gauge/图标/标签/边框取自不同 token；内容 emoji 白名单未覆盖数据与 i18n 扫描面。
-- **浅色主题（§2.8）**：新增 `--room-*` semantic 层、`--hero-surface-gradient` / `--question-card-gradient`；light 主题块收敛为 token + 物理物件白名单；黄铜字面 rgba 全部改为 `color-mix(var(--brass))`；light `--ivory-muted` 调深到 `#665b43`，保证羊皮底/浅木侧栏 AA。
-- **Hero 高度（§6.6）**：新增六个 Hero 的桌面/移动高度预算；FeltArena 的 `DailyGoalCard` 移出椭圆桌；压缩 padding、装饰尺寸、牌匾/立牌宽度；保留 h2、CTA 与签名元素。
-- **Puzzle ActionTier（§5.5）**：三档统一为 `--tier-*` 单一来源；aggressive 从 clay 改为 terra，与答后 danger 反馈保持可辨差异；答前禁止 success/danger；`DifficultyTier` 与 `ActionTier` 明确分家。
-- **h2 例外（§5.7 / §10.6）**：内容区视觉标题保留 h2，允许与壳层 h1 同名/同义；不做文案去重。
-- **Emoji（§7）**：内容层扫描面扩展到 `features/**/data/**`、`shared/data/**`、`i18n/**`；仅允许成就 / 课程与理论正文 / i18n 既有文案；排版箭头 `↔` 单独豁免。
-- **守卫**：新增 `lightThemeSurfaceGuard.test.ts`（light 补丁白名单 + 黄铜/黑色字面棘轮）与 `actionTierPalette.guard.test.ts`（防答案暗示）；扩展 `feltContrast.test.ts`（light 房间对比度）与 `emojiWhitelist.guard.test.ts`（内容层）。
-- **兼容性**：暗色主题视觉不变；既有 16 个 light 组件选择器保留并登记，后续只减不增。

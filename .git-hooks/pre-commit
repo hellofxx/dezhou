@@ -54,7 +54,7 @@ if git diff --cached --name-only | grep -qE '\.md$'; then
   if node scripts/check-doc-links.mjs; then
     echo "✅ Docs check passed."
   else
-    echo "❌ Docs check FAILED：文档断链、索引缺失或状态声明缺失。"
+    echo "❌ Docs check FAILED：文档断链、内联路径不存在、锚点失效、索引缺失或状态/复核日期缺失。"
     echo "   修复：pnpm docs:check 查看明细后重新提交。"
     exit 1
   fi

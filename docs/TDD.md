@@ -1,15 +1,15 @@
 # 德州扑克训练平台 — 技术设计文档 (TDD)
 
-> 状态：Current · 最后复核：2026-11-04
+> 状态：Current · 最后复核：2026-11-25
 
 ## 1. 文档信息
 
 | 字段 | 内容 |
 |------|------|
-| 文档版本 | v2.4 |
+| 文档版本 | 不单独维护；以文件头最后复核日期与 git 历史为准 |
 | 作者 | 开发团队 |
-| 最后更新 | 2026-07-31 |
-| 状态 | v2.4 承接 PRD 职责分离回归（从 PRD 迁入 Streak/ELO/SRS/反馈补救/Drill 题库等技术实现细节；补 §1 文档信息章节） |
+| 最后复核 | 2026-11-25 |
+| 状态 | Current；承接 PRD 职责分离回归（从 PRD 迁入 Streak/ELO/SRS/反馈补救/Drill 题库等技术实现细节） |
 
 > **文档职责**：本文件描述技术实现细节（How）。产品规格见 `PRD.md`，版本演进与执行历史见 `CHANGELOG.md`。
 
@@ -20,6 +20,29 @@
 - `tsconfig.json` — TypeScript 编译选项
 - `public/manifest.json` — PWA 清单
 - `components.json` — shadcn/ui 组件配置
+
+---
+
+## 目录
+
+- [1. 文档信息](#1-文档信息)
+- [2. 系统架构概述](#2-系统架构概述)
+- [3. 项目结构](#3-项目结构)
+- [4. 核心数据模型](#4-核心数据模型)
+- [5. 模块设计](#5-模块设计)
+- [6. 状态管理架构](#6-状态管理架构)
+- [7. 路由与代码分割](#7-路由与代码分割)
+- [8. 性能策略](#8-性能策略)
+- [9. 持久化策略](#9-持久化策略)
+- [10. 安全与数据保护](#10-安全与数据保护)
+- [11. 测试策略](#11-测试策略)
+- [12. 部署方案](#12-部署方案)
+- [13. 扩展性设计](#13-扩展性设计)
+- [14. 样式系统与主题](#14-样式系统与主题)
+- [15. 设计决策记录](#15-设计决策记录)
+- [16. 工程规范](#16-工程规范)
+- [17. 课程区信息架构](#17-课程区信息架构)
+- [18. 测试体系](#18-测试体系)
 
 ---
 
@@ -1233,7 +1256,7 @@ interface DailyRecommendation {
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point/takeaway，8 类，以 `types.ts` 的 `TheorySectionType` 为准）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）。**段落无稳定 id，key 仅按下标**：在已有章节中间插段会让 zh/en 数组静默错位，补段只能追加到 `content` 数组末尾并同步平移两份 locale
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
-2. **内容体系**：章节数据按 Level 拆分为 `data/levels/variants/standard/standardLevel1.ts ~ standardLevel9.ts`（课程内容数据文件属行数守卫豁免类别，阈值与豁免清单以 `src/guards/line-count-guard.test.ts` 与 `docs/AI_GUIDE.md` 为唯一事实源），`data/levels/variants/standard/index.ts` 聚合为 `standardLevels`（兼容层 `data/levels/index.ts` 再导出 `THEORY_LEVELS`）。变体课程位于 `data/levels/variants/{short-deck,heads-up}/`。
+2. **内容体系**：章节数据按 Level 拆分为 `data/levels/variants/standard/standardLevel1.ts ~ standardLevel9.ts`（课程内容数据文件属行数守卫豁免类别，阈值与豁免清单以 `src/guards/line-count-guard.test.ts` 与 §16 为唯一事实源），`data/levels/variants/standard/index.ts` 聚合为 `standardLevels`（兼容层 `data/levels/index.ts` 再导出 `THEORY_LEVELS`）。变体课程位于 `data/levels/variants/{short-deck,heads-up}/`。
    - **章数与题量不在本文档维护副本**：以 `data/levels/variants/**` 与理论结构守卫测试（`theoryIntegrity.test.ts`）为唯一事实源
    - **内容编辑准则（段落类型覆盖、公式须含推导、牌例数量下限、误区显式化、解析须解释错误选项）见 `docs/PRD.md` §6.7.1**，本文件只记录其判定落点：段落类型枚举以 `types.ts` 的 `TheorySectionType` 为准，题量区间与内容非空由 `theoryIntegrity.test.ts` 断言
    - **教材对照基线与版权合规边界见 `docs/PRD.md` §5.27.4 / §6.7.2**；实现侧仅约定标注落点：出处以内联「（概念源自：教材名 章节）」写在 `content` 段落文本中（无独立结构化字段），如需按教材聚合统计请对 `data/levels/variants/**` 做文本检索
@@ -1334,7 +1357,7 @@ interface DailyRecommendation {
     - **persist migration**：`supplemental` / `pathTags` 仍属数据层字段；2026-11 整改新增 `chapterAttempts` / `checkpoints` / `placement` / `bookmarkedChapters` / `chapterNotes`，theory store version 3→4（见第 22 条与下方迁移设计）
 
 22. **2026-11 标准课程整改（题库独立 / 尝试语义 / 定位与工具）**：
-    - **题库独立与行数豁免**：全部 quiz 从 `standardLevelN.ts` / `chapters/t*.ts` 迁入 `data/levels/variants/standard/quizBank/t1..t9.ts`（每文件 `Record<chapterId, TheoryQuizQuestion[]>`）；`applyStandardQuizBank` 按 chapterId 注入、按题号排序、去重并校验 `<chapterId>-q<n>`。运行时 `loaders.ts` 用 `import.meta.glob('./variants/standard/quizBank/t*.ts')` 按 Level 懒加载；静态聚合 `variants/standard/index.ts` 直接 import 全部 9 个文件（仅测试/静态路径）。level/chapter 文件保留 `quiz: []` 占位。quizBank 为课程内容数据文件，按 `docs/AI_GUIDE.md` §文件大小 的课程内容豁免不做行数限制（逻辑文件仍受 ≤300 / >400 约束）
+    - **题库独立与行数豁免**：全部 quiz 从 `standardLevelN.ts` / `chapters/t*.ts` 迁入 `data/levels/variants/standard/quizBank/t1..t9.ts`（每文件 `Record<chapterId, TheoryQuizQuestion[]>`）；`applyStandardQuizBank` 按 chapterId 注入、按题号排序、去重并校验 `<chapterId>-q<n>`。运行时 `loaders.ts` 用 `import.meta.glob('./variants/standard/quizBank/t*.ts')` 按 Level 懒加载；静态聚合 `variants/standard/index.ts` 直接 import 全部 9 个文件（仅测试/静态路径）。level/chapter 文件保留 `quiz: []` 占位。quizBank 为课程内容数据文件，按 §16 的课程内容豁免不做行数限制（逻辑文件仍受 ≤300 / >400 约束）
     - **抽题**：`utils/quizDraw.ts` 以 `hash(chapterId#attemptNumber)` 为种子，从完整题库抽 5 题（T1–T3）/6 题（T4–T9）；attemptNumber = 已持久化 attempts + 1，刷新稳定、重考换题；选项重排仍走 `quizOrder.ts`
     - **尝试与掌握度**：`TheoryProgress` v4 增 `chapterAttempts`（attempts/firstScore/firstCorrect/firstTotal/bestScore/lastScore/lastAt）、`checkpoints`、`placement`、`bookmarkedChapters`、`chapterNotes`。`recordChapterAttempt` 总是记录尝试；首次写 `completedChapters`/`firstScore`/`quizScores` 并 emit；重考只更新 best/last 与 SRS，不更新 ELO/recordAnswer/掌握度。`theoryMastery` 优先读 firstScore，老数据回退 quizScores
     - **定位测评**：`data/placementQuestions.ts`（16 题）+ `utils/placement.ts`；分档 0–5/6–10/11–13/14–16 → T1/T2/T4/T6；`placement.creditLevels` 为推荐起点之前的 Level 并集，只放宽解锁、不写 completedChapters；解锁唯一入口 `isLevelUnlockedByCompleted(levelId, completed, creditLevels)`
@@ -1392,7 +1415,7 @@ interface DailyRecommendation {
 - 理论只读：`TheoryDataSource.getLearningSnapshot()` 与 `getChapterCatalog(variant)` 由 theory bootstrap 注册；未注册时消费方降级为未知，不阻塞实战/下一步。
 - 变体上下文（批次 2）：`TheoryDataSource` 增加可选 `getActiveVariant()` / `switchVariant(variant)`；枢纽顶部为变体 canonical 切换入口，调用切换命令后由两院各自既有 action 落地（标准 / 短牌 / 单挑），地图与执行页只读当前变体。registry 机制不变（仍由 theory bootstrap 注册，progress 只经接口消费）；未实现该可选方法的实现方下，消费方降级为只读展示（地图不提供切换、枢纽保留策略侧既有入口）。不新增 store / registry，不改两院 persist schema / version / migrate。
 - nextAction：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → done；跳过推荐仅会话内轮换，不新增持久字段。
-- 来源感知返回（2026-11，IA 基线见 [`COURSE_IA.md`](./COURSE_IA.md)）：纯函数 `shared/utils/courseBack.ts` 持有 `COURSE_FROM_KEY`（`courseFrom`）、`hubFrom(stageIndex?)` / `theoryMapFrom()` / `academyMapFrom()` 与 `resolveCourseBack(state)`。枢纽前进链接（阶段卡概念 / 实战 chip）携带来源 state；执行页（`CourseView` / `TheoryChapterView` 及 Drill 退出）统一经 `resolveCourseBack` 取得 `{ to, labelKey }`：主线来源回 `/lesson`（带阶段序号时回 `/lesson#hub-stage-N`），理论 / 实战地图来源分别回 `/theory` / `/academy`，缺失、非法 state 与深链刷新兜底 `/lesson`。文案键复用 core `nav.backToCourseHub` / `nav.backToTheoryMap` / `nav.backToAcademyMap`，跨院只传 state 与 id 字符串。
+- 来源感知返回（2026-11，IA 基线见 §17）：纯函数 `shared/utils/courseBack.ts` 持有 `COURSE_FROM_KEY`（`courseFrom`）、`hubFrom(stageIndex?)` / `theoryMapFrom()` / `academyMapFrom()` 与 `resolveCourseBack(state)`。枢纽前进链接（阶段卡概念 / 实战 chip）携带来源 state；执行页（`CourseView` / `TheoryChapterView` 及 Drill 退出）统一经 `resolveCourseBack` 取得 `{ to, labelKey }`：主线来源回 `/lesson`（带阶段序号时回 `/lesson#hub-stage-N`），理论 / 实战地图来源分别回 `/theory` / `/academy`，缺失、非法 state 与深链刷新兜底 `/lesson`。文案键复用 core `nav.backToCourseHub` / `nav.backToTheoryMap` / `nav.backToAcademyMap`，跨院只传 state 与 id 字符串。
 - 锚点回位：`CourseHub` 在带 hash 时对 `#hub-stage-N` 调 `scrollIntoView`，`prefers-reduced-motion: reduce` 降级为 `auto`，短延迟等待阶段卡挂载；阶段卡以 `id=hub-stage-N` + `data-hub-stage` 暴露锚点，不引入新路由。
 - 地图角色：`/academy` 与 `/theory` 在壳层页名与目录入口中统一为「实战地图 / 理论地图」（`nav.academy` / `nav.theory`），地图根只提供返回课程主线，不承担下一步语义。
 - 覆盖报告与评估区（批次 3）：`CourseCoverageCard` 只读汇总理论↔实战映射（`hubStages` + `lessonMeta.theoryAnchors`，短牌降级「概念关联待补充」）；两张地图的「评估」区聚合检查点 / 认证 / 定位入口，不改变门禁与评估行为；地图不再重复续学 Hero / 每日计划。
@@ -1986,7 +2009,7 @@ persist(
 
 ## 11. 测试策略
 
-> 测试分层、文件命名 / 放置、判定标准、执行矩阵、责任与评审以 [`docs/testing/README.md`](./testing/README.md) 为唯一事实源；本节只保留架构级运行拓扑与 E2E 规划。
+> 测试分层、文件命名 / 放置、判定标准、执行矩阵、责任与评审以 §18「测试体系」为唯一事实源；本节只保留架构级运行拓扑。
 
 ### 11.1 双项目运行拓扑（Vitest）
 
@@ -2002,22 +2025,13 @@ Node 环境测 zustand persist migrate 需 stub `window.localStorage`（`src/sha
 - 全局不变式集中在 `src/guards/`，清单与新增约定见 `src/guards/README.md`；守卫必须自检扫描面，allowlist 只减不增。
 - i18n 全局守卫位于 `src/i18n/`；模块级数据完整性守卫留在各 feature 内。
 - 测试体系自身由 `src/guards/testSystem.guard.test.ts` 守护：禁止 focused / skipped 测试、校验测试文件命名与放置、含 `describe`/`it` 的非测试文件为零、每个 feature 至少一个测试、persist store 必有 shape / migrate 测试、守卫文件与 README 清单双向一致。
-- 执行入口：`pnpm test:guards`（快速层）与 `pnpm test`（全量）；`pnpm test:coverage` 仅用于覆盖率审计（v8，非门禁；规范见 `docs/testing/README.md` §7）。
+- 执行入口：`pnpm test:guards`（快速层）与 `pnpm test`（全量）；`pnpm test:coverage` 仅用于覆盖率审计（v8，非门禁；规范见 §18）。
 
-### 11.3 E2E 测试（规划中，未落地）
+### 11.3 E2E（Playwright）
 
-项目尚未引入 Playwright 等 E2E 框架。在 E2E 落地前，UI / 路由 / 样式变更按 `docs/testing/README.md` §8 做真实浏览器验收并在 PR 记录证据。路由注册清单与 `/help` 静态渲染已由 `src/app/routes.test.tsx` 覆盖；训练路径仍靠手工验收。
+E2E 已落地：用例位于仓库根 `e2e/**/*.test.ts`，跑生产构建（`vite preview`，base `/dezhou/`），由 `playwright.config.ts` 收集；PR CI 与 deploy 在发布前执行 `pnpm typecheck:e2e`、E2E lint 与 `pnpm test:e2e`。
 
-若后续引入，优先覆盖以下关键用户流程：
-
-1. **范围训练流程**：首页 → 选择位置 → 开始测验 → 答题 → 查看结果
-2. **GTO 训练流程**：配置场景 → 生成场景 → 提交决策 → 查看反馈 → 完成会话
-3. **手牌导入流程**：粘贴文本 → 检测格式 → 导入 → 列表中可见 → 回放
-4. **进度查看流程**：完成训练 → Dashboard 数据更新 → 图表渲染
-
-进入条件与当前缺口见 `docs/testing/README.md` §11。
-
----
+当前覆盖学习闭环、首页习惯任务与离线深层路由；GTO 会话、手牌导入与课程深链仍属扩面缺口。编写约束（真实 UI、零噪声、禁止 `.only` / `.skip` / 重试变绿）与完整执行矩阵见 §18。
 
 ## 12. 部署方案
 
@@ -2036,7 +2050,7 @@ pnpm build    # tsc -b && vite build
 
 ### 12.2 PWA Service Worker 缓存策略
 
-`public/sw.js` 是模板，构建期由 `scripts/sw-precache-plugin.ts`（自研 Vite 插件，零新依赖）在 `generateBundle`（post 顺序，确保收齐 index.html / CSS）收集全部构建产物与 public 文件，注入全量预缓存清单与清单 hash 后 emitFile 产出 `dist/sw.js`（决策与已接受代价见 `docs/adr/0004-sw-precache-and-retention.md`）：
+`public/sw.js` 是模板，构建期由 `scripts/sw-precache-plugin.ts`（自研 Vite 插件，零新依赖）在 `generateBundle`（post 顺序，确保收齐 index.html / CSS）收集全部构建产物与 public 文件，注入全量预缓存清单与清单 hash 后 emitFile 产出 `dist/sw.js`（决策与已接受代价见 [`docs/DECISIONS.md`](./DECISIONS.md) 的 ADR-0004）：
 - `manifest.json` 声明 PWA 元数据（名称、图标、主题色）；`display: standalone` 模式，安装后全屏运行
 - 全量预缓存：install 时 shell 三件套以 `cache:'reload'` 强制拉新，其余清单按 32 条/批串行 `addAll`，失败重试一次后抛出（不容忍 404）；首次打开后全部路由离线可用
 - 缓存名为 `poker-training-<版本号>-<清单hash>`：版本号经 SW 注册 URL 查询参数 `v` 传入（`APP_VERSION` 常量，由 `main.tsx` 在注册时动态注入）；清单 hash 为排序去重清单 JSON 的 sha256 前 8 位，同版本重部署也会更换缓存名
@@ -2276,6 +2290,8 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 
 ## 15. 设计决策记录
 
+> 架构决策（ADR-0001 至 ADR-0004）见 [`docs/DECISIONS.md`](./DECISIONS.md)；本节只保留设计风格类决策。
+
 ### 15.1 为什么选择经典牌桌风格？
 
 - 目标用户是德州扑克玩家，牌桌氛围能增强沉浸感和使用意愿
@@ -2300,3 +2316,661 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 - 使用 CSS 变量保持语义化和主题一致性
 - 通过 Tailwind v4 的 `@theme inline` 将 CSS 变量映射为语义 token（如 bg-card、text-foreground）
 - 组件直接使用 Tailwind 语义类，无需 `bg-[var(--xxx)]` 任意值写法
+
+---
+
+## 16. 工程规范
+
+> 合并自原 AI_GUIDE（已归档至本地 .archive，历史见 git）。可执行部分由 ESLint 与 `src/guards/` 承担，本节的散文规则只保留无法从代码推导的部分。
+
+> 原导语：根 `AGENTS.md` 为总入口与硬约束；本节是编码 / 状态 / 国际化 / UI/UX 的详细规范。
+
+---
+
+### 编码规范
+
+#### TypeScript
+
+- `strict: true` + `noUncheckedIndexedAccess` + `noUnusedLocals` + `noUnusedParameters`
+- 路径别名：`@/*` → `./src/*`
+- 禁止 `any`；必要时用 `unknown` + 类型守卫
+- 公共 API 必须有显式返回类型
+
+#### 命名
+
+| 类别 | 约定 | 示例 |
+|---|---|---|
+| 组件 | PascalCase.tsx | `RangeGrid.tsx` |
+| Hook | camelCase.ts（use 前缀） | `useQuizEngine.ts` |
+| 工具 | camelCase.ts | `rangeParser.ts` |
+| 路由 | kebab-case | `/pot-odds/quiz` |
+| i18n key | 模块前缀 + camelCase | `range.quiz.correct` |
+
+#### 文件大小
+
+单文件目标 ≤ 300 行。守卫 `src/guards/line-count-guard.test.ts` 分三档判定：
+
+- ≤ 300 行：合规
+- 300–400 行：灰区，守卫以 `console.warn` 输出清单，不阻断 CI
+- > 400 行：硬失败，必须拆分为子组件 / 工具函数 / 数据文件
+
+**课程内容数据文件不做行数限制**（2026-11 起）：策略 `features/strategy-academy/data/lessons/variants/**`、`localLessons/**`、`basicsContent.ts`；理论 `features/theory-academy/data/levels/variants/**` 下的 Level 文件、`chapters/**`、`quizBank/**`、`blocks/**`、`chapterPracticeMap.ts` / `chapterMeta.ts`。课程正文与题库体量随内容增长，拆分只会切碎同一门课/同一章题库，因此按精确路径正则豁免，不进入 300/400 行判定与灰区告警。
+
+**共享组件不做行数限制**（2026-11 起）：`shared/components/**` 是跨模块复用的装配体（QuizCard / ResultHeader / StatCard / Academy* / Poker* 等），按行数拆分会把同一公开 API 切碎、增加跨模块 import 面，因此同样按精确路径正则豁免。`shared/utils` / `types` / `constants` / `stores` 不享受此豁免。
+
+**非课程文件仍按三档执行**：既有超大文件采用**逐文件 allowlist 棘轮**（`LEGACY_OVERSIZED_FILES`）：每个条目记录登记时的实测行数作为 `maxLines`，**只减不增**——文件继续增长即失败；拆分回到 400 行以内后必须删除条目（条目指向已合规文件同样变红）。除课程内容与共享组件外，禁止恢复其他目录 / 类别级宽泛豁免（`/data/`、`/utils/`、`store.ts`、页面组件名枚举等曾使全部超大文件绕过守卫）。新增非课程文件不得登记 allowlist，只能拆分。逻辑文件（`composeVariantChapters` / `loaders` / `index` 等）不享受课程内容豁免。
+
+CSS 单文件上限 800 行，由 `src/guards/cssLineCountGuard.test.ts` 守卫（平铺扫描 `src/styles/*.css`）；`globals.css` 已收敛为纯入口（≤120 行，只允许 `@import` + `@theme`），组件规则按级联顺序落在同目录分片，入口 import 与分片文件双向一致（无孤儿分片 / 无悬空 import）。
+
+#### 函数设计
+
+- 工具函数必须是纯函数（便于测试）
+- 副作用（emit 事件 / 写 store）集中在 hook 或 store action
+- 计算逻辑与渲染逻辑分离
+
+#### React 渲染约定
+
+- **数组不可变性**：排序/反转/删除链优先用不可变 API（`toSorted()` / `toReversed()` / `toSpliced()`），禁止对源数组原地 `.sort()`。
+- **条件渲染**：条件为数值/字符串等非布尔值时用三元（`count > 0 ? <X/> : null`），禁止 `count && <X/>`；布尔条件可用 `&&`。
+- **Effect 治理**：可由 props/state 派生的值禁止用 `useEffect` + `setState` 回写；交互触发的副作用放事件处理器。
+- **组件定义**：禁止在组件内部定义组件（导致每次渲染重挂载与状态丢失），内部子组件提取到模块级。
+- **事件监听器**：`addEventListener` 必须在 `useEffect` 内注册并 cleanup；滚动/触摸类监听须传 `{ passive: true }`。
+
+
+### 状态管理
+
+#### Zustand + persist
+
+- 全局状态用 `create()` + `persist()` 中间件，持久化到 `localStorage`
+- 禁止裸调 `localStorage.getItem / setItem`；所有持久化经 zustand persist（自动版本化 + migrate）
+- 大数据（牌局）用 IndexedDB
+- 每个 store 必须有 `name` 与 `version` 字段
+
+persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事实源，本文档不维护数值副本。下表 `name` 仅作快速索引，不替代代码事实源：
+
+| Store | version 事实源 | name |
+|---|---|---|
+| progress | `src/features/progress/store.ts` | poker-training-progress |
+| puzzle-trainer | `src/features/puzzle-trainer/store.ts` | puzzle-trainer-store |
+| strategy-academy | `src/features/strategy-academy/store.ts` | strategy-academy-progress |
+| theory-academy | `src/features/theory-academy/store.ts` | theory-academy-progress |
+
+#### Persist Version 升级硬性规则
+
+1. 递增 `version`
+2. 编写 `migrate(persistedState, fromVersion)` 函数
+3. migrate 必须防御性合并默认值（`{ ...DEFAULT_X, ...persisted.x }`），不触碰已有字段
+4. 老用户数据零丢失，首次加载自动迁移
+5. persist version 数值以 store 代码为唯一事实源，文档不维护数值副本（无需同步数值）
+6. 在 `docs/CHANGELOG.md` 的"数据迁移"小节记录
+7. 删除废弃字段同样是迁移动作：先确认新事实源已就绪再删（如策略学院 v8 删除 `abilityAssessment` 与首末次得分镜像，尝试记录 / 进步回放改由 `lessonAttempts` + `AcademyDataSource.getLessonAttemptsSnapshot()` 承担、onboarding 种子化改走 `seedEloFromOnboardingAbility`），只删字段不动进度与认证
+
+#### 幂等性
+
+`recordTrainingDay()` / `recordQuickDrillCompletion()` / `markDailyCompleted()` 等"记录完成"action 必须幂等（同一日重复调用不重复计数）。
+
+
+### 国际化
+
+- 默认中文（zh），支持 zh / en
+- 翻译文件按顶层 key 模块化拆分：`src/i18n/locales/{zh,en}/<module>.json`（如 `zh/rangeTrainer.json`、`en/academy.json`），单一 `translation` 命名空间，`t('a.b.c')` 路径式调用不变
+- 加载策略：core 模块（nav / common / dashboard / variant / tilt / streak / feedback / mentor）由 `config.ts` 启动静态加载；academy / theory / academy-course 及其余功能模块经 `src/app/routes.tsx` 的 `lazyPage` 随路由与页面 chunk 并行按需加载。core 清单以 `src/i18n/moduleRegistry.ts` 的 `CORE_MODULES` 为唯一事实源。
+- 模块注册表（唯一契约源）：`src/i18n/moduleRegistry.ts`（`I18nModuleKey` / `ALL_MODULES` / `CORE_MODULES` / `FEATURE_GROUPS` / `loadModule`）；懒加载注入由 `src/i18n/preload.ts`（`preloadI18n` 幂等 + `addResourceBundle` 深层合并 + 语言切换自动补加载）实现
+- **硬性要求**：新增 i18n key 时必须同时更新 zh 与 en 对应模块文件，缺一不可
+- key 命名：`<module>.<context>.<field>`（顶层 key 即模块名，与文件名一一对应）
+
+#### 国际化约束
+
+- **新 UI 组件/页面文案必须走 `t()`（useTranslation）**，禁止直接书写中文字面量。
+- **必须使用 `defaultValue` 兜底参数**：`t('key', { defaultValue: 'Fallback' })`，确保 key 缺失时不白屏。
+- **新增 key 必须同步 zh/en 双语**：`localeParity.test.ts` 按模块自动守护 key 对称性，但人工审查仍需确保两语言对应模块文件同时更新。
+- **课程内容 i18n**：策略学院 / 理论学院的正文、题目、解析按 `academy-course` / `theory-content` 分文件维护；zh 侧保留与原文逐字一致的镜像 key，新增 / 修改必须同批同步 zh 与 en（见 `AGENTS.md` §国际化 与 PRD §12.4.3）。
+- **`academy.*` key 分组规范**：遵循 `<module>.<context>.<field>`，与现有 `academy.*` 和 `drills.*` key 不冲突。新增 key 前先查阅 `src/i18n/locales/zh/academy.json` 与 `zh/drills.json` 对应段，避免重复/冲突。
+- **key 命名**：静态 key 一律 camelCase（如 `selectVariant` / `rulesDifference`）；kebab-case 仅用于与枚举值 / 路由参数一一对应的动态 key（如 `variant.name.short-deck`）。
+- **模块注册表**：`src/i18n/moduleRegistry.ts` 是唯一契约源；模块增删须同步 `I18nModuleKey` / `ALL_MODULES` / `loadModule`（/ `CORE_MODULES` / `FEATURE_GROUPS`）。
+- **课程内容双轨**：数据层保留中文原文 + 渲染层 i18n key 覆盖，zh 侧存在与原文逐字一致的镜像 key；新增/修改课程文本必须同批同步 zh 与 en。正文 / 选项 / 解析 / 小测 / 双语 locale 是**同一原子变更单元**（规则见 PRD §6.7.4，口径见 §12.4.3）。
+- **理论学院内容分层**：`theory.json` 只保留目录/UI；正文/小测/目标按 level 拆分于 `src/i18n/locales/<lng>/theory-content/`，由章节页/复习出口经 `i18n/theoryContent.ts` 按需加载。首页/store 只读 `data/levels/manifest` 摘要，禁止静态引用完整 `data/levels/variants/**`。**6-max 现金增补章**位于 `data/levels/variants/standard/chapters/`，目录摘要透传 `supplemental` / `pathTags`；增补章不计入 Level 解锁与核心进度（core = `!supplemental`），完成增补章不回锁，数据改动后须运行 `pnpm theory:manifest`。
+- **策略学院加载分层**：首页/store/轨道/图谱只读 `data/lessons/manifest` 摘要；完整课程经 `data/lessons/loaders.ts` 按 Level/变体懒载。`academy-course` 文案由 `i18n/academyCourse.ts` 按文件加载，路由入口禁止整批 `loadAcademyCourses`。
+- **复习类持久状态必须存 i18n key**（SRS 队列的 label 与 `metadata.front/back` 等），禁止存任何语言的原文；且渲染于首页的复习界面必须保证来源包按需可得——两者是**配对要求**，只做其一比原状更糟（PRD §12.4.3）。
+
+
+### UI/UX 设计系统
+
+- **色彩**：四层架构（牌桌绿 `--felt-*` / 象牙白 `--ivory-*` / 黄铜金 `--brass-*` / 胡桃木 `--walnut-*`），通过 CSS 变量定义于 `src/styles/tokens.css` 的 `:root`（色彩 token 实现唯一权威，经入口 `globals.css` 引入）
+- **字体**：Fraunces（serif 标题）/ Inter Tight（sans 正文）/ JetBrains Mono（mono 数字）
+- **主题**：暗色为默认，另支持浅色「白天牌室」（light token / 补丁白名单见 DESIGN.md §2.8）；禁止硬编码颜色值
+- **响应式**：桌面 ≥1024px / 平板 768-1023px / 移动 <768px
+- **可访问性**：遵循 WCAG 2.1 AA，交互元素必须有 `aria-label`，对比度 ≥4.5:1
+- **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-d{2,3}`）、纯白/纯黑文字类（`text-white`/`bg-white`/`text-black`）、纯黑白 hex（`#000`/`#fff`）；语义反馈用 `--poker-*` token（映射规则以 `docs/TDD.md` §14.7 为准），SVG 渐变 stop 字面值须注释标注对应 token。由 `src/guards/designTokenGuard.test.ts` 守卫（`pnpm test` 强制），豁免清单只删不加。设计契约权威源为 `DESIGN.md`（以其当前版本为准，不维护版本号副本）
+- **五级反馈样式**：`GRADE_DISPLAY_CONFIG` 的 color 字段引用 globals.css `.grade-best`~`.grade-blunder` 类（样式唯一事实源），禁止内联霓虹类
+- **设计契约权威源**：`DESIGN.md`（以其当前版本为准）；组件视觉、布局、动效与可访问性决策均以其为准。
+- **复用阶梯 / 第三份规则**：已有 primitive/variant → 组合件 → feature-local 模板 → shared 组件 → 内联；同一 UI 模式出现第 3 份拷贝时必须抽模板或 shared variant，禁止继续复制。
+- **共享交互基础件**：shared 组件组合 `ui/Button` / `Input` / `Textarea` / `Dialog` / `Progress`，禁止裸交互控件（特化 allowlist 见 `src/guards/sharedPrimitiveUsage.guard.test.ts`）；焦点环走 `ui/focusRing.ts` 的 `FOCUS_RING` / `FOCUS_RING_VISIBLE`；section 标题走 `layout/SectionLabel`。
+- **Button 变体**：`default` / `secondary` 金属族；`quiet` / `link` 为结构变体。V1 已完成：`.btn-*` 入 `@layer components`、平铺主 CTA → 金属渐变、`ghost` / `outline` / `destructive` 统一收口；新增主 CTA 直接用 `Button variant="default"`，禁止再写平铺黄铜。
+- **重复字面量棘轮**：`src/guards/duplicateLiteralRatchet.guard.test.ts` 监控 focus ring / section label / 平铺主 CTA / stat box，只降不升；低于基线时同步下调常量。
+
+### 跨模块复用契约
+
+> 以下是所有训练模块共享的横向契约；单项事实源以文中路径为准，模块不得自行复制实现。
+
+#### 学院共享组件与纯函数
+
+- 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `AcademyReadingPlane` / `FormulaDerivation` / `AcademyTakeawayCard` / `AcademyPeek` / `AcademyStickyCta`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyVariantRules` / `academyTakeaway`）；掌握度派生 `academyMastery` 单消费，位于 `strategy-academy/utils/`。
+- 理论学院与策略学院只允许薄包装消费：路由拼接、数据适配、i18n 文案留在 feature 内；shared 组件只接收 props/callbacks，禁止 import 任何 feature。
+- 理论侧 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheorySearch*` / `theorySrs` / `applyStandardQuizBank` / `quizDraw` 与策略侧对应实现均改为薄包装；行为/视觉/文案以原测试为回归基线。
+- **阅读页双栏骨架**：`AcademyReadingPlane` 只负责「主阅读列（上限 768px）+ xl 学习导轨」的布局与 sticky 行为，导轨内容与文案由理论 `TheoryChapterRail` / 策略 `CourseStudyRail` 注入；shared 不读 store、不拼路由。
+- **P2 学习工具同源**：`AcademyBookmarksPanel`（strip / panel 两形态）/ `AcademyNotesPanel`（受控草稿 + 字数上限 + 显式保存）/ `ContentIssueReportDialog`（内容纠错弹层）由 shared 提供，理论 `TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport` 与策略 `StrategyBookmarksPanel` / `StrategyNotesPanel` / `StrategyContentIssueReport` 只做文案与数据适配；shared 不读 store、不拼路由。
+- **课程阅读页四件同源（2026-11）**：消费者均为 strategy-academy + theory-academy。
+  - `FormulaDerivation`（计算层 `components/academy/formulaParse.ts` 纯函数）：公式推导单源——编号步骤 + 散文左对齐 + 公式居中 mono + 变量 brass 高亮；总步数 ≥3 或组数 ≥2 才编号，单/双行简单公式保持 legacy DOM（高亮 span 类名不变）；VARIABLE_RE 高亮单源在此，禁止模块内另写变量高亮。
+  - `AcademyTakeawayCard`：章末要点卡，DOM 与两院原 `LessonTakeawayBlock` 逐字一致（`.lesson-takeaway` + brass 圆点列表）；自动装配走 `utils/academyTakeaway.assembleTakeawayItems`（objectives 在前 + key-point 按换行拆分在后，归一化去重、上限 6 条），显式 takeaway 与自动装配共用此卡，不双卡。
+  - `AcademyPeek`：quiz 原文 peek 折叠壳（ui/Button quiet + aria-expanded/aria-controls，展开区限高滚动）；label 与 children 由 feature 注入，shared 不 import feature、不新增 shared i18n key。
+  - `AcademyStickyCta`：移动端 sticky 底部 CTA 的**单 DOM 节点**响应式容器（`fixed … z-40`，低于 MobileNav z-50；`md:static` 还原内联右对齐），Button 由消费者作 children 传入，避免移动/桌面双渲染。
+- 新增共享项须满足 shared ≥2 模块准入门槛，并同步 AGENTS.md 本表与 TDD §5.8 第 23 条。
+
+#### 五级反馈
+
+- `DecisionGrade = 'best' | 'correct' | 'inaccuracy' | 'wrong' | 'blunder'`；阈值以 `shared/types/decisionFeedback.ts` 的 `GRADE_THRESHOLDS` 为唯一事实源。
+- 评级函数 `calculateGrade(evLoss)`；边界归入更严重等级；`buildDecisionFeedback` 必须内部调用 `calculateGrade`，禁止用 `isCorrect` 掩盖真实 EV 损失。
+- 所有训练模块必须复用此系统，禁止自定义评级。theory-academy 章末小测为概念判断题，恒以「正确 / 错误 + 解析」二态呈现（PRD §5.9.2 / §5.27.5）。
+- **呈现诚实性**：选项无真实 EV 标定时不得渲染五级徽章与 EV 数值；覆盖率由 `strategy-academy/utils/evCalibration.test.ts` 棘轮追踪（PRD §6.7.1）。
+
+#### 反馈闭环
+
+- **正向（训练→课程）**：range-trainer / pot-odds / gto-simulator / puzzle-trainer 的答题反馈必须携带 `relatedLessonId`，wrong/blunder 显示「去复习」链接。推导入口：`inferRelatedLessonId(position, actionType)`、GTO 按 `scenario.street`、`inferPuzzleLessonId(theme)`。
+- **反向（数据→难度）**：`progress.shouldDownshiftDifficulty()`（无参）是自适应难度唯一入口，禁止模块自行判定；数据源为 `progress.emotion.consecutiveWrongCount`（由 `recordAnswer(isCorrect)` 维护）。
+- **相关课程 chip 路由**：shared `RelatedLessonChip` 只回传 `lessonId`（`onOpen` / `onRelatedLessonOpen`），目标路由由各 feature 注入；禁止在 `src/shared` 硬编码 `/academy/lesson/`。
+
+#### 训练弱项回流
+
+- 训练明细 `QuestionResult` 可选携带 `topic` / `relatedLessonId`；puzzle-trainer 写入主题与关联课程，其他模块无元数据时保持原行为。
+- 单一事实源：`progress/utils/learningWeakness.ts`，经 `features/progress/index.ts` 公共导出；跨模块禁止深引 progress 内部实现。
+- 派生口径：近 30 天、至少 3 次、正确率低于 70%，取前 3 个弱项；谜题成绩不直接更新 ELO，QuickDrill 只把关联课程作为优先选题信号。
+- 首页默认习惯任务在 5 题速训与 8 题每日谜题间二选一；完成态分别取 `lastQuickDrillDate` 与当日 `puzzle-trainer + daily` 训练记录，不复用全站 Streak 冒充速训完成。
+- QuickDrill 记录使用 `quick-drill` mode；进度统计按该 mode 独立分组，最近训练标签显示「速训」，课程练习仍归策略学院。
+
+#### 位置渐进解锁
+
+- 阈值常量 `POSITION_UNLOCK_THRESHOLDS` 在 `range-trainer/constants.ts`（文档不维护数值副本）；工具函数 `isPositionUnlocked(position, preflopElo)`；调用方 `RangeSelector` 渲染时过滤锁定位置；阈值变更记录到 `docs/CHANGELOG.md`。
+
+#### 变体规则卡（理论 / 策略共用）
+
+- 三段分工：类型 `shared/types/variantRules.ts`（`VariantRuleInfo` / `VariantRuleContext`）、单挑规则事实单源 `shared/constants/headsUpRules.ts`（`headsUpRules`）、行构造纯函数 `shared/utils/academyVariantRules.ts`（`buildHeadsUpRuleRows(rules, context?)` 只产出 key 与语言中立值）、展示组件 `shared/components/academy/AcademyVariantRuleCard`（纯 props，空 items 整卡不渲染）。
+- 两院只做薄包装：理论 `TheoryVariantRuleCard`（仅 `chapter.variant === "heads-up"` 渲染，挂章节正文前）与策略 `StrategyVariantRuleCard`（仅 `lesson.variant === "heads-up"` 渲染，`lesson.variantContext` 追加本课上下文行，挂课时正文前）。翻译一律 `variant.headsUpRules.*` 显式字面量 key，禁止模板拼接（会绕过 `staticKeyGuard` 与 `variantRuleCopyGuard`）。
+- 策略单挑 12 课已全部登记 `variantContext.anteStructure='sb_ante'`；新增/修改课时的上下文只在数据层声明，规则卡渲染与方向派生仍由 shared `buildHeadsUpRuleRows` 负责，正文不得复制规则行。
+- 方向值数据驱动：翻前 / 翻后谁先行动只由 `positionDynamics` 布尔派生，数据没有的行直接省略；规则文案不得在组件或数据里另写一套散文。`huPositionOrderGuard` / `variantRuleCopyGuard` 的判据单源同为 `shared/constants/headsUpRules.ts`；短牌 `shortDeckRules` 仅理论侧消费，仍留在 theory-academy。
+- 新增共享项须满足 shared ≥2 模块准入门槛，并同步 AGENTS.md 契约表与 TDD §5.8b。
+
+#### 答题选项排序治理
+
+- 所有选择题选项必须经统一排序，禁止按题库原序渲染。分流：动作类按语义固定（消极→激进）；纯数值单调排列；文字陈述按 `hash(题目id)` 种子洗牌；认证考试用会话随机种子。
+- 共享策略单源 `shared/utils/optionOrder.ts`：`computeOptionOrder`（策略 → 原索引置换）/ `applyOptionOrder` / `remapCorrectIndex`，四类策略 `numeric`（`strict` / `digit` 判定 + `asc` / `seedParity` 方向）/ `shuffle`（种子可加盐）/ `action`（激进度词表 + `requireAllParsed`）/ `conditional`（先判定再选分支）；随机与数值判定底座仍为 `shared/utils/seededShuffle.ts`（`seededRandom` / `shuffleBySeed` / `hashStringToSeed` / `isNumericOptionSet` / `isDigitBearingOptionSet` / `sortByNumericValue`）。
+- 模块只保留薄包装（导出名与原实现一致，内部仅传策略描述）：puzzle-trainer `utils/optionOrder.ts`（`sortOptionsCanonically`）、strategy-academy `utils/quizShuffle.ts`（`orderQuizQuestion` / `orderDrillOptions` / `orderResolvedOptions`）与 `utils/practiceOptionOrder.ts`（`orderPracticeOptions`）、pot-odds `utils/quizOrder.ts`（`orderQuizOptions`）、theory-academy `utils/quizOrder.ts`（`orderTheoryQuizQuestion`）与 `utils/placement.ts`（`orderPlacementOptions`）、onboarding `utils/optionOrder.ts`（`orderPlacementOptions`）。禁止在模块内另写排序 / 洗牌实现。
+- 源题库静态数据不手改重排；i18n-key 型题库须在 `t()` 解析后重排，顺序不得随语言变化；重排必须同步重映射正确答案；新增题库须经模块薄包装出口并补分布守卫。每日谜题同一天所有用户题目与顺序一致。
+
+#### 结果页装配
+
+- 单一事实源 `shared/components/feedback/ResultSlip.tsx`（overlay / page 两种纸条壳层：`title` / `subtitle` / `tone` / `ring` / `stamp` / `metrics` / `badges` / `mentorQuote` / `detail` / `actions`），内部复用 `ResultHeader.tsx`（标题区）与 `ResultActions.tsx`（动作组）。
+- 标题层级默认 h2（壳层 `AppLayout` / `BlankLayout` 持有唯一 h1）；仅无壳层特殊整页可显式传 h1。任意页面必须恰好一个 h1。
+- 材质外壳（`dealer-slip` / felt / `walnut-panel`）、统计卡行、错题与明细表、路由跳转与文案留在各模块；共享件负责纸张外壳、指标/徽章/导师语/详情槽与动作组的语义结构。
+- 消费方：gto-simulator `ResultSummary`（page 变体）、pot-odds `PotOddsResultView`（overlay）；range-trainer / puzzle-trainer / strategy-academy 的结算页按同一契约接入。两院认证/检查点结果视图保留各自结构（材质与标题语义差异已登记，不强行统一）。
+
+#### 课程枢纽与双泳道
+
+- `/lesson` 是课程枢纽（CourseHub），`/lesson/:id` 仍是课时深链；`theory:` 前缀与 `/academy/lesson/:id` 旧链保持兼容。
+- 阶段契约：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成（去重保序，短牌为 `[]`）；四段归并与阶段状态在 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`。
+- 理论只读契约：`TheoryDataSource.getLearningSnapshot()`（completedChapters / chapterAttempts / quizScores）与 `getChapterCatalog(variant)`（chapterId / levelId / practiceLessonIds），仍由 theory bootstrap 注册，经 shared registry 消费。
+- 变体上下文契约：`TheoryDataSource` 提供可选 `getActiveVariant()` / `switchVariant(variant)`；课程枢纽（`CourseHub`）是变体 canonical 切换入口，地图与执行页只读当前变体，不得各自持久化第二份选择。切换经两院既有 action 落地，registry 机制与 persist 均不变；实现方未提供该可选方法时，消费方降级为只读展示（模块内不得另写变体切换旁路）。规则见 §17 R5。
+- nextAction 顺序：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → 全部完成；阈值复用 `ACADEMY_MASTERY_THRESHOLDS`。
+- 不新增 store / registry、不改 persist；短牌无锚点时概念泳道显示「概念关联待补充」，实战泳道与下一步照常。
+- 学习闭环呈现（批次 4）：阶段卡步骤 `01 概念 / 02 实战 / 03 自查`，步骤③仅标准变体、链 `/academy#assessment`（不直链检查点页，保持 R2 → R3 闭环）；双迷你进度环只呈现（`complete` / 解锁仍由实战驱动）；实战 chip 副标题取 `lessonMeta.theoryAnchors[0]`。掌握度派生 `academyMastery` 为单消费，位于 `strategy-academy/utils/`；地图掌握度卡已移除，单源为枢纽 `CourseMasteryDualCard`。
+- 地图角色：`/academy` = 实战地图、`/theory` = 理论地图（`nav.academy` / `nav.theory` 单源），地图根只回课程主线；来源感知返回与锚点回位的实现细节见 §返回入口 与 §17。
+
+#### 返回入口
+
+- 单一事实源 `shared/components/layout/BackLink.tsx`：`to`（路由链接）/ `onClick` / `historyBack`（`navigate(-1)`）三选一；`variant` 为 `text` / `pill` / `button`；`size` 为 `sm` / `md`；`iconOnly` 见下。
+- icon-only 必须传 `aria-label`；触摸目标 ≥44px（`min-h-11`）；焦点环统一 `focus-visible:ring-2 ring-[var(--brass)]/60`。
+- 页脚内嵌链接等特殊上下文可保留本地样式，不强行统一；`BlankLayout` 的返回走 `historyBack`。
+- **来源感知（课程区）**：返回目标由进入来源决定，唯一解析器 `shared/utils/courseBack.ts` 的 `resolveCourseBack(state)`。前进侧只产出 state：`hubFrom(stageIndex?)`（主线，带阶段序号时回 `/lesson#hub-stage-N`）/ `theoryMapFrom()`（`/theory`）/ `academyMapFrom()`（`/academy`）；执行页、章节页与 Drill 退出都消费同一解析结果与 `labelKey`（core `nav.backToCourseHub` / `nav.backToTheoryMap` / `nav.backToAcademyMap`）。缺失 / 非法 state 与深链刷新兜底 `/lesson`，模块内禁止另写来源推断或 referrer 猜测。
+- 地图根（`/academy` / `/theory`）只提供「返回课程目录」→ 主线；地图下的工具页返回所属地图。导航「课程」项在 `/lesson`、`/academy`、`/theory` 三个前缀内均点亮（侧栏与移动底栏共用 `isCourseSectionPath`；规则 R1–R10 见 §17）。
+
+#### 导师人格化
+
+- 三种风格：`strict-math` / `old-school` / `encouraging`；模板 `MENTOR_FEEDBACK_TEMPLATES`（`shared/constants/mentorStyles.ts`）；渲染 `renderMentorFeedback(mentorStyle, grade, params)`；QuizCard / GTOFeedback 优先调用，缺省降级到 i18n。
+
+#### 事件总线
+
+- 实现 `src/shared/stores/trainingEvents.ts`；feature 完成训练后必须 `trainingEvents.emit(event)`，progress store 自动订阅更新统计。hand-history 为复盘分析工具而非交互式训练，合理豁免 emit（见其 store.ts 顶部说明与 CHANGELOG）。
+- 五大系统的「记录」action 在答题/反馈环节同步调用（不走事件总线）：Streak / ELO / SRS / Emotion 直接记录，Mentor 经 `renderMentorFeedback` 渲染。
+
+#### progress 公共入口与保存语义
+
+- 公共入口三层（唯一跨模块面）：`features/progress/index.ts`（聚合：复习项工具 / 每日训练推荐 / 成就数据 / QuickDrill 混合）、`api.ts` + `api.types.ts`（`useProgressState` / `progressCommands` / `ProgressReadModel`）、`ui.ts`（`SessionLimitGuard` / `OnboardingGate` / `TiltWarning` / `MilestoneCelebrationHost` / `ProgressPersistErrorNotice`）。
+- 深引禁令：`@/features/progress/store`、`/store.bootstrap`、`/components/*`、`/utils/*`、`/types`、`/data/*` 一律禁止（改为在 `api.ts` / `ui.ts` 增补导出）；装配例外仅 `src/main.tsx` 的 `store.bootstrap` 与 `src/app/routes.tsx` 的页面 lazy import。守卫 `src/guards/progressPublicApi.guard.test.ts`（失败信息带 `file:line`）。
+- 保存语义：记录提交后才算「已保存」。`addRecord` 先写内存，落库结果由 `RecordPersistResult` 表达（`ok: true` = `inserted` / `exists`；`ok: false` = `invalid` / `cancelled` / `failed` + `retainedInMemory`）；`persistRecord` 永不 reject，调用方不得把「已入内存」当「已保存」。
+- 分源持久化状态：`persistenceStatus.ts`（`localStorage` / `records` / `cleanup`，运行态不进 persist，代次防迟到成功覆盖新失败）由 `ProgressPersistErrorNotice` 消费，两个壳层各挂一次；重试只重写存储，不重复 emit / 评分，删除与清空会取消在途写入防复活。
+- 迁移保护：legacy records 由 `store.bootstrap` 幂等迁入 IndexedDB，延迟加载用 `epoch` 屏障 + `removedIds` 过滤，清空不会被旧快照回填。
+
+#### 调试解锁
+
+- 实现 `src/shared/stores/debugMode.ts`（独立 persist store，不并入 progress）；激活码常量以该文件为唯一事实源。
+- 全局旁路共 9 处：strategy-academy 的 `isLevelUnlocked` / `isLevelEntryUnlocked`、`ConceptGraph` 本土课节点（`isLocalLessonUnlocked`）、CourseView 本土课与课程级门禁、`LearningTracksView` 轨道前置；range-trainer `RangeSelector` / `QuizConfig` 位置解锁；progress `SessionLimitGuard` 每日题量上限；theory-academy `isTheoryLevelUnlocked` / `TheoryChapterView` 章节直达门禁。
+- 短路接法：store/纯逻辑用 `isDebugUnlockActive()`；组件内用 `useDebugModeStore((s) => s.unlockAll)`。新增门禁须同步接入；onboarding 不纳入解锁范围（PRD 5.6.6 / TDD 5.9）。
+
+---
+
+## 17. 课程区信息架构
+
+> 合并自原 COURSE_IA（已归档至本地 .archive，历史见 git）。范围仍是 `/lesson` 主线、`/theory` 理论地图、`/academy` 实战地图及其执行页 / 工具页。
+
+> 范围：`/lesson` 课程主线、`/theory` 理论地图、`/academy` 实战地图及其执行页 / 工具页的角色、返回语义与数据边界。
+> 本文只写角色、规则与不变量；数量（课时 / 章节 / 路由条数）、阈值与 persist 版本一律以代码与守卫为唯一事实源，本文不复写数值。
+
+---
+
+### 1. 教育目的
+
+| 维度 | 结论 |
+|---|---|
+| 主线 | `/lesson` 是课程区唯一主线（枢纽 = 定位条 + 下一步卡 + 双泳道阶段路径 + 掌握度 + 目录入口）。学习者的「现在该做什么」只由主线回答 |
+| 双泳道 | 理论构建（概念）与实战应用（执行）并列但不混同：概念泳道回答「为什么」，实战泳道回答「怎么打」 |
+| 认证归属 | 能力凭证只由实战侧承担（策略 Level 认证）；理论侧只有检查点与复习，不发证书、不解锁下一级 |
+
+设计后果：地图是「看全局」的浏览面，不是第二主线；任何地图根都必须能回到主线，且不能替代主线的下一步语义。
+
+---
+
+### 2. 课程资产学习逻辑
+
+链条：**阶段 → 课时 / 章节 → 概念锚点 → 掌握度 / SRS**。
+
+- **阶段**：策略侧 `learningStages.ts` 按 Level 序列与先修生成阶段快照；阶段的 `theoryChapterIds` 由课时声明的理论锚点投影而成（去重保序，短牌可为空）。归并、状态与「下一课」的纯函数在 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`，progress 与 strategy 共用同一份判定。
+- **课时 / 章节**：课时（含 Drill 型）与理论章节是两种执行载体；课时 id 与理论章节 id 分属不同命名空间，跨院只传 id / 路由字符串。枢纽只做投影：不新增 store / registry，不改 persist。
+- **概念锚点**：课时数据层声明锚点，理论章按锚点归入阶段；没有锚点的章节进入折叠「补充阅读」。短牌缺锚点时显示「概念关联待补充」，不伪造映射。
+- **掌握度 / SRS**：首次成绩判定 `resolveFirstScore` 与理论复习项判定 `isTheoryReviewItem` 是单一事实源；掌握度派生（`summarizeMastery` / 阈值）位于 `strategy-academy/utils/academyMastery.ts`（枢纽投影两院掌握，单消费回迁），题级复习以 `shared/utils/academySrs.ts` 为准，模块内不得另写第二套阈值或判定。
+
+---
+
+### 3. 评估分层
+
+| 层级 | 载体 | 计分影响 | 是否能力凭证 |
+|---|---|---|---|
+| 形成性 | 课时测验、课后 Drill、理论章末小测、Level Checkpoint | 首考计 ELO 与掌握度；重考只更新 best / last 并进 SRS | 否 |
+| 终结性 | 策略 Level 认证（仅标准变体） | 首考计 ELO；通过即解锁下一级 | 是（唯一凭证出口） |
+| 诊断性 | 策略定位测评、理论定位 | 只放宽解锁（写 `creditLevels`），不写完成态、不计 ELO / 掌握度 / SRS | 否 |
+
+口径统一为「首考定能力、重考定复习」：重考不得重复累加 ELO；错题按题级进入 SRS 并能回跳所属课时 / 章节。
+
+---
+
+### 4. 信息架构
+
+```mermaid
+graph TD
+  SHELL["壳层 AppLayout（01 课程眉标 · 唯一 h1）"] --> HUB["/lesson 课程主线（枢纽）"]
+  HUB --> LESSON["/lesson/:lessonId 课时执行页"]
+  HUB --> TMAP["/theory 理论地图"]
+  HUB --> AMAP["/academy 实战地图"]
+  HUB --> TRACKS["/academy/tracks 学习轨道"]
+  TMAP --> CHAPTER["/theory/chapter/:chapterId 章节执行页"]
+  TMAP --> TTOOLS["理论工具页（定位 / 检查点 / 术语 / 搜索 / 书目 / 疑难复习）"]
+  AMAP --> ATOOLS["学院工具页（定位 / 检查点 / 认证 / 收藏 / 书目 / 概念图谱）"]
+  LESSON --> HUB
+  CHAPTER --> TMAP
+  TTOOLS --> TMAP
+  ATOOLS --> AMAP
+  classDef hub fill:#2f5d50,stroke:#8c6b3f,color:#f5efe0
+  classDef map fill:#3a3f4a,stroke:#8c6b3f,color:#f5efe0
+  classDef exec fill:#4a3a2f,stroke:#8c6b3f,color:#f5efe0
+  class HUB hub
+  class TMAP,AMAP,TRACKS map
+  class LESSON,CHAPTER,TTOOLS,ATOOLS exec
+```
+
+角色约束：`/lesson` 横向承接两张地图与轨道（主线唯一）；地图根纵向只接自己的子路由；执行页与工具页各自只回所属上级。
+
+---
+
+### 5. UI 操作规则（R1–R10）
+
+| 规则 | 内容 | 事实源 / 守卫 |
+|---|---|---|
+| **R1 来源感知返回** | 执行页返回目标由进入来源决定：主线来源回 `/lesson`（携带阶段序号时回 `/lesson#hub-stage-N`），理论地图来源回 `/theory`，实战地图来源回 `/academy`；深链 / 刷新 / 非法 state 一律兜底 `/lesson` | `shared/utils/courseBack.ts`（`hubFrom` / `theoryMapFrom` / `academyMapFrom` / `resolveCourseBack`） |
+| **R2 工具页回地图** | 地图下的工具页（定位、检查点、认证、收藏、书目、术语、搜索、疑难复习、概念图谱）返回所属地图，不落回主题线 | 两院工具页 `nav.backToTheoryMap` / `nav.backToAcademyMap` |
+| **R3 地图根回主线** | 两张地图的根页只提供「返回课程目录」→ `/lesson`；地图根不承担「下一步」语义 | `nav.backToCourseHub` + 两院地图根头 |
+| **R4 锚点回位** | 主线来源返回时按 `#hub-stage-N` 回位阶段卡；`scrollIntoView` 尊重 `prefers-reduced-motion`（降级为 `auto`），短延迟等待阶段卡挂载 | `CourseHub` 的 hash 效应；阶段卡 `id=hub-stage-N` / `data-hub-stage` |
+| **R5 变体 canonical 在主线** | 变体（标准 / 短牌 / 单挑）的唯一 canonical 切换点在课程主线；地图与执行页只读当前变体，不各自持久化第二份选择。批次 2 落地：主线经 `TheoryDataSource.switchVariant` 发出唯一切换命令，地图只读显示 | `shared/types/theoryDataSource.ts`（`getActiveVariant` / `switchVariant`）+ `CourseHub` |
+| **R6 前进带 state** | 枢纽 → 执行页的前进链接必须携带来源 state（`courseFrom`），执行页不靠 referrer 猜来源 | `courseBack` 的 `COURSE_FROM_KEY`；阶段卡 chip |
+| **R7 显式返回** | 课程区的返回一律是显式控件（回到确定目标），不依赖浏览器返回键；浏览器返回键仅作为额外通路 | `BackLink` |
+| **R8 返回入口单源** | 返回入口只用 `shared/components/layout/BackLink`（`to` / `onClick` / `historyBack` 三选一，文本 / 胶囊 / 按钮三变体）；icon-only 必填 `aria-label`；触摸目标 ≥44px | `BackLink.tsx` + DESIGN §13.7 |
+| **R9 地图角色文案** | 两张地图在导航、页名、目录入口中统一称「实战地图」「理论地图」，不复用「学院」作为地图名 | `nav.academy` / `nav.theory`（core nav 单源文案） |
+| **R10 课程激活覆盖 01 组** | 导航「课程」项指向主线，但 `/lesson`、`/academy`、`/theory` 三个前缀都点亮该项：桌面侧栏与移动底栏共用同一判定（`isCourseSectionPath`），其他导航项仍按自身前缀判定 | `src/layouts/navSections.ts`（`COURSE_SECTION_PREFIXES` / `isCourseSectionPath`）+ `AppLayout` / `MobileNav` |
+
+补充：R10 的跨地图激活是**视觉态**；当前页身份由壳层 h1、01 眉标与路由播报承担（`NavLink` 自身的 `aria-current` 仍只覆盖 `/lesson` 子树），不做伪 `aria-current`。
+
+---
+
+### 6. 数据边界
+
+- **两院 store 不合并**：策略与理论各自持有 store / persist；课程区只做跨院只读投影，不新增第二套状态。
+- **单一变体切换命令**：变体上下文由 `TheoryDataSource` 可选 `getActiveVariant` / `switchVariant` 承载，课程主线是唯一命令发出方；切换复用两院既有 action / 字段，地图与执行页只读，不新增 store、不写第二份 persist 字段。
+- **理论经 registry**：策略与中枢侧只经 `shared/stores/theoryDataSourceRegistry` 读理论快照 / 目录，禁止 `progress` import 理论模块。
+- **persist 不变**：课程 IA 只读与路由语义调整，不改两院 store 的 schema / version / migrate。
+- **进度只经公共入口**：课程区读进度走 progress 公共入口（`api` / `ui` / 只读快照 hook），禁止深引模块内部。
+
+---
+
+### 7. 端到端旅程（返回判定）
+
+```mermaid
+graph TD
+  ENTER["进入课时 / 章节执行页"] --> CHECK{"location.state.courseFrom 合法？"}
+  CHECK -->|"hub + stageIndex"| HUB["返回 /lesson#hub-stage-N"]
+  CHECK -->|"hub 无阶段"| HUBPLAIN["返回 /lesson"]
+  CHECK -->|"theory-map"| THEORY["返回 /theory"]
+  CHECK -->|"academy-map"| ACADEMY["返回 /academy"]
+  CHECK -->|"缺失 / 非法 / 深链刷新"| FALLBACK["兜底 /lesson"]
+  HUB --> SCROLL["锚点 scrollIntoView（reduced-motion → auto）"]
+  HUBPLAIN --> DONE["主线按下一步继续"]
+  THEORY --> DONE
+  ACADEMY --> DONE
+  FALLBACK --> DONE
+  SCROLL --> DONE
+  classDef decision fill:#4a3a2f,stroke:#8c6b3f,color:#f5efe0
+  classDef target fill:#2f5d50,stroke:#8c6b3f,color:#f5efe0
+  class CHECK decision
+  class HUB,HUBPLAIN,THEORY,ACADEMY,FALLBACK,SCROLL,DONE target
+```
+
+旅程验收：`shared/utils/courseBack.test.ts`（解析分支）、`AppLayout.test.tsx`（页名 / 展宽 / 课程激活）、`e2e/lesson-hub.test.ts`（枢纽 → 课时 → 返回目录并回位）与 `e2e/ia-navigation.test.ts`（地图页名 + 地图根回主线）、`e2e/ia-restored.test.ts`（工具页回所属地图）。
+
+---
+
+### 8. 覆盖报告与评估区（批次 3）
+
+- **枢纽覆盖报告（只读）**：`CourseCoverageCard` 汇总理论章节与实战课时的双向映射（已关联实战章 / 补充阅读章 / 有理论锚点的课时），数据来自 `hubStages` 与 `lessonMeta.theoryAnchors`；只展示，不门禁、不写进度。
+- **地图评估区（只读聚合）**：`/academy` 的「评估」区集中检查点 / 认证 / 定位；`/theory` 的「评估」区集中定位 / 检查点（理论不发证书）。评估行为与门禁不变，仅收敛入口。
+- **去重**：两张地图不再重复主线/首页的续学 Hero 与每日计划；续学归 `/lesson`，每日计划归首页。
+
+### 9. 学习闭环化与地图瘦身（批次 4，2026-11-23）
+
+> 只改呈现层；§1 教育目的、§4 角色、§5 规则 R1–R10、§6 数据边界均不变。
+
+- **阶段卡闭环**：每段按 `01 概念 → 02 实战 → 03 自查` 呈现；步骤③仅标准变体显示，链接 `/academy#assessment`（评估区锚点）。不直链检查点页：工具页按 R2 回地图会打断「回主线」闭环，评估区聚合入口 + 地图根 R3 回主线使闭环闭合。非标准变体呈两步闭环。
+- **双泳道进度**：阶段头部并列理论 / 实战两个迷你进度环，理论未就绪或短牌无锚点时占位不伪造；阶段 `complete` 与解锁仍由实战完成态驱动（`computeStageStates` 不变）。
+- **课时级配对**：实战 chip 展示首个理论锚点章标题（`lessonMeta.theoryAnchors[0]`）；Drill / 无锚点降级不显示。
+- **地图瘦身**：掌握度单源为枢纽 `CourseMasteryDualCard`（含最弱项导航）；实战学习工具与理论阅读统计默认折叠（原生 `details`，理论统计 `flaggedQuestions > 0` 自动展开）；地图保留「阶梯 + 检索 + 评估」主干。
+- **单一事实源回迁**：`academyMastery`（掌握度派生）因单消费回迁 `strategy-academy/utils/`（准入守卫强制）；理论复习判定仍以 `shared/utils/academySrs.ts` 为准。
+
+---
+
+## 18. 测试体系
+
+> 合并自原 testing 规范（已归档至本地 .archive，历史见 git）。本节是测试分层、文件放置与命名、判定标准、执行矩阵与责任的唯一事实源。
+
+> 地位：本节是测试**分层、文件放置与命名、判定标准、执行矩阵、责任与评审**的唯一事实源。
+> 不重复维护的事实：运行命令以 `package.json` 为事实源；CI 步骤以 `.github/workflows/*.yml` 为事实源；全局守卫清单以 [`src/guards/README.md`](../src/guards/README.md) 为事实源；测试文件清单以 `src/**/*.test.ts(x)` 实际文件为准。
+> 变更本规范时同步：`AGENTS.md` §质量门禁 与 `docs/TDD.md` §11。
+
+---
+
+### 1. 目标与原则
+
+测试只回答一个问题：**这次改动破坏了哪个契约？** 本项目的契约优先级：
+
+1. 数值与策略正确（赔率 / EV / 组合数 / 范围频率 / ICM）
+2. 状态可迁移（persist schema、IndexedDB、复习队列）
+3. 模块边界不破（依赖方向 / 公共 API）
+4. 内容不漂移（课程 / 题库 / 双语 / 术语 / 位置方向）
+5. 用户路径可回归（渲染 / 交互 / 可访问性）
+
+原则：
+
+- **风险驱动**：按契约失效的后果分配测试，不追求全仓行覆盖率数字。
+- **确定性**：时间、随机、存储、网络、i18n 加载必须可控；同输入同结果。
+- **回归锁**：每个缺陷修复必须附一个在修复前会失败的测试；每个数据 / 内容修正必须附完整性守卫。
+- **单源**：断言代码契约，不复制实现；测试数据从源数据导入，不手写第二份。
+- **快速反馈**：本地按层跑，CI 全量跑；失败信息必须能定位到文件与契约。
+- **诚实性**：没有 EV 标定的选项不得断言 / 呈现五级反馈；没有真实数据的策略不得用测试“补”出来。
+
+### 2. 分层模型
+
+| 层 | 名称 | 环境 | 判定对象 | 入口 | 阻断位置 |
+|---|---|---|---|---|---|
+| L0 | 静态契约 | Node | 类型、Lint（模块边界 / any）、仓库卫生、生成物漂移 | `pnpm verify` 前四步 | 本地 verify / PR CI / main CI |
+| L1 | 单元 | Node | 纯函数、store action、parser、迁移、排序、公式 | `pnpm test:unit` | 同上 |
+| L2 | 组件 | jsdom | 渲染、交互、键盘、a11y、双语真实文案 | `pnpm test:component` | 同上 |
+| L3 | 全局不变式 | Node（少数 jsdom） | 跨模块快照、i18n 对称、课程 / 题库完整性、设计 token、行数棘轮 | `pnpm test:guards` / `pnpm test` | 同上 |
+| L4 | 浏览器验收（E2E） | 真实 Chromium + 生产构建（`vite preview`） | 关键用户路径、跨页状态、离线可用 | `pnpm test:e2e`（需先 `pnpm build`）/ `pnpm verify:e2e` | PR CI + main CI（deploy 上传制品前） |
+| R | 发布 | Node + Vite | 生产构建、首屏体积 | `pnpm build && pnpm size:check` | main CI / 发布 |
+
+```mermaid
+flowchart LR
+  C[代码 / 内容变更] --> L0[L0 静态契约]
+  C --> L1[L1 单元 · Node]
+  C --> L2[L2 组件 · jsdom]
+  C --> L3[L3 全局不变式]
+  L0 --> V[pnpm verify]
+  L1 --> V
+  L2 --> V
+  L3 --> V
+  V --> B[pnpm build + size:check]
+  B --> L4[L4 浏览器验收 / Playwright E2E]
+```
+
+L4 由 Playwright 自动门禁 + 人工验收共同承担：
+
+- **自动化部分**（`e2e/**/*.test.ts`，配置 `playwright.config.ts`）：跑**生产构建**（`vite preview`，base `/dezhou/`），当前覆盖「跳过引导 → 范围训练 10 题 → 结果页 → 进度页 → 刷新后记录仍在」的学习闭环、「首页习惯任务二选一 → 完成每日谜题 → 返回首页显示完成态」的习惯闭环，以及「预缓存完成后断网打开从未访问过的深层路由」的离线冒烟。`forbidOnly: true` + `retries: 0`，失败保留 trace / screenshot 作为证据。
+- **仍属人工的部分**（见 §11 已知缺口）：视觉细节与响应式断点、动效、真实滚动、性能感知、跨浏览器（非 Chromium）兼容、部署后的 Pages 环境验证。PR 描述仍需记录“已验证 / 未验证 + 原因”。
+
+> PR CI 的阻断力依赖仓库分支保护：需把 `CI` workflow 设为 required check；workflow 本身只负责执行与报告。
+
+#### 2.1 L4 E2E 执行细则（Playwright）
+
+| 项 | 事实源 / 命令 |
+|---|---|
+| 用例位置 | 仓库根 `e2e/**/*.test.ts`（夹具在 `e2e/fixtures/`；Vitest 双项目只收集 `src/`，两者互不交叉） |
+| 配置 | `playwright.config.ts`：`testDir: './e2e'`、`testMatch: '**/*.test.ts'`、`forbidOnly: true`、`retries: 0`、`trace: 'retain-on-failure'`、`screenshot: 'only-on-failure'` |
+| 运行目标 | **生产构建**：`webServer` 起 `vite preview --port 4173`（`baseURL` `http://127.0.0.1:4173`，路径一律带 `/dezhou/` 前缀） |
+| 类型检查 | `pnpm typecheck:e2e`（独立 `tsconfig.e2e.json`，strict + `@/*` paths） |
+| 运行 | `pnpm test:e2e`（先校验 `dist/index.html` 存在，缺失即报错提示 `pnpm build`） |
+| 全链路 | `pnpm verify:e2e` = `verify` → `build` → `size:check` → `test:e2e` |
+| Lint | `pnpm exec eslint e2e playwright.config.ts`（`pnpm lint` 仍只覆盖 `src`） |
+| CI 位置 | `.github/workflows/ci.yml`（PR / 非 main push）与 `.github/workflows/deploy.yml`（push main，在上传 Pages 制品**之前**阻断） |
+| 失败证据 | trace / screenshot / HTML 报告落在 `test-results/` 与 `playwright-report/`（已 gitignore），CI 失败时以 `playwright-artifacts` 上传 |
+| 浏览器 | 本机 `pnpm exec playwright install chromium`；CI `pnpm exec playwright install --with-deps chromium` |
+| 本地兜底 | 本机网络无法下载 Playwright Chromium 时，可用 `PLAYWRIGHT_LOCAL_CHANNEL=chrome pnpm test:e2e` 借用系统 Chrome 做一次本地验证（环境变量驱动，CI 不设置，门禁事实源仍是 bundled Chromium） |
+
+约定：
+
+- 断言必须落在**真实可见契约**上（真实文案、真实题量、刷新后数据仍在），不得退化为「页面存在即通过」。
+- 禁止 `.only` / `.skip` / `.fixme` / `test.fail`，由 `src/guards/testSystem.guard.test.ts` 的 E2E 段零容忍。
+- 禁止通过 `localStorage` / IndexedDB 直写或调试开关绕过 UI（同一守卫校验），用例必须走真实引导、真实导航、真实答题。
+- 零噪声：console error / pageerror / 失败请求 / 4xx-5xx 一律失败；确属场景注入的期望错误必须**逐条精确登记**（`e2e/fixtures/browserErrors.ts`）。当前训练闭环与离线冒烟都要求零噪声（离线用例不登记任何期望错误）。
+- 失败不得靠 retry 变绿：修实现或修断言；连续失败需记录复现命令与 trace 位置。
+
+### 3. 文件放置与命名
+
+#### 3.1 后缀与项目
+
+| 后缀 | 项目 | 环境 | 用途 |
+|---|---|---|---|
+| `*.test.ts` | unit | Node | 纯函数、store、parser、迁移、数据完整性、全局守卫 |
+| `*.test.tsx` | component | jsdom | 组件渲染 / 交互 / a11y |
+| `*.a11y.test.tsx` | component | jsdom | axe 扫描；必须用 `src/test-utils/a11y.ts` harness |
+| `*.migrate.test.ts` | unit | Node | persist `migrate` 链；需 stub `window.localStorage` |
+| `*.persist-shape.test.ts` | unit | Node | persist 输出形状 / 版本 / 字段白名单 |
+| `*.integrity.test.ts` | unit | Node | 课程、题库、引用、ID 唯一性等数据完整性 |
+| `*.parity.test.ts` | unit | Node | 摘要 / 生成物与源数据一致 |
+| `*.guard.test.ts` | unit | Node | 全局或模块级不变式；全局放 `src/guards/` |
+
+> E2E（L4）例外：Playwright 用例放在仓库根 `e2e/`，同样使用 `*.test.ts` 后缀，但由 `playwright.config.ts` 收集，**不会**被 Vitest 双项目执行（`vitest.config.ts` 只 include `src/**`）。
+>
+> 既有测试保留原名（如 `curriculumIntegrity.test.ts` / `*optionOrder.test.ts`）；新增测试按上表后缀选择。既有守卫保留原名（`*Guard.test.ts` / 描述性命名）；新增守卫统一使用 `*.guard.test.ts`。无论文件名如何，新增守卫都必须登记 `src/guards/README.md`。
+>
+> 含 `describe(` / `it(` 声明的源码必须使用 `.test.ts(x)` 后缀；`testSystem.guard.test.ts` 会扫描并阻断不会被收集的“伪测试文件”。
+
+禁止 `.spec.ts(x)` 与 `__tests__/` 目录；两者不会被 Vitest 双项目收集，属于静默失效，由 `testSystem.guard.test.ts` 阻断。
+
+#### 3.2 放置
+
+- 单元测试与源码同目录（colocate），文件名 = 被测文件 + `.test.ts`；一个文件可覆盖多个相邻纯函数，但必须有清晰 `describe`。
+- 组件测试与被测组件同目录；页面级组合测试放模块 `components/` 下。
+- 全局不变式放 `src/guards/`；i18n 全局守卫放 `src/i18n/`；模块级数据完整性留在模块内。判定标准：**跨模块或全仓契约 → `src/guards/`；单模块契约 → 模块内**。
+- 新增全局守卫必须同步 `src/guards/README.md` 清单；`testSystem.guard.test.ts` 会校验“文件 ↔ 清单”双向一致。
+- 测试辅助代码放 `src/test-utils/`（不进运行时 bundle）或模块内测试工具文件；禁止测试文件之间直接 import 业务测试。
+
+#### 3.3 命名
+
+- `describe` 写被测契约 / 场景，`it` 写“行为 + 预期”，使用中文，与现有测试一致。
+- 避免 `it('works')` / `it('test 1')`；名称必须能直接说明失败含义。
+- 一个 `it` 只表达一个断言主题；允许同一主题下多断言，但不得把互不相关的契约塞进一个超大用例。
+
+### 4. 按变更类型的最小测试要求
+
+> “最小”指必须覆盖的契约，不是数量上限。新增行为优先在最低能复现问题的层加测试。
+
+| 变更类型 | 必测层 | 必须覆盖 |
+|---|---|---|
+| 纯函数 / 公式 / 赔率 / EV / 组合数 | L1 | 正常值、边界、退化输入、与单一事实源的一致性；浮点用 `toBeCloseTo` |
+| store action / 选择器 | L1 | 初始形状、状态转移、幂等性（“记录完成”同日不重复）、跨模块副作用 |
+| persist schema / version | L1 | 旧版本 → 新版本迁移链、未知字段、损坏数据兜底、`<store>.persist-shape.test.ts` 形状锁 |
+| parser / 导入器 | L1 | 合法样本、非法 / 截断输入、格式检测、金额与牌面口径 |
+| 组件交互 | L2 | 用户可见行为、键盘 / 焦点、禁用 / 加载 / 错误态、真实 zh 文案 |
+| 可访问性 | L2 | `expectNoA11yViolations`；豁免必须逐条带 `reason` |
+| 课程 / 题库 / 理论内容 | L1 完整性 | ID 唯一、引用无悬空、章节结构、题量、选项排序分布、EV 标定诚实性、zh/en 对齐 |
+| 选项排序 | L1 | 正确答案索引分布守卫；同一天每日题同题同序 |
+| 跨模块契约 | L3 | 快照 / 一致性断言 + **扫描面自检**（文件数 / 模块数不足即失败） |
+| 路由 / 页面组合 | L2 冒烟 | 懒加载入口、关键文案、门禁分支；新增 / 删除路由同步 `src/app/routes.test.tsx` 路径清单 |
+| 模块依赖 / 边界 | L0 + L3 | `eslint` 门禁 + `ALLOWED_CROSS_IMPORTS` 快照；收紧只删不加 |
+| UI / 视觉 / 响应式 | L4 | 真实浏览器黄金路径 + 边界；a11y 交互组件补 L2 |
+| 缺陷修复 | 最低复现层 | **回归锁**：修复前会失败，修复后通过；不得只改实现不加测试 |
+| 内容修正 | L1 完整性 + L3 i18n | 正文 / 选项 / 解析 / 小测 / 双语同一原子变更；`contentAlignment` / `contentI18n` 保持绿 |
+
+### 5. 断言质量
+
+- 断言**可观察契约**：返回值、持久化形状、渲染文本、回调参数、错误类型；不直接断言私有实现或调用次数（除非调用次数本身就是契约，如幂等）。
+- 禁止“测试镜像实现”：把被测函数体复制进测试再比较，等于没测。
+- 每个守卫必须有**扫描面自检**：`expect(files.length).toBeGreaterThan(N)` 或“模块数 / 字段数不得为 0”，防止路径 / glob 失效导致空洞通过。
+- 快照只用于稳定、小范围的结构（如 persist shape 的内联快照）；整页 DOM / 大对象快照禁止新增。
+- 浮点 / 百分比使用 `toBeCloseTo` 并写明精度；货币 / BB 单位在测试名或变量名中体现。
+- 失败信息包含文件、行号、实际值；守卫用 `toEqual([])` 直接输出违规数组。
+
+### 6. 确定性、隔离与 mock
+
+- **禁止真实网络**；外部数据一律 fixture 或本地 JSON。
+- **IndexedDB**：Node 测试使用 `fake-indexeddb/auto`（hand-history `store.indexeddb.test.ts`）；禁止连接真实浏览器 IDB，也不得在 Node 测试里直接使用未 polyfill 的 `indexedDB`。
+- **localStorage**：Node 环境用 `src/shared/utils/localStorageStub.ts`；persist 形状用 `src/shared/utils/persistShape.ts`。
+- **时间**：`vi.useFakeTimers()` + `vi.setSystemTime()`；新增测试禁止 `await new Promise(r => setTimeout(r, N))`。既有 progress 测试中的 20ms 等待是历史债务，只减不增（见 §11）。
+- **随机**：使用 `seededShuffle` / 固定种子；测试内禁止裸 `Math.random()` 决定断言。
+- **i18n**：组件测试 setup 已预载 zh 全量；断言真实文案时用 zh，断言 key 时直接比较 key。禁止在测试中依赖语言切换的隐式全局状态。
+- **mock 边界**：只 mock 系统边界（时间、存储、网络、worker、懒加载）；不 mock 被测函数本身。mock 必须在用例内恢复（`vi.restoreAllMocks()` / `afterEach`）。
+- **测试隔离**：每个用例重置 store 与模块级缓存；不得依赖文件内用例顺序；并行运行时不得共享可变全局状态。
+- **a11y**：组件渲染进 `<main><h1>Test</h1>...</main>` harness；豁免逐条写理由；不得整块禁用 page-level 规则。
+
+### 7. 覆盖与棘轮
+
+- **不设全仓行覆盖率门禁**：本项目大量代码是课程 / 题库 / 静态数据与声明式 UI，行覆盖率会奖励“执行到”而非“契约正确”。以 §4 的变更类型矩阵 + 本节棘轮替代。
+- 现有棘轮（只减不增 / 只增不减）：
+  - 单文件行数：`line-count-guard.test.ts`（>400 失败，300–400 灰区警告，逐文件 allowlist）
+  - CSS 行数：`cssLineCountGuard.test.ts`（单文件 ≤800）
+  - 选项排序分布：各模块 `*optionOrder*.test.ts` / `quizShuffle.test.ts`
+  - EV 标定覆盖率：`strategy-academy/utils/evCalibration.test.ts`（只增不减）
+  - 守卫清单：`testSystem.guard.test.ts`（文件 ↔ README 双向一致）
+  - 模块覆盖底线：`testSystem.guard.test.ts`（每个 feature 至少一个测试文件）
+  - 测试可收集性：`testSystem.guard.test.ts`（含 `describe`/`it` 的非测试文件、`.spec` / `__tests__`）
+  - persist store 测试覆盖：`testSystem.guard.test.ts`（每个 `persist(` store 必有 shape；version > 1 必有 migrate）
+- 新增 allowlist 必须写理由与退出条件；禁止按目录 / 类别豁免。allowlist 条目对应的债务清偿后必须删除条目，否则守卫变红。
+- **覆盖率审计工具**：`pnpm test:coverage`（v8，unit / component 分项目报告）仅用于定位缺口，不作为门禁；合并覆盖率取两个项目报告并集。若未来设阈值，按模块设置，先记录基线再逐步提高，不得用全局单阈值让数据 / 内容模块“背锅”。
+
+### 8. 执行矩阵
+
+| 场景 | 命令 | 范围 | 期望 |
+|---|---|---|---|
+| 开发内环 | `pnpm test:watch` | 变更相关 | 秒级反馈；新增 / 修改测试先红后绿 |
+| 单层验证 | `pnpm test:unit` / `pnpm test:component` / `pnpm test:guards` | 对应层 | 定位层内失败 |
+| 覆盖率审计 | `pnpm test:coverage` | unit + component v8 报告 | 仅定位缺口，不阻断；结果记录于 CHANGELOG |
+| 提交前 | `pnpm lint` + `pnpm test:guards`（hook 负责 lint 与 agent map；建议手动加跑守卫层） | 快 | 不把 focused 测试 / 守卫清单漂移带进提交 |
+| 推送前 | `pnpm verify` | 全量 | 与 CI 同序列 |
+| E2E（本地） | `pnpm verify:e2e`（或 `pnpm build` + `pnpm test:e2e`） | 生产构建 + Chromium | 学习闭环 / 离线冒烟通过；失败先看 `test-results/` 的 trace |
+| E2E（CI） | `ci.yml` / `deploy.yml` 的 E2E 步骤 | `typecheck:e2e` + E2E lint + `playwright install --with-deps chromium` + `test:e2e` | PR 与发布前必过；deploy 失败即不上传制品 |
+| PR CI | `.github/workflows/ci.yml` | `pnpm verify` + `pnpm build` + `pnpm size:check` | 合并前必过（需在 GitHub 分支保护中设为 required check） |
+| main / 发布 | `.github/workflows/deploy.yml` | 同上门禁 + 部署 | 不通过不部署 |
+| 本地排障 | `pnpm verify:parallel` | 并行 + 分级重试 | 仅用于本地基础设施抖动；不得据此判定测试稳定 |
+
+失败处理：
+
+1. 先复现单文件：`pnpm test <path>`。
+2. 区分“实现错”与“测试错”；**禁止**用放宽断言、`skip`、`todo`、删除测试来“修复”。
+3. 偶发失败视为缺陷：记录复现命令、运行环境、失败用例；修复根因（通常是真实计时器、共享状态、未 await 的副作用）。
+4. `verify:parallel` 的重试只吸收基础设施抖动；同一用例连续重试才通过，必须开修复项，不得视为绿。
+
+### 9. 责任与评审
+
+| 范围 | 持有文件 / 模块 |
+|---|---|
+| 模块内单元 / 组件 / 数据完整性测试 | 对应 `src/features/<module>/**`（见 [`docs/agents/MODULE_MAP.md`](./agents/MODULE_MAP.md)） |
+| `vitest.config.ts` / 分层脚本 / 测试体系守卫 / CI | `vitest.config.ts`、`scripts/**`、`src/guards/**`、`.github/workflows/**` |
+| 全局设计 token / a11y 守卫 | `src/guards/**`、`src/styles/**`、`src/shared/components/**` |
+| progress store / persist 迁移 / 五大系统测试 | `src/features/progress/**` |
+| 全局守卫清单与跨模块一致性 | 能力所属模块 + 平台层文件 |
+
+PR 自检（与 `AGENTS.md` Feature PR Checklist 同步）：
+
+- [ ] 行为变更在正确测试层新增 / 更新用例；缺陷修复附回归锁
+- [ ] 课程 / 题库 / 理论内容变更：完整性守卫、选项排序分布、EV 标定诚实性、zh/en 对齐同批通过
+- [ ] persist schema 变更：version 递增 + migrate + `<store>.persist-shape.test.ts`
+- [ ] 新增全局守卫已登记 `src/guards/README.md`
+- [ ] UI / 路由 / 样式变更已在真实浏览器验证，并在 PR 记录证据
+- [ ] `pnpm verify` 全绿；未通过不得合并
+
+评审测试变更时与生产代码同标准：**断言变弱、覆盖变窄、豁免变多**都视为回退，必须说明理由。
+
+### 10. 新增测试决策树
+
+1. 这次改动破坏了哪个契约？（数值 / 状态 / 边界 / 内容 / 用户路径）
+2. 能在纯函数层复现吗？→ 是：L1；否：下一步。
+3. 需要 store / persist / parser 吗？→ 是：L1（Node，stub 存储）；否：下一步。
+4. 需要渲染或交互吗？→ 是：L2（jsdom）；涉及键盘 / 语义结构时加 a11y。
+5. 契约跨模块或覆盖全仓吗？→ 是：L3（`src/guards/` 或模块级完整性守卫），并加扫描面自检。
+6. 只能在真实浏览器验证吗？→ 关键路径写进 `e2e/`（L4 自动化）；视觉 / 动效 / 响应式等仍人工验收并在 PR 记录。
+7. 补回归锁：先让新测试在修复前失败，再修实现。
+
+### 11. 现状与已知缺口
+
+> 本节只记录**结构性缺口**与处理方向；测试文件清单、数量与覆盖率以实际代码和 `pnpm test` / `pnpm test:coverage` 输出为准，不维护数值快照。
+
+已具备：
+
+- 双项目（Node / jsdom）+ 全局守卫 + i18n 守卫 + 模块级完整性守卫 + 行数 / 样式 / 选项分布 / EV 标定棘轮。
+- persist store 的 migrate / persist-shape 覆盖；i18n 双语对称与静态 key 引用守卫；a11y harness。
+- hand-history IndexedDB CRUD / 批注 / 筛选 / 回放；`src/app` 路由注册清单与 `/help` 渲染冒烟（`fake-indexeddb` 为测试专用 devDependency）。
+- 覆盖率审计入口 `pnpm test:coverage`；最近一次全仓补测审计（2026-11-03）覆盖 10 个 feature 模块与 shared / app / layouts，详见 CHANGELOG。
+- 多智能体补测流程（§13）：按模块拆分、子智能体只跑定向测试、主线统一全量回归与文档同步。
+- 全量 `pnpm test` 在 PR / main 门禁中执行（PR 门禁由 `.github/workflows/ci.yml` 提供；需在 GitHub 分支保护中把该 workflow 设为 required check）。
+
+已知缺口（按风险排序）：
+
+1. **E2E 覆盖面仍窄（已落地，范围待扩）**：`e2e/training.test.ts`（学习闭环）与 `e2e/offline.test.ts`（离线深层路由）已进 PR CI / main CI；GTO 会话、手牌导入、策略 / 理论学院课程深链尚未纳入。扩面原则：只加**真实闭环 + 可观察断言**（真实文案、真实题量、刷新后数据仍在），禁止退化成“页面存在即通过”。
+2. **入口 / 组合壳不做直接单测**：`src/main.tsx`（启动副作用、SW 注册）与 `src/App.tsx`（路由 + Providers + Toaster 组合）由 `routes.test.tsx` / `providers.test.tsx` 间接覆盖；如出现入口回归，再补 bootstrap 集成测试。
+3. **浏览器专属行为**：真实滚动、动画、响应式布局、IDB quota / blocked、Worker 运行时崩溃等只能在真实浏览器或专用 polyfill 下验证；jsdom 测试锁可观察契约，L4 手工验收补足。
+4. **不可达 / 防御分支**：如 `detectVariant`（无消费方）、穷尽联合类型的 `default`、不可触发的空态守卫等，不为覆盖率硬造非法数据；确认死代码时按仓库流程清理，并在 CHANGELOG 记录。
+5. **少量既有真实计时器等待**：部分 progress 测试仍用 20ms `setTimeout` 等待模块底部副作用；新增测试禁止复制，逐步替换为 fake timers。
+6. **测试数量漂移与 MODULE_MAP**：新增 / 删除 feature 模块测试文件会改变 `docs/agents/MODULE_MAP.md` 的测试计数；提交前运行 `pnpm agents:map`，否则 `agents:map:check` 会在 CI 变红。
+
+### 12. 豁免与债务
+
+- 禁止 `.only` / `.skip` / `.todo` / `.fails`；`testSystem.guard.test.ts` 零容忍。确需临时跳过时，删除测试并在对应 issue / PR 记录原因，而不是留在代码里。
+- allowlist（行数、CSS、EV 标定等）只减不增；新增条目必须写理由、到期条件与 owner。
+- 测试债务与产品债务同优先级登记；不得以“测试环境特殊”为由让守卫空跑。
+- 入口 / 组合壳（`main.tsx` / `App.tsx`）与浏览器专属行为属登记豁免；新增豁免必须写入本节并说明替代验证方式（间接测试 / L4 浏览器验收）。
+
+### 13. 多智能体补测协作（大批量补测）
+
+适用：一次需要补齐多个模块的测试，且主线上下文有限。
+
+1. **先审计**：用 `pnpm test:coverage` 分项目跑 unit / component，合并报告定位 0% / 低覆盖文件；不要凭文件数量猜。
+2. **按模块拆分**：一个子智能体负责一个模块（或 components 与 core 两个不相交子集），禁止跨模块改文件；主线持有 docs / config / package.json / MODULE_MAP。
+3. **下达可验证任务**：给每个子智能体明确文件清单、测试层、命令、禁止事项（no new deps / no full suite / no docs / no commit）和返回格式（文件、用例数、通过结果、真实 bug、剩余风险）。
+4. **并行批次**：每批 3–6 个模块，互不重叠；子智能体只跑定向测试，主线在批次结束后跑全量 `pnpm test` / `pnpm verify`。
+5. **验证与收口**：主线逐项复核子智能体报告，抽查源码 bug 修复；统一运行 `pnpm agents:map`、更新 CHANGELOG / 规范 / MODULE_MAP；失败由主线定位后再派回对应模块。
+6. **质量底线**：子智能体同样禁止 `.only/.skip`、jest-dom matcher、真实 sleep、跨模块 import；新增测试必须能在修复前失败（回归锁）。

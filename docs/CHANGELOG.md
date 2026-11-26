@@ -1,14 +1,27 @@
 # 变更日志（CHANGELOG）
 
-> 状态：Historical · 最后复核：2026-11-07
-> 本文件归档德州扑克训练平台的版本演进，仅保留当月变更（跨月后归档）。
-> 历史月份存档位于 `docs/changelog/` 目录下，文件名为 `YYYY-MM.md`。
+> 状态：Historical · 最后复核：2026-11-25
+> 本文件归档德州扑克训练平台的版本演进，仅保留当月变更。
+> 跨月记录从 git 历史追溯；本地 `.archive/` 仅作备份，不入库、不作事实源。
 > PRD.md 与 TDD.md 仅保留当前规格，执行历史统一汇集于此。
-> 已归档：2026-10、2026-09、2026-08、2026-07
 
 ---
 
-## [Unreleased] - 2026-11-04
+## [Unreleased]
+
+### 2026-11-25 文档体系精简 · 单源合并
+
+- **单源合并**：AI_GUIDE → `docs/TDD.md` §16「工程规范」；COURSE_IA → §17「课程区信息架构」；testing 规范 → §18「测试体系」；4 篇 ADR → `docs/DECISIONS.md`（只追加）；how-to / agents 交付规则 / 知识库说明 → `AGENTS.md`；DEPLOY_CHECKLIST → `README.md` §部署与回滚。
+- **移出仓库**：history / changelog / architecture / qgraphflow / ops / testing / how-to / adr 目录与旧 AI_GUIDE、COURSE_IA、knowledge-guide 移到本地 `.archive/docs-merge-2026-11-25/`（gitignore）；历史从 git 追溯。
+- **索引收敛**：`docs/README.md` 只保留 Current（PRD / TDD / DECISIONS）、Generated（MODULE_MAP）与 Historical（CHANGELOG）；`docs:check` 同步移除已删除目录的索引依赖。
+- **验证**：`pnpm verify` 通过。
+
+### 2026-11-25 文档治理 · docs:check v2 与入口修复
+
+- **门禁升级**：`docs:check` 新增内联代码仓库路径、标题锚点、`pnpm` 脚本、孤儿文档与文件头新鲜度校验；历史 / 快照 / ADR 的断链与路径只告警，锚点校验为阻断级。
+- **入口修复**：PR 模板收敛为单一当前清单并保留在 `.github/PULL_REQUEST_TEMPLATE.md`；移除错位的 Issue Template PR 清单；新增 `CONTRIBUTING.md`、`SECURITY.md` 与 ISC `LICENSE`；Claude 指针文件更名为大写 `CLAUDE.md`。
+- **生成物归位**：为 `docs/qgraphflow/` 增加 Generated 说明并登记到文档索引；清理历史索引中的已退场模板与脚本引用。
+- **验证**：`pnpm docs:check` 通过（62 个 Markdown / 179 个本地链接 / 517 个内联路径 / 12 个锚点）；`pnpm verify` 通过（515 个测试文件 / 3807 条用例）。
 
 ### 2026-11-24 谜题与速训 · 弱项回流与每日任务编排
 

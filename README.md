@@ -46,7 +46,7 @@ pnpm verify          # typecheck + lint + repo:check + docs:check + agents:map:c
 pnpm verify:parallel # 并行变体
 pnpm size:check      # 构建产物体积门禁
 pnpm repo:check      # 仓库卫生检查
-pnpm docs:check      # 文档链接 / 索引 / 状态检查
+pnpm docs:check      # 文档链接 / 内联路径 / 锚点 / 新鲜度 / 索引 / 状态
 pnpm agents:map      # 重新生成 docs/agents/MODULE_MAP.md
 pnpm agents:map:check  # 校验模块地图与代码事实一致
 ```
@@ -59,7 +59,62 @@ pnpm agents:map:check  # 校验模块地图与代码事实一致
 typecheck → lint → repo:check → docs:check → agents:map:check → test
 ```
 
-CI 的 `ci.yml` 在 PR / 非 `main` 分支执行 `verify → build → size:check`；`deploy.yml` 在 push `main` 时执行完整门禁并发布 GitHub Pages。发布流程见 [`docs/ops/DEPLOY_CHECKLIST.md`](./docs/ops/DEPLOY_CHECKLIST.md)。
+CI 的 `ci.yml` 在 PR / 非 `main` 分支执行 `verify → build → size:check`；`deploy.yml` 在 push `main` 时执行完整门禁并发布 GitHub Pages。发布与回滚见下文。
+
+## 部署与回滚
+
+适用 GitHub Pages 项目页 `/dezhou/`。流水线定义以 `.github/workflows/ci.yml` 与 `.github/workflows/deploy.yml` 为准。
+
+### 触发与门禁
+
+| 场景 | 工作流 | 门禁序列 |
+|---|---|---|
+| push `main` | `deploy.yml` | install → verify → build → size:check → E2E（typecheck / lint / Chromium / test）→ SPA fallback → upload → deploy |
+| PR / 非 `main` push | `ci.yml` | install → verify → build → size:check → E2E |
+
+`pnpm verify` 的唯一定义以 `package.json` 为准；E2E 跑生产构建（`vite preview`），失败即不可发布。
+
+### 发布前本地检查
+
+```powershell
+pnpm install --frozen-lockfile
+pnpm verify
+pnpm build
+pnpm size:check
+pnpm exec playwright install chromium
+pnpm typecheck:e2e
+pnpm exec eslint e2e playwright.config.ts
+pnpm test:e2e
+```
+
+等价一条命令：`pnpm verify:e2e`。失败即视为不可发布；trace / screenshot 在 `test-results/`，HTML 报告在 `playwright-report/`，禁止用重试或放宽断言放行。
+
+- `vite.config.ts` 的 `base` 必须为 `/dezhou/`；路由 `basename` 使用 `import.meta.env.BASE_URL`。
+- 不提交 `dist/`；`404.html` 由 CI 在构建后生成。
+- 路由 / 模块 / i18n 注册表变更后先运行 `pnpm agents:map` 并提交更新后的 `docs/agents/MODULE_MAP.md`。
+- 持久化 schema 变更按 `docs/TDD.md` §16「状态管理」递增 version + 编写 migrate。
+
+### 发布后验证
+
+- [ ] 首页正常加载；深层路由刷新不 404。
+- [ ] Network 面板无 JS / CSS / 字体 / 图标 404。
+- [ ] 中英文切换正常，无原始 i18n key。
+- [ ] Service Worker：关闭站点所有标签页后重新打开即加载新版本，无需硬刷新或清缓存。
+- [ ] 离线：首次打开完成预缓存后，断网直接访问未访问过的深层路由正常渲染。`e2e/offline.test.ts` 覆盖 `/dezhou/help`；课程深链与真实 Pages 环境仍需人工复核。
+
+### 回滚
+
+1. 优先在 GitHub Actions 中重跑上一个成功的 deploy workflow。
+2. 若问题来自代码，`git revert <commit>` 后 push `main`，由流水线重新发布。
+3. 不在本地修改 `dist/`、手改 Pages 产物或绕过门禁直接发布。
+
+### 排障
+
+- **Actions 失败**：先看失败步骤日志；本地用 `pnpm verify` / `pnpm build` 复现。
+- **页面白屏**：检查 `base` 与资源路径、Network 404、Service Worker 缓存。
+- **深层路由 404**：确认 CI 生成了 `dist/404.html`，且 Pages Source 为 `GitHub Actions`。
+- **体积门禁失败**：查看 `pnpm size:check` 的 Top chunk；不要在未分析的情况下抬高 `BUDGETS`。
+- **E2E 失败**：先看 `test-results/**/trace.zip` 与 `playwright-report/`；本地复现用 `pnpm build; pnpm test:e2e`。
 
 ## Git Hooks（可选，建议启用）
 
@@ -80,17 +135,15 @@ git config core.hooksPath .git-hooks
 | 文档 | 描述 |
 |---|---|
 | [`AGENTS.md`](./AGENTS.md) | AI 代理唯一约束源：任务路由、架构约束、质量门禁 |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | 贡献流程入口（约束、命令、所有权、文档变更） |
+| [`SECURITY.md`](./SECURITY.md) | 安全策略与漏洞报告 |
 | [`docs/README.md`](./docs/README.md) | 文档索引与 Current / Historical 状态约定 |
 | [`docs/PRD.md`](./docs/PRD.md) | 产品规格（What / Why） |
-| [`docs/TDD.md`](./docs/TDD.md) | 技术设计（How） |
-| [`docs/AI_GUIDE.md`](./docs/AI_GUIDE.md) | 编码 / 状态 / i18n / UI 详细规范 |
-| [`docs/testing/README.md`](./docs/testing/README.md) | 测试体系规范 |
-| [`docs/CHANGELOG.md`](./docs/CHANGELOG.md) | 版本演进记录 |
+| [`docs/TDD.md`](./docs/TDD.md) | 技术设计（How；含课程 IA、工程规范、测试体系） |
+| [`docs/DECISIONS.md`](./docs/DECISIONS.md) | 架构决策记录（ADR） |
+| [`docs/CHANGELOG.md`](./docs/CHANGELOG.md) | 版本演进记录（当月） |
 | [`DESIGN.md`](./DESIGN.md) | UI/UX 设计语言规范（唯一设计契约） |
-| [`docs/architecture/README.md`](./docs/architecture/README.md) | 当前态架构模型（快照） |
-| [`docs/adr/README.md`](./docs/adr/README.md) | 架构决策记录（ADR） |
-| [`docs/how-to/README.md`](./docs/how-to/README.md) | 贡献者操作指南（新增模块 / 守卫 / 测试） |
-| [`docs/history/README.md`](./docs/history/README.md) | 历史评审 / 计划 / 诊断报告索引 |
+| [`docs/agents/MODULE_MAP.md`](./docs/agents/MODULE_MAP.md) | 生成的模块 / 路由 / i18n 地图（勿手改） |
 
 设计参考原型：[`poker-ui-demo/pages/index.html`](./poker-ui-demo/pages/index.html)。
 
@@ -110,8 +163,8 @@ git config core.hooksPath .git-hooks
 - **共享层**：`src/shared/**` 需 ≥2 模块消费才可准入
 - **平台层**：`src/app/`、`src/layouts/`、`src/i18n/`、`src/guards/`、`scripts/`
 
-详见 [`AGENTS.md`](./AGENTS.md) §Agent 协作 与 [`docs/agents/README.md`](./docs/agents/README.md)。
+详见 [`AGENTS.md`](./AGENTS.md) §Agent 协作。
 
 ## 许可证
 
-ISC（以 [`package.json`](./package.json) 的 `license` 字段为准）。如计划改为 MIT，请同时更新 `package.json` 并补充 `LICENSE` 文件。
+ISC（以 [`package.json`](./package.json) 的 `license` 字段与 [`LICENSE`](./LICENSE) 文件为准）。如计划改变许可证，请同时更新两处。
