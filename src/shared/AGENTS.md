@@ -75,8 +75,8 @@ src/shared/
 ## 修改规则
 
 - 工具函数必须是纯函数（便于测试）；计算逻辑与渲染逻辑分离，副作用集中在 hook 或 store action
-- **行数豁免**：`components/**`（跨模块装配体保持单文件内聚）不做行数限制；`utils` / `types` / `constants` / `stores` 仍受 ≤300 行目标、>400 行失败约束（口径见 `docs/AI_GUIDE.md` §文件大小与 `src/guards/line-count-guard.test.ts`）
+- **行数豁免**：`components/**`（跨模块装配体保持单文件内聚）不做行数限制；`utils` / `types` / `constants` / `stores` 仍受 ≤300 行目标、>400 行失败约束（口径见 `docs/TDD.md` §16「文件大小」与 `src/guards/line-count-guard.test.ts`）
 - 修改 shared/ 影响所有模块：变更后必须运行 `pnpm verify`（含 `admission-guard.test.ts`），并同步检查受影响模块、事件总线接线与注册表
-- 新增共享项的登记顺序：根 AGENTS.md §跨模块复用契约 + `docs/AI_GUIDE.md` §跨模块复用契约 + `docs/TDD.md` 对应章节，然后才落代码
+- 新增共享项的登记顺序：根 AGENTS.md §跨模块复用契约 + `docs/TDD.md` §16「跨模块复用契约」+ `docs/TDD.md` 对应章节，然后才落代码
 
 > 组件级 a11y 测试工具在 `src/test-utils/`（不在 shared 运行时层）；全局不变式守卫在 `src/guards/`（清单见 `src/guards/README.md`）。

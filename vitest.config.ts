@@ -4,7 +4,7 @@ import path from 'path';
 // 测试独立配置：不加载 react/tailwind 插件
 // 双项目划分：纯函数 / store migrate 测试运行于 Node 环境；
 // tsx 组件冒烟测试运行于 jsdom 环境（Vitest 4 已移除 environmentMatchGlobs，改用 projects）
-// 分层、命名与执行矩阵见 docs/testing/README.md
+// 分层、命名与执行矩阵见 docs/TDD.md §18
 export default defineConfig({
   resolve: {
     alias: {
@@ -35,7 +35,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text-summary', 'json-summary'],
       reportsDirectory: 'coverage',
-      // 覆盖率仅用于审计，不作为门禁（见 docs/testing/README.md §7）
+      // 覆盖率仅用于审计，不作为门禁（见 docs/TDD.md §18）
       include: ['src/**/*.{ts,tsx}'],
       exclude: [
         'src/**/*.test.{ts,tsx}',

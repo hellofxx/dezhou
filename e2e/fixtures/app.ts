@@ -35,7 +35,7 @@ export const MOBILE_NAV_ITEMS = ['学习路径', '课程', '训练', '速训', '
  * 课程 01 组（主线枢纽 + 两张地图）的壳层页名。
  *
  * `/lesson` 是唯一课程主线（返回目标恒为它）；`/academy` 与 `/theory` 是地图，
- * 地图根只做「返回课程目录」而不承担主线职责（见 docs/COURSE_IA.md R2 / R8）。
+ * 地图根只做「返回课程目录」而不承担主线职责（见 docs/TDD.md §17 R2 / R8）。
  */
 export const COURSE_GROUP = [
   { path: '/lesson', heading: '课程' },

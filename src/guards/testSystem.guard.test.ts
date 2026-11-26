@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 /**
  * 测试体系自身的不变式守卫。
  *
- * 规范源：docs/testing/README.md；守卫清单源：src/guards/README.md。
+ * 规范源：docs/TDD.md §18；守卫清单源：src/guards/README.md。
  * 本文件保护“测试能否被收集、是否会被静默跳过、关键契约是否至少有一条测试”：
  * - 测试文件只使用 .test.ts / .test.tsx（.spec / __tests__ 不会被双项目收集）
  * - 禁止 focused / skipped / todo / expected-failure 测试

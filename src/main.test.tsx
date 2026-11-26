@@ -2,7 +2,7 @@
  * 应用入口启动集成测试（入口回归例外）：
  * - SW 注册失败必须留下带 SW URL 与 APP_VERSION 的可查信号
  * - SW 注册成功不得误报失败
- * 入口与组合壳的常规豁免见 `docs/testing/README.md` §11。
+ * 入口与组合壳的常规豁免见 `docs/TDD.md` §18「测试体系」。
  */
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 

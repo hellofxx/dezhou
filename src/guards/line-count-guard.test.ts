@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 /**
  * 文件规模守卫（逐文件棘轮）。
  *
- * docs/AI_GUIDE.md §编码规范「文件大小」：
+ * docs/TDD.md §16「编码规范」「文件大小」：
  * - 课程内容数据文件：不做行数限制（正文 / 题库 / 章节块随内容量增长）
  * - 共享组件（src/shared/components/**）：不做行数限制（跨模块装配体保持单文件内聚）
  * - 其余逻辑 / UI / 常量文件：≤ 300 行目标，300–400 灰区告警，> 400 硬失败
@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
  * 除课程内容与共享组件外，禁止再引入目录 / 类别级宽泛豁免。
  */
 
-/** 硬失败线，对齐 docs/AI_GUIDE.md「超过 400 行需拆分」 */
+/** 硬失败线，对齐 docs/TDD.md §16「超过 400 行需拆分」 */
 const MAX_LINES = 400;
 
 /** 灰区下限：300–400 行仅告警 */
