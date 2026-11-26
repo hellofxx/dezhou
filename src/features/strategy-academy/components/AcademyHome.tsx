@@ -100,8 +100,10 @@ export default function AcademyHome() {
                 {activeVariant !== 'standard' && (
                   <span className="text-[var(--ivory-dim)]">
                     {' '}
-                    · {getVariantLessonSummaries(activeVariant).length} {t('academy.lessons')} ·{' '}
-                    {t('academy.variantSkeleton')}
+                    · {getVariantLessonSummaries(activeVariant).length} {t('academy.lessons')}
+                    {activeVariant === 'short-deck' && (
+                      <> · {t('academy.variantSkeleton')}</>
+                    )}
                   </span>
                 )}
               </p>

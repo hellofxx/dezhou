@@ -31,6 +31,7 @@ function renderHome() {
 afterEach(() => {
   cleanup();
   useAcademyStore.getState().resetProgress();
+  useAcademyStore.getState().switchVariant('standard');
 });
 
 describe('AcademyHome：零状态渐进披露', () => {
@@ -87,6 +88,7 @@ describe('AcademyHome：有进度后的地图装配', () => {
     renderHome();
 
     expect(screen.getByText('短牌德州')).toBeTruthy();
+    expect(screen.getByText(/内容填充中/)).toBeTruthy();
 
     // 地图不再渲染分段切换控件（分组 aria-label 即「选择游戏变体」）
     expect(screen.queryByRole('group', { name: '选择游戏变体' })).toBeNull();
@@ -99,6 +101,16 @@ describe('AcademyHome：有进度后的地图装配', () => {
 
     // 复位变体，避免污染同组后续用例（resetProgress 不重置 activeVariant）
     useAcademyStore.getState().switchVariant('standard');
+  });
+
+  it('单挑课程已对齐，变体面板保留课时数且不再显示骨架文案', () => {
+    useAcademyStore.getState().switchVariant('heads-up');
+    const { container } = renderHome();
+
+    expect(screen.getByText('单挑')).toBeTruthy();
+    const panelText = container.querySelector('.variant-panel')?.textContent ?? '';
+    expect(panelText).toContain('12 课时');
+    expect(panelText).not.toContain('内容填充中');
   });
 
   it('基础入门完成后阶梯不再全部锁定并标出当前位置', () => {
