@@ -14,8 +14,17 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
+import { preloadI18n } from '@/i18n/preload';
+import { FEATURE_GROUPS } from '@/i18n/moduleRegistry';
 
-const SettingsPage = lazy(() => import('./SettingsPage'));
+// /settings 不在 lazyPage 路由表内，须在此显式按路由分组预加载命名空间；
+// 否则 settings / sessionLimit 只能命中中文 defaultValue，英文界面会漏中文。
+const SettingsPage = lazy(() =>
+  Promise.all([
+    import('./SettingsPage'),
+    preloadI18n(FEATURE_GROUPS['/settings']),
+  ]).then(([module]) => module),
+);
 
 export interface SettingsSlipProps {
   /** 路由层传入；`/settings` 恒为 true（关闭即离开路由） */
@@ -42,7 +51,8 @@ export default function SettingsSlip({ open, onClose }: SettingsSlipProps) {
         <DialogTitle className="sr-only">
           {t('settings.title', { defaultValue: '设置' })}
         </DialogTitle>
-        <div className="max-h-[76vh] overflow-y-auto pr-1 -mr-1">
+        {/* 顶部留出纸条关闭按钮（44px）的高度，避免按钮压住 Hero 台卡 */}
+        <div className="max-h-[76vh] overflow-y-auto pt-12 pr-1 -mr-1">
           <Suspense fallback={<PageSkeleton />}>
             <SettingsPage />
           </Suspense>

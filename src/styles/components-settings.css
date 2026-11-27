@@ -1,48 +1,49 @@
 /* =========================================================
-   Settings 设置页（2026-08-10）— 签名元素「分区台卡导航」
-   桌面双栏：左侧 sticky 竖向黄铜节点导航 + 右侧折叠分组；
-   Hero 顶部黄铜发线 + eyebrow + 自动保存铭牌。
+   Settings 设置页（2026-11 重构）— 牌室纸条内的设置台卡
+   单栏折叠分区（无侧栏导航）：Hero 台卡 + 分区摘要 + 折叠面板。
+   Hero 必须纸面原生（暗色 hero-surface-gradient 不会随 .dealer-slip 重锚，
+   会把纸面墨色文字压在深色底上）。
    ========================================================= */
 
 /* ---- Settings Hero ---- */
 .settings-hero {
   position: relative;
-  border: 1px solid var(--walnut-border);
+  border: 1px solid var(--paper-rule);
   border-radius: var(--poker-radius-lg);
   background:
-    radial-gradient(ellipse 70% 160% at 100% 0%, color-mix(in srgb, var(--brass) 6%, transparent), transparent 60%),
-    var(--hero-surface-gradient);
+    radial-gradient(ellipse 70% 160% at 100% 0%, color-mix(in srgb, var(--paper-brass) 8%, transparent), transparent 60%),
+    var(--paper-raised);
   padding: 14px 18px 12px;
   overflow: hidden;
 }
 .settings-hero::before {
   content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--brass-deep) 15%, var(--brass-bright) 50%, var(--brass-deep) 85%, transparent);
-  opacity: 0.7;
+  background: linear-gradient(90deg, transparent, var(--paper-brass) 15%, var(--paper-brass) 50%, var(--paper-brass) 85%, transparent);
+  opacity: 0.6;
 }
 .settings-hero-eyebrow {
   font-size: 9px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.22em; color: var(--brass-text); margin-bottom: 6px;
+  letter-spacing: 0.22em; color: var(--paper-brass); margin-bottom: 6px;
 }
 .settings-hero-title {
   font-family: var(--font-display);
-  font-size: 24px; font-weight: 600; color: var(--ivory);
+  font-size: 24px; font-weight: 600; color: var(--paper-ink);
   line-height: 1.25; letter-spacing: 0.01em;
   font-variation-settings: 'opsz' 144;
   display: flex; align-items: center; gap: 8px;
 }
-.settings-hero-title svg { color: var(--brass); }
+.settings-hero-title svg { color: var(--paper-brass); }
 .settings-hero-sub {
-  font-size: 12px; color: var(--ivory-muted);
+  font-size: 12px; color: var(--paper-ink-muted);
   line-height: 1.6; margin-top: 4px;
 }
 .settings-hero-autosave {
   align-items: center; gap: 6px;
   font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ivory-muted); font-variant-numeric: tabular-nums;
+  color: var(--paper-ink-muted); font-variant-numeric: tabular-nums;
   padding: 5px 10px; border-radius: 999px;
-  background: rgba(0,0,0,0.2);
-  border: 1px solid var(--walnut-border);
+  background: var(--paper);
+  border: 1px solid var(--paper-rule);
   flex-shrink: 0;
 }
 

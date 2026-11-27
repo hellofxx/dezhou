@@ -14,12 +14,15 @@ import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
  * SettingsPage 设置页（jsdom 冒烟 + 关键分支）。
  *
  * 契约：
- * - 七个分区恒渲染；单栏折叠手风琴，仅首组（外观）默认展开，页面不再有分区导航；
+ * - 七个分区恒渲染；单栏折叠手风琴，仅首组（外观）默认展开，折叠态显示当前取值摘要；
+ *   页面不再有分区导航（不再有 nav 侧栏）；
+ * - 主题 / 语言 / 时间 / 题量使用分段控件，选中态通过 aria-pressed 暴露；
  * - 教练风格按钮写入 store.mentorStyle，头像为 Lucide 图标（iconId 映射，尺寸与旧 emoji 一致）；
  * - 音效开关直接落到 settings.soundEnabled；
  * - 冻结卡按钮在「已训 / 已用 / 无卡」时禁用，可用时点击写入 streak 并给出成功反馈；
  * - 数据管理：导入按 submitRecord 实际结果分别统计新增 / 重复 / 无效 / 未保存；
  *   牌局恢复失败不影响记录统计；导出在 hands 读取失败时仍下载部分备份并明确标注；
+ *   v3 备份额外包含个人偏好（教练风格 / 游戏变体 / 每日题量上限）并按白名单恢复；
  *   清除只针对训练记录，失败时按持久化上报回滚（不假装成功）；
  * - 开发者选项默认折叠，错误调试码报错、正确调试码解锁并可关闭。
  */
@@ -85,6 +88,7 @@ function seedStore(overrides: Record<string, unknown> = {}) {
       language: 'zh',
     },
     mentorStyle: 'strict-math',
+    currentGameVariant: 'standard',
     ...overrides,
   });
   useDebugModeStore.setState({ unlockAll: false });
@@ -183,13 +187,48 @@ describe('SettingsPage 分区与偏好', () => {
     expect(container.querySelector('nav')).toBeNull();
   });
 
+  it('折叠态显示当前取值摘要，展开后让位给分区 hint', () => {
+    const { container } = renderPage();
+    const text = container.textContent ?? '';
+
+    // 未展开的分区直接给出当前值，免去逐个打开
+    expect(text).toContain('15 秒 · 20 题');
+    expect(text).toContain('标准德州 · 冻结卡 ×2');
+    expect(text).toContain('当前共 0 条训练记录');
+    // 首组展开时显示 hint
+    expect(text).toContain('主题与界面语言');
+
+    // 折叠「外观」后显示主题 / 语言摘要
+    const expanded = container.querySelector<HTMLButtonElement>('button[aria-expanded="true"]');
+    expect(expanded).toBeTruthy();
+    fireEvent.click(expanded!);
+    expect(container.textContent).toContain('暗色 · 中文');
+  });
+
+  it('主题分段控件写入 settings.theme 并切换选中态', () => {
+    const { container, getByRole } = renderPage();
+
+    const light = getByRole('button', { name: '亮色' });
+    expect(light.getAttribute('aria-pressed')).toBe('false');
+
+    fireEvent.click(light);
+
+    expect(useProgressStore.getState().settings.theme).toBe('light');
+    expect(light.getAttribute('aria-pressed')).toBe('true');
+    expect(getByRole('button', { name: '暗色' }).getAttribute('aria-pressed')).toBe('false');
+    expect(container.textContent).toContain('设置');
+  });
+
   it('教练风格按钮写入 store 并切换 aria-pressed，头像走 Lucide 图标', () => {
     const { container, getByText } = renderPage();
     openSection(container, '教练风格');
 
-    // 三位教练各一枚 Lucide 图标（无 emoji 文本节点）
+    // 三位教练各一枚 Lucide 图标（无 emoji 文本节点）；只在教练分区内取 aria-pressed，
+    // 避免把外观分区的主题 / 语言分段控件算进来
+    const coach = container.querySelector('#settings-coach');
+    expect(coach).toBeTruthy();
     const profileButtons = Array.from(
-      container.querySelectorAll<HTMLButtonElement>('button[aria-pressed]'),
+      coach!.querySelectorAll<HTMLButtonElement>('button[aria-pressed]'),
     );
     expect(profileButtons).toHaveLength(MENTOR_PROFILES.length);
     for (const button of profileButtons) {
@@ -424,6 +463,54 @@ describe('SettingsPage 数据管理 · 导入', () => {
   });
 });
 
+describe('SettingsPage 数据管理 · 偏好备份（v3）', () => {
+  it('导入 preferences 恢复教练风格 / 游戏变体 / 每日题量上限，白名单外字段丢弃', async () => {
+    const { container } = renderPage();
+    openSection(container, '数据管理');
+
+    importJson(container, {
+      preferences: {
+        mentorStyle: 'encouraging',
+        currentGameVariant: 'short-deck',
+        dailyQuestionLimit: 100,
+        unknownField: true,
+      },
+    });
+
+    await waitFor(() => {
+      expect(container.textContent).toContain('已恢复个人偏好');
+    });
+
+    const state = useProgressStore.getState();
+    expect(state.mentorStyle).toBe('encouraging');
+    expect(state.currentGameVariant).toBe('short-deck');
+    expect(state.emotion.dailyQuestionLimit).toBe(100);
+  });
+
+  it('非法偏好值被忽略，不写入 store 也不提示已恢复', async () => {
+    const { container } = renderPage();
+    openSection(container, '数据管理');
+
+    importJson(container, {
+      preferences: {
+        mentorStyle: 'not-a-mentor',
+        currentGameVariant: 'omaha',
+        dailyQuestionLimit: 9999,
+      },
+    });
+
+    await waitFor(() => {
+      expect(container.textContent).toContain('导入完成');
+    });
+
+    const state = useProgressStore.getState();
+    expect(state.mentorStyle).toBe('strict-math');
+    expect(state.currentGameVariant).toBe('standard');
+    expect(state.emotion.dailyQuestionLimit).toBe(0);
+    expect(container.textContent).not.toContain('已恢复个人偏好');
+  });
+});
+
 describe('SettingsPage 数据管理 · 导出', () => {
   it('hands 读取失败仍导出 records+settings，并明确标注为部分导出', async () => {
     seedStore({ records: [buildRecord('exp-1')] });
@@ -445,6 +532,12 @@ describe('SettingsPage 数据管理 · 导出', () => {
     expect(payload).not.toHaveProperty('hands');
     expect((payload.records as TrainingRecord[]).map((r) => r.id)).toEqual(['exp-1']);
     expect(payload.settings).toMatchObject({ soundEnabled: true });
+    expect(payload.dataVersion).toBe(3);
+    expect(payload.preferences).toMatchObject({
+      mentorStyle: 'strict-math',
+      currentGameVariant: 'standard',
+      dailyQuestionLimit: 0,
+    });
   });
 
   it('hands 读取成功时导出完整备份（含 hands 分区）', async () => {

@@ -7,7 +7,8 @@
  * - **unknown 校验**：外部 JSON 一律先按 unknown 收下，记录校验关键字段与数值范围，
  *   设置只接受白名单字段（未知字段丢弃，非法值忽略）；
  * - **牌局独立结果**：hands 走 IndexedDB，成功 / 失败单独提示，绝不影响训练记录统计；
- * - **导出不得用空数组冒充完整**：`loadAllHands` 失败时仍导出 records + settings，
+ * - **偏好可迁移**（v3）：教练风格 / 游戏变体 / 每日题量上限随备份导出，导入时按白名单校验后恢复；
+ * - **导出不得用空数组冒充完整**：`loadAllHands` 失败时仍导出 records + settings + preferences，
  *   并以 `partial: true` 与文案明确标注为部分备份；
  * - **清除结果按实际情况反馈**：清库失败已由持久化切片回滚内存并上报 records 来源，
  *   本 hook 只读取该状态，不自行判定成功。
@@ -15,29 +16,17 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { APP_VERSION } from '@/shared/constants/app';
-import type { TrainingRecord, UserSettings } from '../../types';
+import { switchLanguage } from '@/i18n/preload';
 import { useProgressStore } from '../../store';
 import { usePersistenceStatus } from '../../persistenceStatus';
 import { loadAllHands, saveAllHands, type BackupHand } from '../../utils/handHistoryBackup';
-
-/** 导出文件格式版本：v1 仅含 records+settings；v2 起新增 hands（IndexedDB 牌局复盘）分区。 */
-export const EXPORT_DATA_VERSION = 2;
-
-/** 合法的训练模块标识（与 TrainingRecord.module 联合类型保持一致）。 */
-const TRAINING_MODULES = new Set([
-  'range-trainer',
-  'pot-odds',
-  'gto-simulator',
-  'strategy-academy',
-  'puzzle-trainer',
-  'hand-history',
-  'theory-academy',
-]);
-
-/** settings 白名单字段的数值边界（防止导入把题量/计时写成非法值）。 */
-const QUIZ_TIME_MAX = 600;
-const QUESTION_COUNT_MAX = 500;
-const QUESTIONS_PER_SESSION_MAX = 1000;
+import {
+  EXPORT_DATA_VERSION,
+  isValidTrainingRecord,
+  readBackupPayload,
+  sanitizeImportedPreferences,
+  sanitizeImportedSettings,
+} from './backupFormat';
 
 export type DataMessageKind = 'success' | 'error' | 'info';
 
@@ -52,67 +41,6 @@ export interface ImportSummary {
   duplicate: number;
   invalid: number;
   failed: number;
-}
-
-export interface BackupPayload {
-  records: unknown[];
-  settings: unknown;
-  hands: BackupHand[];
-}
-
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-function isFiniteNumber(value: unknown): value is number {
-  return typeof value === 'number' && Number.isFinite(value);
-}
-
-function isIntInRange(value: unknown, min: number, max: number): value is number {
-  return isFiniteNumber(value) && Number.isInteger(value) && value >= min && value <= max;
-}
-
-/** 校验外部 JSON 里的单条训练记录（关键字段存在 + 数值范围合法）。 */
-export function isValidTrainingRecord(value: unknown): value is TrainingRecord {
-  if (!isPlainObject(value)) return false;
-  if (typeof value.id !== 'string' || value.id.trim() === '') return false;
-  if (typeof value.module !== 'string' || !TRAINING_MODULES.has(value.module)) return false;
-  if (typeof value.mode !== 'string') return false;
-  if (!isFiniteNumber(value.createdAt) || value.createdAt <= 0) return false;
-  const result = value.result;
-  if (!isPlainObject(result)) return false;
-  if (typeof result.sessionId !== 'string' || typeof result.module !== 'string') return false;
-  if (!isIntInRange(result.totalQuestions, 1, QUESTIONS_PER_SESSION_MAX)) return false;
-  if (!isIntInRange(result.correctAnswers, 0, result.totalQuestions)) return false;
-  if (!isFiniteNumber(result.accuracy) || result.accuracy < 0 || result.accuracy > 1) return false;
-  if (!isFiniteNumber(result.averageTime) || result.averageTime < 0) return false;
-  if (!isFiniteNumber(result.timestamp) || result.timestamp <= 0) return false;
-  return Array.isArray(result.details);
-}
-
-/** 只接受 settings 白名单字段（未知字段丢弃，非法值忽略，不整体覆盖）。 */
-export function sanitizeImportedSettings(value: unknown): Partial<UserSettings> {
-  if (!isPlainObject(value)) return {};
-  const patch: Partial<UserSettings> = {};
-  const { theme, soundEnabled, defaultQuizTime, defaultQuestionCount, language } = value;
-  if (theme === 'dark' || theme === 'light' || theme === 'system') patch.theme = theme;
-  if (typeof soundEnabled === 'boolean') patch.soundEnabled = soundEnabled;
-  if (isIntInRange(defaultQuizTime, 0, QUIZ_TIME_MAX)) patch.defaultQuizTime = defaultQuizTime;
-  if (isIntInRange(defaultQuestionCount, 1, QUESTION_COUNT_MAX)) {
-    patch.defaultQuestionCount = defaultQuestionCount;
-  }
-  if (language === 'zh' || language === 'en') patch.language = language;
-  return patch;
-}
-
-/** 解析备份文件主体；完全无可导入内容时返回 null（视为格式不正确）。 */
-export function readBackupPayload(raw: unknown): BackupPayload | null {
-  if (!isPlainObject(raw)) return null;
-  const records = Array.isArray(raw.records) ? raw.records : [];
-  const hands = Array.isArray(raw.hands) ? raw.hands.filter(isPlainObject) : [];
-  const hasSettings = isPlainObject(raw.settings);
-  if (records.length === 0 && hands.length === 0 && !hasSettings) return null;
-  return { records, settings: raw.settings, hands };
 }
 
 function readFileText(file: File): Promise<string> {
@@ -142,6 +70,12 @@ export function useDataManagement() {
   const submitRecord = useProgressStore((s) => s.submitRecord);
   const updateSettings = useProgressStore((s) => s.updateSettings);
   const clearAllRecords = useProgressStore((s) => s.clearAllRecords);
+  const mentorStyle = useProgressStore((s) => s.mentorStyle);
+  const setMentorStyle = useProgressStore((s) => s.setMentorStyle);
+  const currentGameVariant = useProgressStore((s) => s.currentGameVariant);
+  const setGameVariant = useProgressStore((s) => s.setGameVariant);
+  const dailyQuestionLimit = useProgressStore((s) => s.emotion.dailyQuestionLimit);
+  const setDailyQuestionLimit = useProgressStore((s) => s.setDailyQuestionLimit);
   const persistence = usePersistenceStatus();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -171,6 +105,7 @@ export function useDataManagement() {
         partial: hands === null,
         records,
         settings,
+        preferences: { mentorStyle, currentGameVariant, dailyQuestionLimit },
         ...(hands === null ? {} : { hands }),
       });
       setMessages([
@@ -224,6 +159,16 @@ export function useDataManagement() {
       }
       const settingsPatch = sanitizeImportedSettings(payload.settings);
       if (Object.keys(settingsPatch).length > 0) updateSettings(settingsPatch);
+      // 语言偏好写入 store 后同步切 i18n，避免导入后需刷新才生效
+      if (settingsPatch.language) void switchLanguage(settingsPatch.language);
+
+      const preferencesPatch = sanitizeImportedPreferences(payload.preferences);
+      if (preferencesPatch.mentorStyle) setMentorStyle(preferencesPatch.mentorStyle);
+      if (preferencesPatch.currentGameVariant) setGameVariant(preferencesPatch.currentGameVariant);
+      if (preferencesPatch.dailyQuestionLimit !== undefined) {
+        setDailyQuestionLimit(preferencesPatch.dailyQuestionLimit);
+      }
+      const preferencesApplied = Object.keys(preferencesPatch).length > 0;
 
       const next: DataMessage[] = [
         {
@@ -237,6 +182,15 @@ export function useDataManagement() {
           }),
         },
       ];
+      if (preferencesApplied) {
+        next.push({
+          id: 'import-preferences',
+          kind: 'success',
+          text: t('settings.importPreferences', {
+            defaultValue: '已恢复个人偏好（教练风格 / 游戏变体 / 每日题量上限）',
+          }),
+        });
+      }
       if (payload.hands.length > 0) {
         try {
           await saveAllHands(payload.hands);

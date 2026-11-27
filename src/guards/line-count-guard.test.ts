@@ -41,7 +41,6 @@ const LEGACY_OVERSIZED_FILES: Record<string, OversizedEntry> = {
   'features/puzzle-trainer/data/puzzleBank.ts': { maxLines: 3632, reason: '题库数据（非课程内容文件，仍受行数约束）' },
   'features/progress/store.ts': { maxLines: 1202, reason: 'Phase 2 拆分待执行（跨模块状态中枢）' },
   'features/strategy-academy/components/PracticeDrill.tsx': { maxLines: 1001, reason: 'Phase 2 拆分待执行' },
-  'features/progress/components/settings/SettingsPage.tsx': { maxLines: 804, reason: '页面级组件' },
   'features/strategy-academy/components/ConceptGraph.tsx': { maxLines: 664, reason: 'Phase 2 拆分待执行' },
   'features/pot-odds/components/PotOddsQuizPage.tsx': { maxLines: 536, reason: '页面级组件' },
   'features/strategy-academy/store.ts': { maxLines: 520, reason: 'Phase 2 拆分待执行' },
