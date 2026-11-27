@@ -15,6 +15,7 @@ export default function GTOSimulatorHome() {
   const navigate = useNavigate();
   const { generateScenarios } = useScenarioEngine();
   const { lastResult } = useGTOSimulatorStore();
+  const calibratedResult = lastResult?.calibration === 'calibrated';
 
   const handleStart = () => {
     generateScenarios();
@@ -61,11 +62,15 @@ export default function GTOSimulatorHome() {
               <span className="text-2xl font-bold font-numeric text-[var(--brass-bright)]">
                 {Math.round(lastResult.accuracy * 100)}%
               </span>
-              <span className="text-sm text-[var(--ivory-muted)] ml-2">{t('gto.home.optimalRate')}</span>
+              <span className="text-sm text-[var(--ivory-muted)] ml-2">
+                {t(calibratedResult ? 'gto.home.optimalRate' : 'gto.home.referenceRate')}
+              </span>
             </div>
             <div className="text-right">
               <div className="text-sm text-[var(--ivory-muted)] font-numeric">
-                {t('gto.home.scenariosCount', { count: lastResult.scenarios, ev: lastResult.evLossBB100.toFixed(2) })}
+                {calibratedResult
+                  ? t('gto.home.scenariosCount', { count: lastResult.scenarios, ev: lastResult.evLossBB100.toFixed(2) })
+                  : t('gto.home.scenariosCountReference', { count: lastResult.scenarios })}
               </div>
             </div>
           </div>

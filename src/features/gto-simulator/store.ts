@@ -1,18 +1,24 @@
 import { create } from 'zustand';
 import { Position } from '@/shared/types/position';
 import type { Decision } from '@/shared/types/action';
-import type { Scenario, ScenarioConfig, GTOSession, GTODecision, HandStrategy, GTOResult, DecisionNode } from './types';
-import { compareDecision, estimateHeroEquity, adjustForOpponent } from './utils/strategyCompare';
+import type { Scenario, ScenarioConfig, GTOSession, GTODecision, HandStrategy, GTOResult, DecisionNode, StrategyCalibration } from './types';
+import { compareDecision, estimateHeroEquity } from './utils/strategyCompare';
+import { adjustForOpponent } from './utils/opponentAdjust';
 import type { CompareResult } from './utils/strategyCompare';
 import { getEasyGTOScenario } from './hooks/useGTOComparison';
 import { getPreflopHandStrategy } from './utils/spotKey';
-import { estimatePostflopStrategy, boardToFlat, getCbetSizingMultiplier } from './utils/postflopStrategy';
+import { estimatePostflopStrategy, boardToFlat } from './utils/postflopStrategy';
 import { classifyBoardTexture } from './utils/boardGenerator';
+import { getDecisionCalibration } from './utils/calibration';
+import { computeCallAmount } from './utils/legalActions';
+
+export { computeCallAmount, getLegalActionContext } from './utils/legalActions';
 
 export interface GTOFeedbackState extends CompareResult {
   gtoStrategy: HandStrategy | null;
   /** P1C-16: exploit 调整后的策略（区别于原始 gtoStrategy） */
   exploitStrategy?: HandStrategy | null;
+  calibration: StrategyCalibration;
 }
 
 interface GTOSimulatorStore {
@@ -91,6 +97,7 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
 
     const nodes = scenario.decisionNodes;
     const node: DecisionNode | undefined = nodes?.[currentNodeIndex];
+    const calibration = getDecisionCalibration(scenario, node);
 
     // P1C-03/04: 统一 GTO 策略查找（preflop 查表 + postflop texture_strategy）
     const gtoStrategy = node ? node.gtoStrategy : getGTOStrategyForScenario(scenario);
@@ -128,9 +135,10 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
       evLoss: result.evLoss,
       isOptimal: result.isOptimal,
       timeTaken: Date.now() - decisionStartAt,
+      calibration,
     };
 
-    const feedbackState: GTOFeedbackState = { ...result, gtoStrategy, exploitStrategy };
+    const feedbackState: GTOFeedbackState = { ...result, gtoStrategy, exploitStrategy, calibration };
 
     set({
       currentDecision: decision,
@@ -228,29 +236,6 @@ function getGTOStrategyForScenario(scenario: Scenario): HandStrategy {
   return estimatePostflopStrategy(scenario.heroHand, scenario.board, texture, scenario.street as 'flop' | 'turn' | 'river');
 }
 
-/** P1C-12: 计算真实 callAmount（导出供 GTOSessionPage 复用，保证 UI 显示与内部判分口径一致） */
-export function computeCallAmount(scenario: Scenario, node: DecisionNode | undefined, potSize: number): number {
-  const actions = node?.previousActions ?? scenario.previousActions;
-  const street = node?.street ?? scenario.street;
-
-  if (street === 'preflop') {
-    const heroCommitment = actions
-      .filter((a) => a.position === scenario.position && (a.action === 'raise' || a.action === 'call'))
-      .at(-1)?.amount;
-    const heroInvested = heroCommitment ?? (scenario.position === Position.BB ? 1 : scenario.position === Position.SB ? 0.5 : 0);
-    const raises = actions.filter((a) => a.action === 'raise');
-    const lastRaise = raises[raises.length - 1];
-    const target = lastRaise?.amount ?? (scenario.position === Position.BB ? 0 : 1);
-    return Math.round(Math.max(0, target - heroInvested) * 10) / 10;
-  }
-  // postflop: 面对 c-bet，callAmount = pot × sizing multiplier
-  // P1 fix: 多步节点（turn/river）的 board 已变化，texture 应按 node 实际 board 重新分类，
-  // 而非沿用 scenario.boardTexture（flop 时刻缓存），否则 turn/river 节点 callAmount 用错 texture。
-  const flat = node?.board ? boardToFlat(node.board) : scenario.board ? boardToFlat(scenario.board) : undefined;
-  const texture = flat ? classifyBoardTexture(flat) : scenario.boardTexture;
-  return Math.round(potSize * getCbetSizingMultiplier(texture) * 10) / 10;
-}
-
 /** P1C-11/24: 计算会话结果 */
 function computeResult(session: GTOSession): GTOResult {
   const { decisions, scenarios, startTime } = session;
@@ -267,6 +252,16 @@ function computeResult(session: GTOSession): GTOResult {
     return scenario ? [{ scenario, evLoss: d.evLoss }] : [];
   });
 
+  const calibratedDecisions = decisions.filter((d) => d.calibration === 'calibrated').length;
+  const unavailableDecisions = decisions.filter((d) => d.calibration === 'unavailable').length;
+  const calibration: StrategyCalibration = decisions.length === 0
+    ? 'unavailable'
+    : calibratedDecisions === decisions.length
+      ? 'calibrated'
+      : unavailableDecisions === decisions.length
+        ? 'unavailable'
+        : 'heuristic';
+
   return {
     sessionId: `gto-${Date.now()}`,
     scenarios: decisions.length,
@@ -277,5 +272,8 @@ function computeResult(session: GTOSession): GTOResult {
     worstSpots,
     accuracy: decisions.length > 0 ? optimalCount / decisions.length : 0,
     totalTime: Date.now() - startTime,
+    calibration,
+    calibratedDecisions,
+    unavailableDecisions,
   };
 }

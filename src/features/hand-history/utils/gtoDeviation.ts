@@ -5,12 +5,22 @@ import type { Card } from '@/shared/types/poker';
 
 // ─── Types ────────────────────────────────────────────────
 
+/**
+ * 不可用哨兵：Worker 不可用 / 崩溃 / 超时 / 未回传时，gtoAction 与 grade 都写该值。
+ * 消费方必须先看 `available`，禁止把哨兵当成 call / best 渲染，避免伪造满分。
+ */
+export const DEVIATION_UNAVAILABLE = 'unavailable';
+
 export interface DeviationDecision {
   street: string;
   action: string;
+  /** 可用时为启发式建议动作；不可用时为 DEVIATION_UNAVAILABLE */
   gtoAction: string;
   evLoss: number;
+  /** 可用时为五级评级（best/correct/inaccuracy/wrong/blunder）；不可用时为 DEVIATION_UNAVAILABLE */
   grade: string;
+  /** 该决策是否有可用结论；false 时不得计入任何统计或评级展示 */
+  available: boolean;
 }
 
 export interface DeviationResult {
@@ -20,18 +30,27 @@ export interface DeviationResult {
 }
 
 export interface DeviationSummary {
+  /** 全部 hero 决策数（含不可用项），仅作分母 / 提示用途 */
   totalDecisions: number;
+  /** 可参与统计的决策数（available === true） */
+  availableTotal: number;
+  /** 不可用决策数（totalDecisions - availableTotal） */
+  unavailableCount: number;
+  /** 仅统计可用决策中的 best 数 */
   optimalCount: number;
+  /** 仅统计可用决策的平均 EV 损失；无可用决策时为 0 */
   averageEvLoss: number;
+  /** 仅统计可用决策的最差项；无可用决策时为 null */
   worstDecision: { street: string; evLoss: number } | null;
 }
 
-/** Worker 单条分析结果 */
+/** Worker 单条分析结果（跨线程负载：`available` 由 worker 标记，缺失即视为不可用） */
 export interface WorkerAnalyzeResult {
   id: string;
   gtoAction: string;
   evLoss: number;
   grade: string;
+  available?: boolean;
 }
 
 // ─── Cache ────────────────────────────────────────────────
@@ -171,7 +190,7 @@ function sendToWorker<T>(type: string, payload: unknown): Promise<T> {
   return new Promise((resolve) => {
     const worker = getWorker();
     if (!worker) {
-      // Fallback: return optimal for everything
+      // Worker 构造失败（环境不支持 / 被禁用）：整批标记为不可用，不再伪造 best。
       resolve(fallbackAnalyze(payload) as T);
       return;
     }
@@ -196,8 +215,37 @@ function sendToWorker<T>(type: string, payload: unknown): Promise<T> {
 }
 
 function fallbackAnalyze(payload: unknown): WorkerAnalyzeResult[] {
-  const hands = payload as Array<{ id: string }>;
-  return hands.map(h => ({ id: h.id, gtoAction: 'call', evLoss: 0, grade: 'best' }));
+  const hands = (payload as Array<{ id: string }> | null | undefined) ?? [];
+  // 失败路径不得伪装成功：明确标记不可用并写哨兵值，UI 据此拒绝展示最优率 / EV。
+  return hands.map(h => ({
+    id: h.id,
+    available: false,
+    gtoAction: DEVIATION_UNAVAILABLE,
+    evLoss: 0,
+    grade: DEVIATION_UNAVAILABLE,
+  }));
+}
+
+/** 把 worker 回传归一化为决策：只有明确 `available === true` 才采纳其结论。 */
+function toDecision(entry: DecisionEntry, wr: WorkerAnalyzeResult | undefined): DeviationDecision {
+  if (wr?.available === true) {
+    return {
+      street: entry.street,
+      action: entry.action,
+      gtoAction: wr.gtoAction,
+      evLoss: wr.evLoss,
+      grade: wr.grade,
+      available: true,
+    };
+  }
+  return {
+    street: entry.street,
+    action: entry.action,
+    gtoAction: DEVIATION_UNAVAILABLE,
+    evLoss: 0,
+    grade: DEVIATION_UNAVAILABLE,
+    available: false,
+  };
 }
 
 // ─── Idle scheduler ───────────────────────────────────────
@@ -215,8 +263,9 @@ function requestIdle(fn: () => void): void {
 const BATCH_SIZE = 50;
 
 /**
- * Batch-analyze GTO deviations for a set of hands.
+ * Batch-analyze heuristic strategy deviations for a set of hands.
  * Uses requestIdleCallback and skips already-cached hands.
+ * 结果可用性以每条决策的 `available` 表达：worker 不可用 / 崩溃 / 超时 / 未回传均为 false。
  */
 export async function analyzeHandDeviations(
   hands: HandHistory[],
@@ -260,12 +309,7 @@ export async function analyzeHandDeviations(
     const start = batchIdx * BATCH_SIZE;
     const batch = toAnalyze.slice(start, start + BATCH_SIZE);
 
-    const workerResults = await sendToWorker<Array<{
-      id: string;
-      gtoAction: string;
-      evLoss: number;
-      grade: string;
-    }>>('batchAnalyze', batch);
+    const workerResults = await sendToWorker<WorkerAnalyzeResult[]>('batchAnalyze', batch);
 
     for (let i = 0; i < batch.length; i++) {
       const entry = batch[i]!;
@@ -273,13 +317,7 @@ export async function analyzeHandDeviations(
       const handId = entry.id.split(':')[0]!;
       const deviations = resultMap.get(handId);
       if (!deviations) continue;
-      deviations.push({
-        street: entry.street,
-        action: entry.action,
-        gtoAction: wr?.gtoAction ?? 'call',
-        evLoss: wr?.evLoss ?? 0,
-        grade: wr?.grade ?? 'best',
-      });
+      deviations.push(toDecision(entry, wr));
     }
 
     processed += batch.length;
@@ -306,25 +344,33 @@ export async function analyzeHandDeviations(
 
 /**
  * Get a summary of deviation results for a single hand.
+ *
+ * 只对 `available === true` 的决策计算最优数 / 平均 EV / 最差决策；
+ * 不可用决策只计入 `totalDecisions` 与 `unavailableCount`，不得进入分母，
+ * 否则 Worker 失败时会被当成「全部最优、零损失」。
  */
 export function getDeviationSummary(result: DeviationResult): DeviationSummary {
   const { deviations } = result;
   const totalDecisions = deviations.length;
+  const usable = deviations.filter(d => d.available === true);
+  const availableTotal = usable.length;
+  const unavailableCount = totalDecisions - availableTotal;
+
   // P1 fix: 五级体系（best/correct/inaccuracy/wrong/blunder）中最优为 'best'，
   // 'optimal' 是已废弃的三级旧值，导致 optimalCount 恒为 0、最优率永远显示 0%。
-  const optimalCount = deviations.filter(d => d.grade === 'best').length;
-  const averageEvLoss = totalDecisions > 0
-    ? Math.round((deviations.reduce((s, d) => s + d.evLoss, 0) / totalDecisions) * 100) / 100
+  const optimalCount = usable.filter(d => d.grade === 'best').length;
+  const averageEvLoss = availableTotal > 0
+    ? Math.round((usable.reduce((s, d) => s + d.evLoss, 0) / availableTotal) * 100) / 100
     : 0;
 
   let worstDecision: { street: string; evLoss: number } | null = null;
-  for (const d of deviations) {
+  for (const d of usable) {
     if (!worstDecision || d.evLoss > worstDecision.evLoss) {
       worstDecision = { street: d.street, evLoss: d.evLoss };
     }
   }
 
-  return { totalDecisions, optimalCount, averageEvLoss, worstDecision };
+  return { totalDecisions, availableTotal, unavailableCount, optimalCount, averageEvLoss, worstDecision };
 }
 
 /**

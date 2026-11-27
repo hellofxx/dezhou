@@ -7,7 +7,7 @@ import type { Card } from '@/shared/types/poker';
 import type { HandStrategy, PreviousAction, Scenario } from '../types';
 import { ActionType } from '@/shared/types/action';
 import { getOptimalAction, isPureStrategy, compareDecision } from '../utils/strategyCompare';
-import { resolveSpotKey as resolveSpotKeyUtil } from '../utils/spotKey';
+import { getStrategiesForSpot, resolveSpotKey as resolveSpotKeyUtil } from '../utils/spotKey';
 import { buildGtoReviewItemInput } from '../utils/gtoSrs';
 import type { Decision } from '@/shared/types/action';
 import preflopData from '../data/preflop-ranges.json';
@@ -115,20 +115,14 @@ export function useGTOComparison(
     const spotData = data[spotKey];
     if (!spotData) return null;
 
-    return spotData[handNotation] ?? null;
+    return spotData[handNotation] ?? { fold: 1, call: 0, raise: 0 };
   }, [position, handNotation, previousActions]);
 
-  // 获取整个位置的所有策略（用于热力图）
+  // 获取整个位置的所有策略（用于热力图；缺手牌补 100% fold）
   const allStrategies = useMemo((): Record<HandNotation, HandStrategy> | null => {
     if (!position) return null;
-
     const spotKey = resolveSpotKeyUtil(position, previousActions);
-    if (!spotKey) return null; // 场景未覆盖
-
-    const data = (preflopData as PreflopData)['6max_100bb_preflop'];
-    if (!data) return null;
-
-    return data[spotKey] ?? null;
+    return getStrategiesForSpot(spotKey);
   }, [position, previousActions]);
 
   // 比较用户决策

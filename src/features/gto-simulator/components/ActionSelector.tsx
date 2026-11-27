@@ -9,6 +9,10 @@ interface ActionSelectorProps {
   potSize: number;
   effectiveStack: number;
   callAmount?: number;
+  /** 无下注可过牌语境：中间按钮展示 Check 并提交 Check（优先于 callAmount） */
+  canCheck?: boolean;
+  /** 场景给定的最小加注**到**的总额；缺省沿用 2×callAmount / 2 */
+  minRaiseTo?: number;
   onDecision: (decision: Decision) => void;
   disabled?: boolean;
 }
@@ -17,23 +21,40 @@ export function ActionSelector({
   potSize,
   effectiveStack,
   callAmount,
+  canCheck = false,
+  minRaiseTo,
   onDecision,
   disabled = false,
 }: ActionSelectorProps) {
   const { t } = useTranslation();
-  const [raiseAmount, setRaiseAmount] = useState(() =>
-    Math.min(Math.max(2.5, callAmount ? callAmount * 2 : 2), effectiveStack)
-  );
-  const [showRaiseSlider, setShowRaiseSlider] = useState(false);
-
-  const minRaise = callAmount ? callAmount * 2 : 2;
   const maxRaise = effectiveStack;
+
+  /** 未钳制的最小加注（判断「最小加注是否已超过有效筹码」用原始值） */
+  const rawMinRaise = minRaiseTo ?? (callAmount ? callAmount * 2 : 2);
+  /** 滑块 / 提交用的最小加注：始终不超过有效筹码，避免 min > max 的非法区间 */
+  const minRaise = Math.min(rawMinRaise, maxRaise);
+  /** 最小加注超过有效筹码 → 没有合法加注空间 */
+  const raiseBlocked = rawMinRaise > maxRaise;
+  const raiseDisabled = disabled || raiseBlocked;
+
+  const [raiseAmount, setRaiseAmount] = useState(() => Math.min(Math.max(2.5, minRaise), maxRaise));
+  const [showRaiseSlider, setShowRaiseSlider] = useState(false);
 
   /** 提交前把加注尺寸约束到合法区间 [minRaise, maxRaise] */
   const clampRaise = useCallback(
     (v: number) => Math.min(Math.max(v, minRaise), maxRaise),
     [minRaise, maxRaise]
   );
+
+  /** 当前展示 / 提交的加注尺寸（prop 变化导致区间收窄时保持合法） */
+  const raiseValue = clampRaise(raiseAmount);
+
+  /** 中间按钮语义：可过牌时提交 Check，否则提交 Call 带跟注额 */
+  const commitMiddle = useCallback(() => {
+    onDecision(
+      canCheck ? { action: ActionType.Check } : { action: ActionType.Call, amount: callAmount }
+    );
+  }, [canCheck, callAmount, onDecision]);
 
   // 快捷键
   const handleKeyDown = useCallback(
@@ -44,9 +65,11 @@ export function ActionSelector({
           onDecision({ action: ActionType.Fold });
           break;
         case '2':
-          onDecision({ action: ActionType.Call, amount: callAmount });
+          commitMiddle();
           break;
         case '3':
+          // 无可加注空间：不展开面板、不提交
+          if (raiseBlocked) return;
           if (!showRaiseSlider) {
             setShowRaiseSlider(true);
           } else {
@@ -58,7 +81,16 @@ export function ActionSelector({
           break;
       }
     },
-    [disabled, callAmount, effectiveStack, raiseAmount, showRaiseSlider, onDecision, clampRaise]
+    [
+      disabled,
+      commitMiddle,
+      raiseBlocked,
+      effectiveStack,
+      raiseAmount,
+      showRaiseSlider,
+      onDecision,
+      clampRaise,
+    ]
   );
 
   useEffect(() => {
@@ -74,12 +106,17 @@ export function ActionSelector({
   ];
 
   const handleRaiseSubmit = () => {
-    onDecision({ action: ActionType.Raise, amount: clampRaise(raiseAmount) });
+    if (raiseBlocked) return;
+    onDecision({ action: ActionType.Raise, amount: raiseValue });
     setShowRaiseSlider(false);
   };
 
   // BUG-GTO-010：动作词统一取 shared 级扑克动作术语源（actionTerms），刻意保留英文。
-  const callLabel = callAmount ? actionLabel(ActionType.Call, callAmount) : actionTerm(ActionType.Check);
+  const callLabel = canCheck
+    ? actionTerm(ActionType.Check)
+    : callAmount
+      ? actionLabel(ActionType.Call, callAmount)
+      : actionTerm(ActionType.Check);
 
   return (
     <div className="space-y-4">
@@ -101,9 +138,9 @@ export function ActionSelector({
           {actionTerm(ActionType.Fold)}
         </button>
 
-        {/* Call */}
+        {/* Call / Check */}
         <button
-          onClick={() => onDecision({ action: ActionType.Call, amount: callAmount })}
+          onClick={commitMiddle}
           disabled={disabled}
           aria-label={callLabel}
           className={cn(
@@ -117,13 +154,14 @@ export function ActionSelector({
           {callLabel}
         </button>
 
-        {/* Raise */}
+        {/* Raise — 最小加注超过有效筹码时无加注空间，原生 disabled + aria-disabled 双语义 */}
         <button
           onClick={() => setShowRaiseSlider(!showRaiseSlider)}
           aria-expanded={showRaiseSlider}
           aria-controls="gto-raise-panel"
           aria-label={actionTerm(ActionType.Raise)}
-          disabled={disabled}
+          aria-disabled={raiseDisabled || undefined}
+          disabled={raiseDisabled}
           className={cn(
             'relative py-4 rounded-md font-display font-semibold text-lg transition-all',
             showRaiseSlider
@@ -149,7 +187,7 @@ export function ActionSelector({
                 onClick={() => setRaiseAmount(clampRaise(qr.value))}
                 className={cn(
                   'flex-1 py-1.5 rounded text-xs font-medium transition-all font-numeric',
-                  Math.abs(raiseAmount - qr.value) < 0.1
+                  Math.abs(raiseValue - qr.value) < 0.1
                     ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                     : 'bg-[var(--walnut-raised)]/60 text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15'
                 )}
@@ -166,15 +204,15 @@ export function ActionSelector({
               min={minRaise}
               max={maxRaise}
               step={0.5}
-              value={raiseAmount}
+              value={raiseValue}
               onChange={(e) => setRaiseAmount(Number(e.target.value))}
               aria-label={t('gto.action.raiseSlider')}
-              aria-valuetext={`${raiseAmount.toFixed(1)} BB`}
+              aria-valuetext={`${raiseValue.toFixed(1)} BB`}
               className="w-full h-2 bg-[var(--felt-deep)] rounded-full appearance-none cursor-pointer accent-[var(--brass)]"
             />
             <div className="flex justify-between text-xs text-[var(--ivory-muted)] font-numeric">
               <span>{minRaise.toFixed(1)} BB</span>
-              <span className="text-[var(--brass-bright)] font-bold">{raiseAmount.toFixed(1)} BB</span>
+              <span className="text-[var(--brass-bright)] font-bold">{raiseValue.toFixed(1)} BB</span>
               <span>{maxRaise.toFixed(1)} BB</span>
             </div>
           </div>
@@ -182,10 +220,11 @@ export function ActionSelector({
           {/* 确认加注 */}
           <button
             onClick={handleRaiseSubmit}
-            disabled={disabled}
-            className="w-full py-2.5 rounded-md bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-display font-semibold hover:[background:var(--brass-fill-gradient-hover)] transition-all active:scale-95"
+            disabled={raiseDisabled}
+            aria-disabled={raiseDisabled || undefined}
+            className="w-full py-2.5 rounded-md bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-display font-semibold hover:[background:var(--brass-fill-gradient-hover)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {actionTerm(ActionType.Raise)} {raiseAmount.toFixed(1)} BB
+            {actionTerm(ActionType.Raise)} {raiseValue.toFixed(1)} BB
           </button>
         </div>
       )}

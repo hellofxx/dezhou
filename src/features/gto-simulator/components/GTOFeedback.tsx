@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import type { HandStrategy } from '../types';
+import type { HandStrategy, StrategyCalibration } from '../types';
 import type { HandNotation } from '@/shared/types/poker';
 import { cn } from '@/shared/utils/cn';
 import { getOpponentProfile } from '@/shared/data/opponentProfiles';
@@ -32,6 +32,10 @@ interface GTOFeedbackProps {
   userAction?: { action: string; amount?: number } | null;
   /** 再做一题回调（wrong/blunder 反馈底部） */
   onTryAgain?: () => void;
+  /** 策略数据可信度；非标定时不展示 EV 与五级评级 */
+  calibration?: StrategyCalibration;
+  /** 非标定场景的推荐动作文案 */
+  recommendedAction?: string;
 }
 
 export function GTOFeedback({
@@ -49,6 +53,8 @@ export function GTOFeedback({
   feedback,
   userAction,
   onTryAgain,
+  calibration = 'calibrated',
+  recommendedAction,
 }: GTOFeedbackProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -58,8 +64,10 @@ export function GTOFeedback({
   const callTerm = actionTerm(ActionType.Call);
   const foldTerm = actionTerm(ActionType.Fold);
 
-  // 五级反馈配置（feedback 提供时使用）
-  const grade = feedback?.grade ?? null;
+  const calibrated = calibration === 'calibrated';
+
+  // 五级反馈配置（仅真实标定数据使用）
+  const grade = calibrated ? feedback?.grade ?? null : null;
   const gradeConfig = grade ? GRADE_DISPLAY_CONFIG[grade] : null;
 
   // 旧二元显示的样式（feedback 缺省时使用）
@@ -68,12 +76,16 @@ export function GTOFeedback({
     : evLoss > 3
       ? 'text-[var(--clay-text)] border-[var(--clay)]/40 bg-[var(--clay)]/10'
       : 'text-[var(--brass-bright)] border-[var(--brass)]/40 bg-[var(--brass)]/10';
-  const legacyStatusIcon = isOptimal ? '✓' : evLoss > 3 ? '✗' : '△';
-  const legacyStatusLabel = isOptimal
-    ? t('gto.feedback.optimalLabel')
-    : evLoss > 3
-      ? t('gto.feedback.severeError')
-      : t('gto.feedback.suboptimal');
+  const legacyStatusIcon = isOptimal ? '✓' : calibrated && evLoss > 3 ? '✗' : '△';
+  const legacyStatusLabel = !calibrated
+    ? isOptimal
+      ? t('gto.feedback.referenceMatched')
+      : t('gto.feedback.referenceDeviated')
+    : isOptimal
+      ? t('gto.feedback.optimalLabel')
+      : evLoss > 3
+        ? t('gto.feedback.severeError')
+        : t('gto.feedback.suboptimal');
 
   // P2-4：优先使用 mentorStyle 渲染人格化文案；缺省时降级到 i18n
   const mentorStyle = useProgressState((s) => s.mentorStyle);
@@ -123,14 +135,29 @@ export function GTOFeedback({
               {handNotation && <div className="text-xs opacity-80 font-numeric">{handNotation}</div>}
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-xs opacity-80">{t('gto.evLoss')}</div>
-            <div className="text-lg font-bold font-numeric">{Math.max(0, evLoss).toFixed(2)} BB</div>
-          </div>
+          {calibrated ? (
+            <div className="text-right">
+              <div className="text-xs opacity-80">{t('gto.evLoss')}</div>
+              <div className="text-lg font-bold font-numeric">{Math.max(0, evLoss).toFixed(2)} BB</div>
+            </div>
+          ) : recommendedAction ? (
+            <div className="text-right">
+              <div className="text-xs opacity-80">{t('gto.feedback.recommendedAction')}</div>
+              <div className="text-sm font-bold font-numeric">{recommendedAction}</div>
+            </div>
+          ) : null}
         </div>
       )}
 
-      {(userEV !== undefined || optimalEV !== undefined) && (
+      {!calibrated && (
+        <div className="rounded-lg bg-black/20 px-3 py-2 text-xs text-[var(--ivory-muted)]">
+          {t(calibration === 'unavailable'
+            ? 'gto.feedback.unavailableNotice'
+            : 'gto.feedback.heuristicNotice')}
+        </div>
+      )}
+
+      {calibrated && (userEV !== undefined || optimalEV !== undefined) && (
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="rounded-lg bg-black/20 p-2">
             <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">{t('gto.feedback.yourEV')}</div>
@@ -151,7 +178,7 @@ export function GTOFeedback({
         </div>
       )}
 
-      {!isOptimal && evLoss < 0.3 && !feedback && (
+      {calibrated && !isOptimal && evLoss < 0.3 && !feedback && (
         <div className="text-xs text-[var(--sage-text)] font-display">{t('gto.feedback.nearOptimal')}</div>
       )}
 
@@ -175,7 +202,9 @@ export function GTOFeedback({
       {/* 频率条形图 — Raise=brass, Call=sage, Fold=clay（术语源自 actionTerms，英文单源） */}
       {gtoStrategy && (
         <div className="space-y-2">
-          <div className="text-xs font-medium opacity-80">{t('gto.feedback.frequencyDistribution')}</div>
+          <div className="text-xs font-medium opacity-80">
+            {t(calibrated ? 'gto.feedback.frequencyDistribution' : 'gto.feedback.referenceDistribution')}
+          </div>
           <div className="flex h-6 rounded overflow-hidden">
             {gtoStrategy.raise > 0 && (
               <div className="bg-[var(--brass-fill)] flex items-center justify-center text-[10px] font-bold text-[var(--brass-fill-ink)] transition-all font-numeric" style={{ width: `${gtoStrategy.raise * 100}%` }}>

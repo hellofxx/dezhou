@@ -160,6 +160,39 @@ describe('GTOFeedback 五级显示（提供 feedback）', () => {
   });
 });
 
+describe('GTOFeedback 非标定场景', () => {
+  it('启发式场景隐藏 EV 与五级评级，展示参考动作与说明', () => {
+    renderFeedback({
+      isOptimal: false,
+      evLoss: 3,
+      calibration: 'heuristic',
+      recommendedAction: 'raise 2.5BB',
+      gtoStrategy: { fold: 0, call: 0.2, raise: 0.8, raiseAmount: 2.5 },
+      explanation: 'heuristic-explanation',
+    });
+
+    expect(screen.getByText('偏离参考策略')).toBeTruthy();
+    expect(screen.getByText('参考动作')).toBeTruthy();
+    expect(screen.getByText('raise 2.5BB')).toBeTruthy();
+    expect(screen.getByText('参考频率分布')).toBeTruthy();
+    expect(screen.getByText(/不提供精确 EV/)).toBeTruthy();
+    expect(screen.queryByText('3.00 BB')).toBeNull();
+    expect(screen.queryByText('次优决策')).toBeNull();
+  });
+
+  it('无可用数据时展示不可用说明', () => {
+    renderFeedback({
+      isOptimal: false,
+      evLoss: 0,
+      calibration: 'unavailable',
+      recommendedAction: 'fold',
+    });
+
+    expect(screen.getByText(/无可用策略数据/)).toBeTruthy();
+    expect(screen.getByText('参考动作')).toBeTruthy();
+  });
+});
+
 describe('GTOFeedback 频率条与 Exploit 建议', () => {
   it('渲染 GTO 频率条、百分比与建议加注大小', () => {
     const { container } = renderFeedback({

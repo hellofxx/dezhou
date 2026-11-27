@@ -231,6 +231,36 @@ describe('GTOSessionPage 单步场景', () => {
   });
 });
 
+describe('GTOSessionPage 标定与动作合法性', () => {
+  it('非标定配置隐藏 EV 与五级评级，展示参考口径', () => {
+    store().startSession([
+      { ...makeScenario('heuristic', [FOLD_OPTIMAL]), playerCount: 9 },
+    ]);
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Fold' }));
+
+    expect(screen.getByText('与参考策略一致')).toBeTruthy();
+    expect(screen.getByText(/启发式参考/)).toBeTruthy();
+    expect(screen.queryByText('最优决策！')).toBeNull();
+    expect(screen.queryByText(/EV 损失/)).toBeNull();
+  });
+
+  it('BB 无下注时展示 Check 并提交 Check', () => {
+    store().startSession([
+      {
+        ...makeScenario('bb-check', [FOLD_OPTIMAL]),
+        position: Position.BB,
+      },
+    ]);
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Check' }));
+
+    expect(store().session!.decisions[0]!.userAction.action).toBe(ActionType.Check);
+  });
+});
+
 describe('GTOSessionPage 多步场景', () => {
   it('首节点继续后切到下一节点，仅首节点记录 ELO/SRS/Emotion', () => {
     store().startSession([makeScenario('multi', [FOLD_OPTIMAL, SECOND_NODE])]);

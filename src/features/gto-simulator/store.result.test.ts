@@ -13,7 +13,7 @@ import { Suit, Rank } from '@/shared/types/poker';
 import { ActionType } from '@/shared/types/action';
 import type { Decision } from '@/shared/types/action';
 import { Position } from '@/shared/types/position';
-import type { Scenario, DecisionNode, GTODecision } from './types';
+import type { Scenario, DecisionNode, GTODecision, StrategyCalibration } from './types';
 import { useGTOSimulatorStore } from './store';
 import { getPreflopHandStrategy } from './utils/spotKey';
 import { estimatePostflopStrategy, boardToFlat } from './utils/postflopStrategy';
@@ -73,7 +73,12 @@ function makeNode(id: string): DecisionNode {
   };
 }
 
-function makeDecision(scenarioId: string, evLoss: number, isOptimal = evLoss === 0): GTODecision {
+function makeDecision(
+  scenarioId: string,
+  evLoss: number,
+  isOptimal = evLoss === 0,
+  calibration: StrategyCalibration = 'calibrated'
+): GTODecision {
   return {
     scenarioId,
     userAction: FOLD,
@@ -81,6 +86,7 @@ function makeDecision(scenarioId: string, evLoss: number, isOptimal = evLoss ===
     evLoss,
     isOptimal,
     timeTaken: 100,
+    calibration,
   };
 }
 
@@ -192,6 +198,42 @@ describe('gto-simulator store 结果聚合', () => {
     const worst = store().lastResult!.worstSpots;
     expect(worst.map((spot) => spot.scenario.id)).toEqual(['s1', 's2']);
     expect(worst.map((spot) => spot.evLoss)).toEqual([3, 1]);
+  });
+
+  it('结果按决策可信度聚合：全标定 / 混合 / 全不可用', () => {
+    store().startSession([makePreflopScenario('cal')]);
+    useGTOSimulatorStore.setState({
+      session: { ...store().session!, decisions: [makeDecision('cal', 0, true, 'calibrated')] },
+    });
+    store().endSession();
+    expect(store().lastResult).toMatchObject({
+      calibration: 'calibrated',
+      calibratedDecisions: 1,
+      unavailableDecisions: 0,
+    });
+
+    store().startSession([makePreflopScenario('mix')]);
+    useGTOSimulatorStore.setState({
+      session: {
+        ...store().session!,
+        decisions: [
+          makeDecision('mix', 0, true, 'calibrated'),
+          makeDecision('mix', 1, false, 'heuristic'),
+        ],
+      },
+    });
+    store().endSession();
+    expect(store().lastResult).toMatchObject({ calibration: 'heuristic', calibratedDecisions: 1 });
+
+    store().startSession([makePreflopScenario('none')]);
+    useGTOSimulatorStore.setState({
+      session: { ...store().session!, decisions: [makeDecision('none', 0, true, 'unavailable')] },
+    });
+    store().endSession();
+    expect(store().lastResult).toMatchObject({
+      calibration: 'unavailable',
+      unavailableDecisions: 1,
+    });
   });
 
   it('全对时 worstSpots 不展示零损失决策', () => {

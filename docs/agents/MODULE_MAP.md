@@ -17,7 +17,7 @@
 
 | 模块 | 入口组件 | store | i18n 模块 | 测试数 | 允许跨模块引用 | 组件数 |
 |---|---|---|---|---|---|---|
-| `gto-simulator` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 26 | `progress` | 21 |
+| `gto-simulator` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 29 | `progress` | 21 |
 | `hand-history` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 28 | — | 23 |
 | `help-center` | `HelpHome` | — | `help` | 6 | — | 12 |
 | `onboarding` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |

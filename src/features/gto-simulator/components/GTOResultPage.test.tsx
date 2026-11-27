@@ -10,7 +10,7 @@
 
 import { describe, it, expect, afterEach, beforeEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import { MemoryRouter, useLocation } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import type { Card } from '@/shared/types/poker';
 import { Suit, Rank } from '@/shared/types/poker';
 import { ActionType } from '@/shared/types/action';
@@ -58,6 +58,9 @@ const RESULT: GTOResult = {
   worstSpots: [],
   accuracy: 0.75,
   totalTime: 60000,
+  calibration: 'calibrated',
+  calibratedDecisions: 20,
+  unavailableDecisions: 0,
 };
 
 function LocationProbe() {
@@ -65,10 +68,13 @@ function LocationProbe() {
   return <div data-testid="location">{location.pathname}</div>;
 }
 
-function renderResult() {
+function renderResult(path = '/gto-simulator/result/gto-42') {
   return render(
-    <MemoryRouter initialEntries={['/gto-simulator/result/gto-42']}>
-      <GTOResultPage />
+    <MemoryRouter initialEntries={[path]}>
+      <Routes>
+        <Route path="/gto-simulator" element={null} />
+        <Route path="/gto-simulator/result/:sessionId" element={<GTOResultPage />} />
+      </Routes>
       <LocationProbe />
     </MemoryRouter>,
   );
@@ -105,6 +111,14 @@ describe('GTOResultPage 空态', () => {
     fireEvent.click(screen.getByRole('button', { name: '返回主页' }));
     expect(screen.getByTestId('location').textContent).toBe('/gto-simulator');
   });
+
+  it('路由 sessionId 与当前结果不一致时展示无数据', () => {
+    useGTOSimulatorStore.setState({ lastResult: RESULT });
+    renderResult('/gto-simulator/result/other-session');
+
+    expect(screen.getByText('没有结果数据')).toBeTruthy();
+    expect(screen.queryByText('训练完成！')).toBeNull();
+  });
 });
 
 describe('GTOResultPage 结果摘要', () => {
@@ -127,6 +141,35 @@ describe('GTOResultPage 结果摘要', () => {
     // 矩阵跟随会话 spot（无会话时回落 config 位置）
     expect(screen.getByText('BTN GTO 策略矩阵 (btn_open)')).toBeTruthy();
     expect(container.querySelectorAll('[title]')).toHaveLength(169);
+  });
+
+  it('启发式结果不展示 EV 汇总与最差场景，改用参考口径', () => {
+    const spot = makeScenario('worst', Position.CO);
+    useGTOSimulatorStore.setState({
+      lastResult: {
+        ...RESULT,
+        calibration: 'heuristic',
+        calibratedDecisions: 0,
+        worstSpots: [{ scenario: spot, evLoss: 3 }],
+      },
+    });
+    renderResult();
+
+    expect(screen.getByText('本次包含启发式场景，不展示精确 EV 汇总。')).toBeTruthy();
+    expect(screen.queryByText('12.3 BB/100')).toBeNull();
+    expect(screen.queryByText('最需要改进的 Spots')).toBeNull();
+    expect(screen.getByText('与参考一致')).toBeTruthy();
+    expect(screen.getByText('偏离参考')).toBeTruthy();
+  });
+
+  it('无可用数据的结果展示不可用说明', () => {
+    useGTOSimulatorStore.setState({
+      lastResult: { ...RESULT, calibration: 'unavailable', unavailableDecisions: 20 },
+    });
+    renderResult();
+
+    expect(screen.getByText('本次没有可用策略数据，无法生成偏差结论。')).toBeTruthy();
+    expect(screen.queryByText('12.3 BB/100')).toBeNull();
   });
 
   it('「再练一次」跳回模块首页', () => {

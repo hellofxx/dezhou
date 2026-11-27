@@ -103,16 +103,34 @@ describe('gtoWorker calculateEV', () => {
 });
 
 describe('gtoWorker batchAnalyze（五级评级链路）', () => {
-  it('用户动作与 GTO 推荐一致 → evLoss 0 / grade best', async () => {
+  it('用户动作与 GTO 推荐一致 → evLoss 0 / grade best / available true', async () => {
     await loadWorker();
     // AA 在 BTN 的推荐动作是 raise
     dispatch('batchAnalyze', [{ id: 'h1', hand: 'AA', position: 'BTN', action: 'raise', street: 'preflop' }]);
 
-    const [result] = lastResult<Array<{ id: string; gtoAction: string; evLoss: number; grade: string }>>();
+    const [result] = lastResult<Array<{ id: string; gtoAction: string; evLoss: number; grade: string; available: boolean }>>();
     expect(result!.id).toBe('h1');
     expect(result!.gtoAction).toBe('raise');
     expect(result!.evLoss).toBe(0);
     expect(result!.grade).toBe('best');
+    // 启发式结论必须显式标记可用；缺失该标记时消费方会按不可用处理
+    expect(result!.available).toBe(true);
+  });
+
+  it('每条结果都带 available:true（启发式成功路径不返回不可用哨兵）', async () => {
+    await loadWorker();
+    dispatch('batchAnalyze', [
+      { id: 'a1', hand: 'AA', position: 'BTN', action: 'fold', street: 'preflop' },
+      { id: 'a2', hand: '72o', position: 'UTG', action: 'call', street: 'preflop' },
+    ]);
+
+    const results = lastResult<Array<{ available: boolean; grade: string; gtoAction: string }>>();
+    expect(results).toHaveLength(2);
+    for (const r of results) {
+      expect(r.available).toBe(true);
+      expect(r.grade).not.toBe('unavailable');
+      expect(r.gtoAction).not.toBe('unavailable');
+    }
   });
 
   it('用户动作与推荐差异越大 evLoss 越高（同手牌对比相邻档与跨档）', async () => {

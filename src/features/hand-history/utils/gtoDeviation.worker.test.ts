@@ -84,7 +84,7 @@ afterEach(() => {
 });
 
 describe('analyzeHandDeviations（Worker 不可用时的 fallback）', () => {
-  it('按街顺序提取 hero 决策，fallback 全部判为 best / 0 EV 损失', async () => {
+  it('按街顺序提取 hero 决策，fallback 全部标记不可用而非 best', async () => {
     const onProgress = vi.fn();
     const results = await mod.analyzeHandDeviations([makeHand('h1')], 'Hero', onProgress);
 
@@ -92,7 +92,12 @@ describe('analyzeHandDeviations（Worker 不可用时的 fallback）', () => {
     const deviations = results[0]!.deviations;
     expect(deviations.map(d => d.street)).toEqual(['preflop', 'flop', 'turn', 'river']);
     expect(deviations.map(d => d.action)).toEqual(['raise', 'check', 'call', 'all-in']);
-    expect(deviations.every(d => d.gtoAction === 'call' && d.evLoss === 0 && d.grade === 'best')).toBe(true);
+    expect(deviations.every(d =>
+      d.available === false &&
+      d.gtoAction === 'unavailable' &&
+      d.grade === 'unavailable' &&
+      d.evLoss === 0
+    )).toBe(true);
     expect(onProgress).toHaveBeenLastCalledWith(1, 1);
   });
 
@@ -161,6 +166,7 @@ describe('analyzeHandDeviations（Worker 可用）', () => {
         gtoAction: i % 2 === 0 ? 'raise' : 'fold',
         evLoss: i % 2 === 0 ? 0 : 3.5,
         grade: i % 2 === 0 ? 'best' : 'inaccuracy',
+        available: true,
       }));
       this.onmessage?.({ data: { id: msg.id, result } } as MessageEvent);
     }
@@ -187,12 +193,14 @@ describe('analyzeHandDeviations（Worker 可用）', () => {
     expect(deviations[1]!.evLoss).toBe(3.5);
   });
 
-  it('Worker 回传结果条数不足时按保守默认值补齐（call / 0 / best）', async () => {
+  it('Worker 回传结果条数不足时剩余决策标记不可用', async () => {
     vi.stubGlobal('Worker', EmptyReplyingWorker);
     await loadModule();
 
     const results = await mod.analyzeHandDeviations([makeHand('w2')], 'Hero');
-    expect(results[0]!.deviations.every(d => d.grade === 'best' && d.evLoss === 0 && d.gtoAction === 'call')).toBe(true);
+    expect(results[0]!.deviations.every(d =>
+      d.available === false && d.grade === 'unavailable' && d.gtoAction === 'unavailable'
+    )).toBe(true);
   });
 });
 
@@ -229,7 +237,7 @@ describe('analyzeHandDeviations（Worker 异常通道）', () => {
 
     expect(settled).toBe('resolved');
     expect(captured.value).not.toBeNull();
-    expect(captured.value![0]!.deviations.every(d => d.grade === 'best')).toBe(true);
+    expect(captured.value![0]!.deviations.every(d => d.available === false)).toBe(true);
   });
 
   it('Worker 无响应时 10s 超时走 fallback，不永久等待', async () => {
@@ -263,13 +271,15 @@ describe('getDeviationSummary 最差决策', () => {
       handId: 's1',
       analyzedAt: 0,
       deviations: [
-        { street: 'flop', action: 'call', gtoAction: 'raise', evLoss: 1, grade: 'inaccuracy' },
-        { street: 'river', action: 'fold', gtoAction: 'call', evLoss: 6, grade: 'blunder' },
+        { street: 'flop', action: 'call', gtoAction: 'raise', evLoss: 1, grade: 'inaccuracy', available: true },
+        { street: 'river', action: 'fold', gtoAction: 'call', evLoss: 6, grade: 'blunder', available: true },
       ],
     };
     expect(mod.getDeviationSummary(result).worstDecision).toEqual({ street: 'river', evLoss: 6 });
     expect(mod.getDeviationSummary({ handId: 's2', analyzedAt: 0, deviations: [] })).toEqual({
       totalDecisions: 0,
+      availableTotal: 0,
+      unavailableCount: 0,
       optimalCount: 0,
       averageEvLoss: 0,
       worstDecision: null,

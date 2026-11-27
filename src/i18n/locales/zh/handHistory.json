@@ -1,18 +1,26 @@
 {
   "deviation": {
-    "title": "GTO 偏差分析",
-    "decisions": "决策数",
+    "title": "策略偏差分析（启发式）",
+    "heuristicNote": "启发式估算，非求解器 GTO；分析不可用时不提供任何结论。",
+    "decisions": "可用决策数",
     "optimal": "最优率",
     "avgEvLoss": "平均 EV 损失",
     "worstDecision": "最差决策",
     "loading": "分析中...",
-    "loadingWithProgress": "GTO 分析中 ({{completed}}/{{total}})",
+    "loadingWithProgress": "策略分析中 ({{completed}}/{{total}})",
     "noData": "暂无偏差数据",
     "streetComparison": "逐街对比",
     "youActed": "你: {{action}}",
-    "gtoActed": "GTO: {{action}}",
+    "gtoActed": "建议: {{action}}",
     "avgLossPerHand": "平均每手损失 {{evLoss}}BB",
-    "worstOnStreet": "，最差决策出现在 {{street}}"
+    "worstOnStreet": "，最差决策出现在 {{street}}",
+    "partialUnavailable": "{{unavailable}}/{{total}} 条决策不可用，统计仅基于可用决策",
+    "unavailable": {
+      "title": "分析暂不可用",
+      "description": "分析引擎不可用或超时，本次不提供评级与 EV 结论。",
+      "count": "{{unavailable}} 条决策未分析",
+      "row": "本街分析不可用"
+    }
   },
   "dbError": {
     "unavailable": "存储不可用，请检查浏览器设置或隐私模式",

@@ -870,6 +870,14 @@ interface DailyRecommendation {
 
 11. **翻前金额口径**：`PreviousAction.amount` 对 raise 表示 raise-to 总额；`computeCallAmount` 扣除 hero 已投入（BB 1BB / SB 0.5BB / 既有 call 或 raise 金额）。无加注时 BB 为 0，其他位置补足到 1BB
 
+12. **策略可信度与动作合法性**（`utils/calibration.ts` / `utils/legalActions.ts`）：
+    - `getDecisionCalibration` 只把标准 6-max / 100BB 翻前策略表标为 `calibrated`；其他人数、筹码、短牌与全部翻后策略为 `heuristic`；翻前 spot 未覆盖为 `unavailable`
+    - 表内未列出的手牌按 100% fold 处理并补齐 169 手；禁止把缺项回退成 `40/30/30`
+    - 非标定场景不展示精确 EV / 五级评级，会话页与结果页改用「参考策略」口径；结果汇总只在全部决策标定时展示 EV 与 worstSpots
+    - 混合策略中任一正频率动作（raise 尺寸不超过建议尺寸）视为最优；零频率或超注动作至少记 0.5BB 损失
+    - `getLegalActionContext` 统一给出 callAmount / 可过牌 / 最小与最大加注；ActionSelector 据此渲染 Check / Call，并在最小加注超过筹码时禁用 Raise
+    - 结果路由校验 `:sessionId` 与内存结果一致；结果矩阵为只读，移动端使用 11px 字号与横向滚动
+
 ### 5.4 Hand History（手牌历史）
 
 **模块职责**：导入、存储、回放和分析历史手牌数据。
@@ -920,6 +928,8 @@ interface DailyRecommendation {
    - `annotations: Record<string, string>` — 键为 `"{street}_{actionIndex}"` 或自定义标识
    - 标注随 HandHistory 一起持久化到 IndexedDB
    - 在回放任意时刻可添加/查看标注
+
+5. **策略偏差分析（启发式）**：Worker 仅按手牌与位置估算，board / pot / amount 未参与；UI 标题与说明明确为启发式参考，不宣称求解器 GTO。每条结果携带 `available`；Worker 不可用、崩溃、超时或回传不足时为 false，`getDeviationSummary` 只对可用项计算最优率与平均损失，失败路径禁止补成 best
 
 ### 5.5 Progress Tracking（进度追踪）
 

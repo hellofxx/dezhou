@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Target, Clock, TrendingDown, AlertTriangle } from 'lucide-react';
@@ -13,7 +13,9 @@ import { MOTION_DURATION } from '@/shared/utils/motion';
 export default function GTOResultPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { sessionId } = useParams<{ sessionId: string }>();
   const { lastResult, config, session } = useGTOSimulatorStore();
+  const resultMatchesRoute = !lastResult || !sessionId || lastResult.sessionId === sessionId;
 
   // P1C-14: 按会话实际 spotKey 展示矩阵（不再固定 pos_open）
   const sessionSpotKey = (() => {
@@ -32,7 +34,7 @@ export default function GTOResultPage() {
   })();
   const allStrategies = getStrategiesForSpot(sessionSpotKey);
 
-  if (!lastResult) {
+  if (!lastResult || !resultMatchesRoute) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className="text-[var(--ivory-muted)] mb-4">{t('gto.result.noData')}</div>
@@ -49,6 +51,7 @@ export default function GTOResultPage() {
   const timeSeconds = Math.round(lastResult.totalTime / 1000);
   // P1C-24: 除零防御
   const avgTimePerDecision = Math.round(timeSeconds / (lastResult.scenarios || 1));
+  const calibrated = lastResult.calibration === 'calibrated';
 
   return (
     <ResultSummary
@@ -61,8 +64,8 @@ export default function GTOResultPage() {
       accuracy={lastResult.accuracy}
       stats={[
         { icon: <Target className="w-4 h-4" />, label: t('gto.result.statTotalScenarios'), value: `${lastResult.scenarios}` },
-        { icon: <span className="text-[var(--paper-success)] text-sm font-bold">✓</span>, label: t('gto.result.statOptimal'), value: `${lastResult.optimalDecisions}` },
-        { icon: <span className="text-[var(--paper-danger)] text-sm font-bold">✗</span>, label: t('gto.result.statNonOptimal'), value: `${lastResult.scenarios - lastResult.optimalDecisions}` },
+        { icon: <span className="text-[var(--paper-success)] text-sm font-bold">✓</span>, label: t(calibrated ? 'gto.result.statOptimal' : 'gto.result.statReferenceMatched'), value: `${lastResult.optimalDecisions}` },
+        { icon: <span className="text-[var(--paper-danger)] text-sm font-bold">✗</span>, label: t(calibrated ? 'gto.result.statNonOptimal' : 'gto.result.statReferenceDeviated'), value: `${lastResult.scenarios - lastResult.optimalDecisions}` },
         { icon: <Clock className="w-4 h-4" />, label: t('gto.result.statAvgTime'), value: `${avgTimePerDecision}s` },
       ]}
       onRetry={() => navigate('/gto-simulator')}
@@ -70,20 +73,30 @@ export default function GTOResultPage() {
       retryLabel={t('gto.result.retry')}
       backLabel={t('gto.result.backHome')}
     >
+      {!calibrated && (
+        <div className="p-3 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)]">
+          {t(lastResult.calibration === 'unavailable'
+            ? 'gto.result.calibrationUnavailable'
+            : 'gto.result.calibrationHeuristic')}
+        </div>
+      )}
+
       {/* EV Loss highlight */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: MOTION_DURATION.fast, delay: 0.8 }}
-        className="flex items-center justify-center gap-2 p-3 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)]"
-      >
-        <TrendingDown className="w-4 h-4 text-[var(--brass-bright)]" />
-        <span className="text-sm text-[var(--ivory-dim)]">{t('gto.result.evLossRate')}</span>
-        <span className="font-bold font-numeric text-[var(--brass-bright)]">{lastResult.evLossBB100.toFixed(1)} BB/100</span>
-      </motion.div>
+      {calibrated && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: MOTION_DURATION.fast, delay: 0.8 }}
+          className="flex items-center justify-center gap-2 p-3 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)]"
+        >
+          <TrendingDown className="w-4 h-4 text-[var(--brass-bright)]" />
+          <span className="text-sm text-[var(--ivory-dim)]">{t('gto.result.evLossRate')}</span>
+          <span className="font-bold font-numeric text-[var(--brass-bright)]">{lastResult.evLossBB100.toFixed(1)} BB/100</span>
+        </motion.div>
+      )}
 
       {/* Worst spots */}
-      {lastResult.worstSpots.length > 0 && (
+      {calibrated && lastResult.worstSpots.length > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -131,7 +144,7 @@ export default function GTOResultPage() {
             : t('gto.result.matrixTitle', { position: config.position })}
         </h2>
         {allStrategies ? (
-          <StrategyMatrix strategies={allStrategies} />
+          <StrategyMatrix strategies={allStrategies} readOnly />
         ) : (
           <div className="p-4 text-center text-sm text-[var(--ivory-muted)] border border-dashed border-[var(--walnut-border)] rounded-lg">
             {t('gto.result.noSpotData')}

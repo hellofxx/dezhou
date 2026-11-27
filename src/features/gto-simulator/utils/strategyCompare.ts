@@ -2,8 +2,7 @@ import type { Card } from '@/shared/types/poker';
 import type { Decision } from '@/shared/types/action';
 import { ActionType } from '@/shared/types/action';
 import i18n from '@/i18n/config';
-import type { HandStrategy, Scenario } from '../types';
-import { getOpponentProfile } from '@/shared/data/opponentProfiles';
+import type { HandStrategy } from '../types';
 // P1C-10：isOptimal 边界与五级反馈阈值统一（只读引用 shared 常量，不修改 shared）
 import { GRADE_THRESHOLDS } from '@/shared/types/decisionFeedback';
 
@@ -244,7 +243,19 @@ function calculateUserRaiseEV(
   return evAtGto - overshoot * (1 - heroEquity);
 }
 
-/** 统一的 EV 对比核心：userEV / optimalEV / evLoss（clamp ≥ 0，P1C-02） */
+function getActionFrequency(action: string, gtoStrategy: HandStrategy): number {
+  switch (action) {
+    case 'fold': return gtoStrategy.fold;
+    case 'call':
+    case 'check': return gtoStrategy.call;
+    case 'raise':
+    case 'allin':
+    case 'all-in': return gtoStrategy.raise;
+    default: return 0;
+  }
+}
+
+/** 统一的 EV 对比核心：支持频率内动作不产生损失，频率外动作至少记 0.5BB。 */
 function computeDecisionEVs(
   userAction: string,
   userAmount: number | undefined,
@@ -256,7 +267,12 @@ function computeDecisionEVs(
   const evFold = 0;
   const evCall = calculateEVFromAction('call', heroEquity, potSize, callAmount);
   const evRaise = calculateEVFromAction('raise', heroEquity, potSize, callAmount, gtoStrategy.raiseAmount ?? callAmount * 3);
-  const optimalEV = gtoStrategy.fold * evFold + gtoStrategy.call * evCall + gtoStrategy.raise * evRaise;
+  const supportEVs = [
+    gtoStrategy.fold > 0 ? evFold : null,
+    gtoStrategy.call > 0 ? evCall : null,
+    gtoStrategy.raise > 0 ? evRaise : null,
+  ].filter((ev): ev is number => ev !== null);
+  const optimalEV = supportEVs.length > 0 ? Math.max(...supportEVs) : Math.max(evFold, evCall, evRaise);
 
   let userEV: number;
   switch (userAction) {
@@ -269,9 +285,14 @@ function computeDecisionEVs(
     default: userEV = evFold;
   }
 
-  // P1C-02：clamp ≥ 0——简化 EV 模型下用户动作 EV 可能略高于混合策略均值，
-  // 负损失会被 calculateGrade 判为 best，形成"越激进越优"的剥削通道
-  const evLoss = Math.max(0, Math.round((optimalEV - userEV) * 1000) / 1000);
+  const raiseTo = userAmount ?? gtoStrategy.raiseAmount ?? callAmount * 3;
+  const sizingInSupport = !['raise', 'allin', 'all-in'].includes(userAction)
+    || raiseTo <= (gtoStrategy.raiseAmount ?? callAmount * 3) + 0.01;
+  const inSupport = getActionFrequency(userAction, gtoStrategy) > 0 && sizingInSupport;
+  const rawLoss = Math.max(0, optimalEV - userEV);
+  const evLoss = inSupport
+    ? 0
+    : Math.round(Math.max(GRADE_THRESHOLDS.correct, rawLoss) * 1000) / 1000;
   return { userEV, optimalEV, evLoss };
 }
 
@@ -394,58 +415,4 @@ export function getDominantAction(strategy: HandStrategy): ActionType | null {
   if (strategy.call >= 0.95) return ActionType.Call;
   if (strategy.fold >= 0.95) return ActionType.Fold;
   return null;
-}
-
-// ─── Exploit 调整 ───────────────────────────────
-
-/**
- * 根据对手类型调整 GTO 策略，生成剥削性策略
- */
-export function adjustForOpponent(
-  gtoStrategy: HandStrategy,
-  opponentId: string,
-  _scenario: Scenario
-): HandStrategy {
-  const opponent = getOpponentProfile(opponentId);
-  if (!opponent || opponent.id === 'unknown') return gtoStrategy;
-
-  const clamp = (v: number) => Math.max(0, Math.min(1, v));
-
-  // 面对 Nit：更频繁地偷盲（fold to steal 高）
-  if (opponent.id === 'nit') {
-    const raise = clamp(gtoStrategy.raise + 0.15);
-    const fold = clamp(gtoStrategy.fold - 0.10);
-    const call = clamp(1 - raise - fold);
-    return { ...gtoStrategy, raise, call, fold };
-  }
-
-  // 面对 Maniac：更多 call（他的范围太宽）
-  if (opponent.id === 'maniac') {
-    const call = clamp(gtoStrategy.call + 0.15);
-    const fold = clamp(gtoStrategy.fold - 0.10);
-    const raise = clamp(1 - call - fold);
-    return { ...gtoStrategy, raise, call, fold };
-  }
-
-  // 面对 Calling Station：增加 value bet（raise+），减少 bluff（fold 略降，call 略降）
-  // CS 几乎不弃牌 → 减少 bluff 频率（fold 降低 = 更愿意继续）
-  // CS 加注即强牌 → 中等牌可适当 fold（但 CS 加注频率极低，主要靠 value bet 获利）
-  // 正确策略：纯价值下注，加大尺度，绝不诈唬 → raise 增加，call 略降，fold 不变或略降
-  if (opponent.id === 'calling_station') {
-    const fold = clamp(gtoStrategy.fold - 0.05);   // 略降低 fold（CS 不 bluff，可多 call 中等牌）
-    const raise = clamp(gtoStrategy.raise + 0.15); // 增加 value bet（CS 会用弱牌跟注）
-    const call = clamp(1 - raise - fold);          // 归一化：call 略降
-    return { ...gtoStrategy, raise, call, fold };
-  }
-
-  // 面对 LAG：稍微增加 call 频率（他 bluff 多）
-  if (opponent.id === 'lag') {
-    const call = clamp(gtoStrategy.call + 0.08);
-    const fold = clamp(gtoStrategy.fold - 0.05);
-    const raise = clamp(1 - call - fold);
-    return { ...gtoStrategy, raise, call, fold };
-  }
-
-  // TAG 接近 GTO，微调即可
-  return gtoStrategy;
 }

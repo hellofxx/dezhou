@@ -96,27 +96,56 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
 
   if (!result || !summary) return null;
 
-  const { totalDecisions, optimalCount, averageEvLoss, worstDecision } = summary;
-  const optimalPct = totalDecisions > 0 ? Math.round((optimalCount / totalDecisions) * 100) : 0;
+  const { totalDecisions, availableTotal, unavailableCount, optimalCount, averageEvLoss, worstDecision } = summary;
+  // 统计分母只含可用决策：不可用项既不进最优率，也不进平均 / 最差 EV
+  const optimalPct = availableTotal > 0 ? Math.round((optimalCount / availableTotal) * 100) : 0;
+  const hasAvailable = availableTotal > 0;
 
   return (
     <div className="space-y-3">
-      {/* Header */}
-      <div className="flex items-center gap-2">
-        <Target size={14} className="text-[var(--brass-bright)]" />
-        <span className="text-xs font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('handHistory.deviation.title')}</span>
+      {/* Header + 诚实口径说明：启发式估算，非求解器 GTO */}
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <Target size={14} className="text-[var(--brass-bright)]" />
+          <span className="text-xs font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('handHistory.deviation.title')}</span>
+        </div>
+        <p className="text-xs leading-relaxed text-[var(--ivory-muted)]">{t('handHistory.deviation.heuristicNote')}</p>
       </div>
 
-      {/* Stats grid */}
-      <div className="grid grid-cols-4 gap-2">
-        <StatBox label={t('handHistory.deviation.decisions')} value={totalDecisions} />
-        <StatBox label={t('handHistory.deviation.optimal')} value={`${optimalPct}%`} accent={optimalPct >= 70} />
-        <StatBox label={t('handHistory.deviation.avgEvLoss')} value={`${averageEvLoss}BB`} />
-        <StatBox
-          label={t('handHistory.deviation.worstDecision')}
-          value={worstDecision ? `${worstDecision.evLoss}BB` : '—'}
-        />
-      </div>
+      {hasAvailable ? (
+        <>
+          {/* Stats grid（仅可用决策） */}
+          <div className="grid grid-cols-4 gap-2">
+            <StatBox label={t('handHistory.deviation.decisions')} value={availableTotal} />
+            <StatBox label={t('handHistory.deviation.optimal')} value={`${optimalPct}%`} accent={optimalPct >= 70} />
+            <StatBox label={t('handHistory.deviation.avgEvLoss')} value={`${averageEvLoss}BB`} />
+            <StatBox
+              label={t('handHistory.deviation.worstDecision')}
+              value={worstDecision ? `${worstDecision.evLoss}BB` : '—'}
+            />
+          </div>
+
+          {unavailableCount > 0 && (
+            <p className="text-xs text-[var(--ivory-muted)]">
+              {t('handHistory.deviation.partialUnavailable', { unavailable: unavailableCount, total: totalDecisions })}
+            </p>
+          )}
+        </>
+      ) : (
+        <div
+          role="status"
+          className="flex items-start gap-2 px-2.5 py-2 rounded-lg bg-[var(--clay)]/8 border border-[var(--clay)]/20 text-xs text-[var(--ivory-dim)]"
+        >
+          <AlertTriangle size={13} className="text-[var(--clay-text)] shrink-0" />
+          <div className="space-y-1">
+            <p className="font-semibold">{t('handHistory.deviation.unavailable.title')}</p>
+            <p className="text-[var(--ivory-muted)]">{t('handHistory.deviation.unavailable.description')}</p>
+            <p className="text-[var(--ivory-muted)]">
+              {t('handHistory.deviation.unavailable.count', { unavailable: unavailableCount })}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Decision list */}
       {result.deviations.length > 0 && (
@@ -125,35 +154,41 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
             {t('handHistory.deviation.streetComparison')}
           </span>
           {result.deviations.map((d, i) => {
+            const available = d.available === true;
             const cfg = GRADE_CONFIG[d.grade] ?? DEFAULT_GRADE;
-            const Icon = cfg.icon;
+            const Icon = available ? cfg.icon : AlertTriangle;
+            const color = available ? cfg.color : 'text-[var(--ivory-muted)]';
             return (
               <div
                 key={i}
                 className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-[var(--walnut-raised)]/30 border border-[var(--walnut-border)]/60 text-xs"
               >
                 <div className="flex items-center gap-2">
-                  <Icon size={12} className={cfg.color} />
+                  <Icon size={12} className={color} />
                   <span className="text-[var(--ivory-dim)] capitalize">{d.street}</span>
                   <span className="text-[var(--ivory-muted)]">{t('handHistory.deviation.youActed', { action: d.action })}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[var(--ivory-muted)]">{t('handHistory.deviation.gtoActed', { action: d.gtoAction })}</span>
-                  {d.evLoss > 0 && (
-                    <span className={`font-numeric font-semibold ${cfg.color}`}>
-                      -{d.evLoss}BB
-                    </span>
-                  )}
-                  <span className={`text-[10px] ${cfg.color}`}>{t(cfg.labelKey)}</span>
-                </div>
+                {available ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[var(--ivory-muted)]">{t('handHistory.deviation.gtoActed', { action: d.gtoAction })}</span>
+                    {d.evLoss > 0 && (
+                      <span className={`font-numeric font-semibold ${cfg.color}`}>
+                        -{d.evLoss}BB
+                      </span>
+                    )}
+                    <span className={`text-[10px] ${cfg.color}`}>{t(cfg.labelKey)}</span>
+                  </div>
+                ) : (
+                  <span className="text-xs text-[var(--ivory-muted)]">{t('handHistory.deviation.unavailable.row')}</span>
+                )}
               </div>
             );
           })}
         </div>
       )}
 
-      {/* Overall assessment */}
-      {averageEvLoss > 0 && (
+      {/* Overall assessment（仅可用决策且确有损失时） */}
+      {hasAvailable && averageEvLoss > 0 && (
         <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[var(--clay)]/8 border border-[var(--clay)]/20 text-xs text-[var(--ivory-dim)]">
           <TrendingDown size={13} className="text-[var(--clay-text)] shrink-0" />
           <span>

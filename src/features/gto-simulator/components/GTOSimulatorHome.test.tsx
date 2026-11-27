@@ -42,6 +42,9 @@ const RESULT: GTOResult = {
   worstSpots: [],
   accuracy: 0.75,
   totalTime: 120000,
+  calibration: 'calibrated',
+  calibratedDecisions: 20,
+  unavailableDecisions: 0,
 };
 
 function findButton(container: HTMLElement, text: string): HTMLButtonElement | undefined {
@@ -101,6 +104,17 @@ describe('GTOSimulatorHome 上次训练摘要', () => {
     expect(screen.getByText('75%')).toBeTruthy();
     expect(screen.getByText('最优决策率')).toBeTruthy();
     expect(screen.getByText('20 个决策 · EV 损失率 12.34 BB/100')).toBeTruthy();
+  });
+
+  it('启发式结果摘要使用参考口径且不展示 EV', () => {
+    useGTOSimulatorStore.setState({
+      lastResult: { ...RESULT, calibration: 'heuristic', calibratedDecisions: 0 },
+    });
+    renderHome();
+
+    expect(screen.getByText('参考一致率')).toBeTruthy();
+    expect(screen.getByText('20 个决策 · 启发式参考')).toBeTruthy();
+    expect(screen.queryByText(/EV 损失率/)).toBeNull();
   });
 
   it('点击「查看完整结果」跳转到结果页', () => {

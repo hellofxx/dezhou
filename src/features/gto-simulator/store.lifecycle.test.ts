@@ -123,6 +123,7 @@ describe('gto-simulator store 会话启动与答题', () => {
         optimalEV: 0,
         heroEquity: 0.5,
         gtoStrategy: null,
+        calibration: 'calibrated',
       },
       showFeedback: true,
       currentDecision: FOLD,

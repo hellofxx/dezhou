@@ -34,7 +34,7 @@ const BASELINE: Readonly<Record<string, number>> = {
   'src/features/gto-simulator/components/DecisionTree.tsx': 6,
   'src/features/gto-simulator/components/GTOFeedback.tsx': 13,
   'src/features/gto-simulator/components/GTOSessionPage.tsx': 1,
-  'src/features/gto-simulator/components/StrategyMatrix.tsx': 4,
+  'src/features/gto-simulator/components/StrategyMatrix.tsx': 2,
   'src/features/hand-history/components/ActionLog.tsx': 1,
   'src/features/hand-history/components/GtoDeviationPanel.tsx': 3,
   'src/features/hand-history/components/HandHistoryList.tsx': 2,

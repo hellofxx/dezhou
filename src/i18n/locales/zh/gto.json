@@ -39,7 +39,15 @@
     "raise": "加注",
     "fold": "弃牌",
     "explanationOptimal": "好的决策！GTO 建议这里以较高频率 {{action}}，EV 损失仅 {{evLoss}} BB。",
-    "explanationMixed": "GTO 建议这里 {{parts}}。你选择了 {{userAction}}，EV 损失 {{evLoss}} BB。"
+    "explanationMixed": "GTO 建议这里 {{parts}}。你选择了 {{userAction}}，EV 损失 {{evLoss}} BB。",
+    "referenceMatched": "与参考策略一致",
+    "referenceDeviated": "偏离参考策略",
+    "recommendedAction": "参考动作",
+    "referenceDistribution": "参考频率分布",
+    "heuristicNotice": "该场景为启发式参考，不提供精确 EV 或五级评级。",
+    "unavailableNotice": "该 spot 无可用策略数据，仅显示参考动作。",
+    "heuristicExplanation": "当前场景使用启发式策略估算，请结合牌理判断，不应视为求解器 GTO 结论。",
+    "unavailableExplanation": "该场景没有可用的策略数据，无法给出可靠的 GTO 评价。"
   },
   "setup": {
     "title": "场景设置",
@@ -151,6 +159,8 @@
     "statTotalScenarios": "总决策数",
     "statOptimal": "最优决策",
     "statNonOptimal": "非最优",
+    "statReferenceMatched": "与参考一致",
+    "statReferenceDeviated": "偏离参考",
     "statAvgTime": "平均用时",
     "evLossRate": "EV 损失率：",
     "worstSpots": "最需要改进的 Spots",
@@ -164,12 +174,16 @@
     "gradePoor": "💡 建议从 GTO 基础课程开始。",
     "restart": "重新训练",
     "backHome": "返回首页",
-    "noData": "没有结果数据"
+    "noData": "没有结果数据",
+    "calibrationHeuristic": "本次包含启发式场景，不展示精确 EV 汇总。",
+    "calibrationUnavailable": "本次没有可用策略数据，无法生成偏差结论。"
   },
   "home": {
     "lastTraining": "上次训练",
     "optimalRate": "最优决策率",
+    "referenceRate": "参考一致率",
     "scenariosCount": "{{count}} 个决策 · EV 损失率 {{ev}} BB/100",
+    "scenariosCountReference": "{{count}} 个决策 · 启发式参考",
     "scenarioCount": "个场景",
     "title": "GTO 决策模拟器",
     "subtitle": "学习博弈论最优策略，提升你的扑克决策能力",

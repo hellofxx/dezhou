@@ -5,6 +5,10 @@
  *  - 13×13 = 169 手全量渲染与图例文案（动作词取 actionTerms 英文单源）
  *  - 频率 title 提示、无数据兜底 title
  *  - hover / click 回调与高亮 class
+ *  - readOnly（结果页复盘）：无 role=button / tabIndex / aria-current、click 不回调、
+ *    无 cursor-pointer，仍保留 title 频率说明
+ *  - DESIGN.md §13.3.3：格子 / 图例 11px + 容器 overflow-x-auto 横向滚动
+ *  - roving tabindex 键盘导航仅交互态生效
  */
 
 import { describe, it, expect, vi, afterEach } from 'vitest';
@@ -119,5 +123,90 @@ describe('StrategyMatrix 交互', () => {
     );
 
     expect(container.querySelector('.matrix-custom')).not.toBeNull();
+  });
+});
+
+describe('StrategyMatrix 只读态（结果页复盘）', () => {
+  it('readOnly 不挂 role / tabIndex / aria-current，click 不回调且无 cursor-pointer', () => {
+    const onCellClick = vi.fn();
+    const { container } = render(
+      <StrategyMatrix strategies={AA_PURE_RAISE} readOnly onCellClick={onCellClick} />,
+    );
+    const aa = cellByHand(container, 'AA');
+
+    expect(aa.getAttribute('role')).toBeNull();
+    expect(aa.getAttribute('tabindex')).toBeNull();
+    expect(aa.getAttribute('aria-current')).toBeNull();
+    expect(aa.className).not.toContain('cursor-pointer');
+    // 169 格均不参与 roving focus
+    expect(container.querySelectorAll('[role="button"]')).toHaveLength(0);
+    expect(cells(container)).toHaveLength(169);
+
+    fireEvent.click(aa);
+    fireEvent.click(cellByHand(container, 'KK'));
+    expect(onCellClick).not.toHaveBeenCalled();
+  });
+
+  it('readOnly 保留 title 频率说明（有数据 / 无数据两种）', () => {
+    const { container } = render(<StrategyMatrix strategies={AA_PURE_RAISE} readOnly />);
+
+    expect(cellByHand(container, 'AA').getAttribute('title')).toBe('AA: R100% C0% F0%');
+    expect(cellByHand(container, '72o').getAttribute('title')).toBe('72o');
+  });
+
+  it('readOnly 下键盘导航不生效（无 tabIndex 停靠点、无 aria-current 迁移）', () => {
+    const { container } = render(<StrategyMatrix strategies={AA_PURE_RAISE} readOnly />);
+    const aa = cellByHand(container, 'AA');
+
+    fireEvent.keyDown(aa, { key: 'ArrowRight' });
+
+    const all = cells(container);
+    expect(all.filter((node) => node.getAttribute('tabindex') === '0')).toHaveLength(0);
+    expect(all.filter((node) => node.getAttribute('aria-current') === 'true')).toHaveLength(0);
+  });
+
+  it('交互态保留 roving tabindex 键盘导航（默认非只读）', () => {
+    const { container } = render(<StrategyMatrix strategies={AA_PURE_RAISE} />);
+    const aa = cellByHand(container, 'AA');
+    const aks = cellByHand(container, 'AKs');
+
+    expect(aa.getAttribute('role')).toBe('button');
+    expect(aa.getAttribute('tabindex')).toBe('0');
+    expect(aa.getAttribute('aria-current')).toBe('true');
+    expect(aa.className).toContain('cursor-pointer');
+
+    fireEvent.keyDown(aa, { key: 'ArrowRight' });
+
+    expect(aks.getAttribute('tabindex')).toBe('0');
+    expect(aks.getAttribute('aria-current')).toBe('true');
+    expect(aa.getAttribute('tabindex')).toBe('-1');
+    expect(aa.getAttribute('aria-current')).toBeNull();
+  });
+});
+
+describe('StrategyMatrix 可读性约束（DESIGN.md §13.3.3）', () => {
+  it('格子用 11px 字号，图例功能微文字不少于 11px', () => {
+    const { container } = render(<StrategyMatrix strategies={AA_PURE_RAISE} />);
+
+    expect(cellByHand(container, 'AA').className).toContain('text-[11px]');
+
+    const raiseLabel = screen.getByText('Raise');
+    const legend = raiseLabel.closest('div')?.parentElement;
+    expect(legend?.className).toContain('text-[11px]');
+    // 图例功能性微文字不再出现 10px
+    expect(legend?.className).not.toContain('text-[10px]');
+  });
+
+  it('矩阵容器可横向滚动且保持最小可读宽度', () => {
+    const { container } = render(<StrategyMatrix strategies={AA_PURE_RAISE} />);
+
+    const scroller = container.querySelector('.overflow-x-auto');
+    expect(scroller).not.toBeNull();
+
+    const matrix = scroller!.firstElementChild as HTMLElement | null;
+    expect(matrix).not.toBeNull();
+    expect(matrix!.className).toContain('min-w-[600px]');
+    // 169 格全部落在可滚动容器内
+    expect(matrix!.querySelectorAll('[title]')).toHaveLength(169);
   });
 });

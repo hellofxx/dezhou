@@ -39,7 +39,15 @@
     "raise": "Raise",
     "fold": "Fold",
     "explanationOptimal": "Good decision! GTO suggests {{action}} here at a high frequency — EV loss is only {{evLoss}} BB.",
-    "explanationMixed": "GTO suggests {{parts}} here. You chose {{userAction}}, EV loss {{evLoss}} BB."
+    "explanationMixed": "GTO suggests {{parts}} here. You chose {{userAction}}, EV loss {{evLoss}} BB.",
+    "referenceMatched": "Matches the reference strategy",
+    "referenceDeviated": "Deviates from the reference strategy",
+    "recommendedAction": "Reference action",
+    "referenceDistribution": "Reference frequency",
+    "heuristicNotice": "This spot uses a heuristic reference. Precise EV and five-level grading are not shown.",
+    "unavailableNotice": "No strategy data is available for this spot — only a reference action is shown.",
+    "heuristicExplanation": "This spot uses a heuristic estimate. Treat it as guidance, not a solver-backed GTO conclusion.",
+    "unavailableExplanation": "No strategy data is available, so no reliable GTO assessment can be shown."
   },
   "setup": {
     "title": "Scenario Setup",
@@ -151,6 +159,8 @@
     "statTotalScenarios": "Total Decisions",
     "statOptimal": "Optimal",
     "statNonOptimal": "Suboptimal",
+    "statReferenceMatched": "Reference match",
+    "statReferenceDeviated": "Reference deviation",
     "statAvgTime": "Avg Time",
     "evLossRate": "EV loss rate:",
     "worstSpots": "Spots to Improve",
@@ -164,12 +174,16 @@
     "gradePoor": "💡 Start with the GTO basics course.",
     "restart": "Train Again",
     "backHome": "Back to Home",
-    "noData": "No result data"
+    "noData": "No result data",
+    "calibrationHeuristic": "This session includes heuristic spots — precise EV summary is hidden.",
+    "calibrationUnavailable": "No strategy data was available for this session, so no deviation assessment is shown."
   },
   "home": {
     "lastTraining": "Last Training",
     "optimalRate": "Optimal Decision Rate",
+    "referenceRate": "Reference Match Rate",
     "scenariosCount": "{{count}} decisions · EV loss {{ev}} BB/100",
+    "scenariosCountReference": "{{count}} decisions · heuristic reference",
     "scenarioCount": "scenarios",
     "title": "GTO Decision Simulator",
     "subtitle": "Learn game-theoretic optimal strategy and sharpen your poker decisions",

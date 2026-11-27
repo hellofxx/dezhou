@@ -1,6 +1,8 @@
 import type { Card, HandNotation } from '@/shared/types/poker';
 import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
+import { GRID_RANKS } from '@/shared/constants/poker';
+import { getHandFromGrid } from '@/shared/utils/rangeParser';
 import { classifyHand } from '@/shared/utils/handClassifier';
 import type { HandStrategy, PreviousAction } from '../types';
 import preflopData from '../data/preflop-ranges.json';
@@ -65,16 +67,26 @@ export function resolveSpotKey(position: Position, previousActions?: PreviousAct
   return data[key] ? key : null;
 }
 
-/** 获取某 spot 的完整 169 手策略表（不存在返回 null） */
+/** 表内未列出的手牌即 100% fold；补齐 169 手，避免 UI 缺格与静默兜底。 */
 export function getStrategiesForSpot(spotKey: string | null): Record<HandNotation, HandStrategy> | null {
   if (!spotKey) return null;
   const data = (preflopData as PreflopData)[GAME_KEY];
-  return (data?.[spotKey] as Record<HandNotation, HandStrategy> | undefined) ?? null;
+  const spotData = data?.[spotKey] as Record<HandNotation, HandStrategy> | undefined;
+  if (!spotData) return null;
+
+  const strategies = {} as Record<HandNotation, HandStrategy>;
+  for (let row = 0; row < GRID_RANKS.length; row++) {
+    for (let col = 0; col < GRID_RANKS.length; col++) {
+      const hand = getHandFromGrid(row, col);
+      strategies[hand] = spotData[hand] ?? { fold: 1, call: 0, raise: 0 };
+    }
+  }
+  return strategies;
 }
 
 /**
  * 查询 preflop 场景下指定手牌的 GTO 策略。
- * 未覆盖场景 / 缺手牌数据时返回 null（P1C-03：调用方需显式 fallback，不得静默用 open 表）。
+ * 表内未列出的手牌按 100% fold 处理；spot 本身未覆盖时返回 null。
  */
 export function getPreflopHandStrategy(
   position: Position,
@@ -85,5 +97,5 @@ export function getPreflopHandStrategy(
   const spotData = getStrategiesForSpot(spotKey);
   if (!spotData) return null;
   const notation = classifyHand(heroHand[0], heroHand[1]);
-  return spotData[notation] ?? null;
+  return spotData[notation] ?? { fold: 1, call: 0, raise: 0 };
 }

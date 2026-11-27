@@ -21,6 +21,36 @@ import {
  *
  * 桌面用例不受影响：chromium project 通过 testIgnore 排除本文件。
  */
+test('移动端 GTO 会话可开始、关闭反馈后仍可继续', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+
+  await skipOnboarding(page);
+  await page.goto('/dezhou/gto-simulator');
+  await page.getByRole('button', { name: '开始 GTO 训练' }).click();
+  await expect(page).toHaveURL(/\/dezhou\/gto-simulator\/session\/active$/);
+
+  await page.getByRole('button', { name: 'Fold' }).click();
+  await expect(page.getByRole('dialog', { name: '答题反馈' })).toBeVisible();
+  await page.getByRole('button', { name: '关闭' }).click();
+
+  await expect(page.getByRole('button', { name: '查看反馈' })).toBeVisible();
+  await page.getByRole('button', { name: '查看反馈' }).click();
+  await expect(page.getByRole('dialog', { name: '答题反馈' })).toBeVisible();
+
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto('/dezhou/gto-simulator');
+  await page.getByRole('button', { name: 'Spot 练习' }).click();
+  const matrixScroller = page.locator('.overflow-x-auto').first();
+  await expect(matrixScroller).toBeVisible();
+  const matrixSize = await matrixScroller.evaluate((el) => ({
+    clientWidth: el.clientWidth,
+    scrollWidth: el.scrollWidth,
+  }));
+  expect(matrixSize.scrollWidth).toBeGreaterThan(matrixSize.clientWidth);
+
+  guard.assertClean();
+});
+
 test('移动端底栏五入口直达对应页面，帮助经顶栏按钮', async ({ page }) => {
   const guard = guardBrowserErrors(page);
 

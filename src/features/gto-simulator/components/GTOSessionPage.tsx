@@ -7,7 +7,7 @@ import { HandDisplay } from '@/shared/components/poker/HandDisplay';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { useScenarioEngine } from '../hooks/useScenarioEngine';
 import { useGTOComparison, useGtoEloRecorder, useGtoSrsRecorder, useGtoEmotionRecorder, buildGtoFeedback } from '../hooks/useGTOComparison';
-import { useGTOSimulatorStore, computeCallAmount } from '../store';
+import { useGTOSimulatorStore, getLegalActionContext } from '../store';
 import { ActionSelector } from './ActionSelector';
 import { GTOFeedback } from './GTOFeedback';
 import { DecisionTree } from './DecisionTree';
@@ -90,6 +90,22 @@ export default function GTOSessionPage() {
   const activeBoard = currentNode?.board ?? scenario?.board;
   const activePotSize = currentNode?.potSize ?? scenario?.potSize ?? 1.5;
   const activeStreet = currentNode?.street ?? scenario?.street ?? 'preflop';
+  const legalActions = scenario ? getLegalActionContext(scenario, currentNode, activePotSize) : null;
+
+  const calibration = feedback?.calibration ?? 'unavailable';
+  const recommendationStrategy = feedback?.exploitStrategy ?? feedback?.gtoStrategy;
+  const recommended = recommendationStrategy ? getOptimalAction(recommendationStrategy) : null;
+  const recommendedAction = recommended
+    ? `${recommended.action}${recommended.amount ? ` ${recommended.amount}BB` : ''}`
+    : undefined;
+  const relatedLessonId = activeStreet === 'preflop'
+    ? 'l4-gto-basics'
+    : activeStreet === 'flop'
+      ? 'l3-cbet'
+      : 'l3-multistreet';
+  const calibratedFeedback = calibration === 'calibrated' && feedback
+    ? buildGtoFeedback(feedback, recommendedAction ?? '', relatedLessonId)
+    : null;
 
   const flatBoard = useMemo(() => {
     if (!activeBoard) return [];
@@ -277,12 +293,13 @@ export default function GTOSessionPage() {
       {/* 决策区 / 反馈区 — §13.7.2：移动端反馈渲染进底部 Sheet，桌面端内联 */}
       {!showFeedback ? (
         <ActionSelector
+          key={`${scenario.id}-${currentNodeIndex}`}
           potSize={activePotSize}
           effectiveStack={scenario.effectiveStack}
           onDecision={handleDecision}
-          // P1C-12: 复用 store 导出的 computeCallAmount，保证 UI 显示与内部判分口径一致
-          // （postflop 按实际 board texture 的 cbet sizing 取值，不再用固定 0.5 近似）
-          callAmount={computeCallAmount(scenario, currentNode, activePotSize)}
+          callAmount={legalActions?.callAmount}
+          canCheck={legalActions?.canCheck}
+          minRaiseTo={legalActions?.minRaiseTo}
         />
       ) : isMobile ? (
         <>
@@ -318,33 +335,23 @@ export default function GTOSessionPage() {
       <>
         <GTOFeedback
           isOptimal={feedback?.isOptimal ?? false}
-          evLoss={Math.max(0, feedback?.evLoss ?? 0)}
-          explanation={feedback?.explanation ?? ''}
+          evLoss={calibration === 'calibrated' ? Math.max(0, feedback?.evLoss ?? 0) : 0}
+          explanation={calibration === 'calibrated'
+            ? feedback?.explanation ?? ''
+            : t(calibration === 'unavailable' ? 'gto.feedback.unavailableExplanation' : 'gto.feedback.heuristicExplanation')}
           gtoStrategy={feedback?.gtoStrategy ?? null}
           handNotation={handNotation}
-          userEV={feedback?.userEV}
-          optimalEV={feedback?.optimalEV}
-          heroEquity={feedback?.heroEquity}
+          userEV={calibration === 'calibrated' ? feedback?.userEV : undefined}
+          optimalEV={calibration === 'calibrated' ? feedback?.optimalEV : undefined}
+          heroEquity={calibration === 'calibrated' ? feedback?.heroEquity : undefined}
           exploitMode={useGTOSimulatorStore.getState().exploitMode}
           exploitStrategy={feedback?.exploitStrategy}
           selectedOpponent={useGTOSimulatorStore.getState().selectedOpponent}
           userAction={currentDecision}
           onTryAgain={handleContinue}
-          feedback={(() => {
-            if (!feedback) return null;
-            const gtoStrat = feedback.exploitStrategy ?? feedback.gtoStrategy;
-            const optimal = gtoStrat ? getOptimalAction(gtoStrat) : null;
-            const correctAction = optimal
-              ? `${optimal.action}${optimal.amount ? ` ${optimal.amount}BB` : ''}`
-              : '';
-            // P1C-09: 用 activeStreet 而非 scenario.street
-            const relatedLessonId = (() => {
-              if (activeStreet === 'preflop') return 'l4-gto-basics';
-              if (activeStreet === 'flop') return 'l3-cbet';
-              return 'l3-multistreet';
-            })();
-            return buildGtoFeedback(feedback, correctAction, relatedLessonId);
-          })()}
+          feedback={calibratedFeedback}
+          calibration={calibration}
+          recommendedAction={recommendedAction}
         />
         <button
           onClick={handleContinue}

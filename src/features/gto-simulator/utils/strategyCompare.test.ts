@@ -124,6 +124,22 @@ describe('P1C-02: All-In EV 剥削漏洞 - evLoss 恒 >= 0', () => {
   });
 });
 
+describe('混合策略：支持频率内动作不罚，频率外动作不为最优', () => {
+  it('fold/call/raise 任一正频率动作均视为最优（EV 损失 0）', () => {
+    for (const action of [ActionType.Fold, ActionType.Call, ActionType.Raise]) {
+      const result = compareDecision({ action, amount: 3 }, mixed, 10, 0.55, 2);
+      expect(result.evLoss).toBe(0);
+      expect(result.isOptimal).toBe(true);
+    }
+  });
+
+  it('零频率 call 不再因 EV 更高而被判最优', () => {
+    const result = compareDecision({ action: ActionType.Call }, { fold: 0.7, call: 0, raise: 0.3, raiseAmount: 2.5 }, 1.5, 0.503, 1);
+    expect(result.evLoss).toBeGreaterThanOrEqual(0.5);
+    expect(result.isOptimal).toBe(false);
+  });
+});
+
 describe('P1C-10: isOptimal 边界对齐 GRADE_THRESHOLDS', () => {
   it('evLoss = 0 → isOptimal = true', () => {
     const result = compareDecision({ action: ActionType.Call }, pureCall, 10, 0.5, 2);

@@ -36,6 +36,8 @@ interface BatchAnalyzeResult {
   gtoAction: string;
   evLoss: number;
   grade: string;
+  /** 该条结论是否可用：worker 成功估算时为 true；缺失即按不可用处理（消费方不放行） */
+  available: boolean;
 }
 
 interface EVPayload {
@@ -202,13 +204,21 @@ function gradeDecision(userAction: string, gtoAction: string, _gtoEv: number, ha
   return { gtoAction, evLoss, grade };
 }
 
+/**
+ * Heuristic batch analysis.
+ *
+ * 注意：这里只按手牌记法 + 位置做启发式估算，board / pot / amount 等上下文未参与计算，
+ * 因此结论必须标记 `available: true` 且只能作为启发式参考，不得宣称求解器 GTO。
+ * 一旦 worker 不可用 / 崩溃 / 超时，调用方 gtoDeviation 会返回 available:false，
+ * 禁止在此或调用方把失败路径补成 best。
+ */
 function batchAnalyze(hands: BatchAnalyzeHand[]): BatchAnalyzeResult[] {
   return hands.map((h) => {
     const strategy = lookupStrategy({ hand: h.hand, position: h.position });
     // Use pre-computed handStrength or fall back to strategy ev as proxy
     const handStrength = h.handStrength ?? Math.max(0, Math.min(1, (strategy.ev + 0.5) / 2));
     const { gtoAction, evLoss, grade } = gradeDecision(h.action, strategy.action, strategy.ev, handStrength);
-    return { id: h.id, gtoAction, evLoss, grade };
+    return { id: h.id, gtoAction, evLoss, grade, available: true };
   });
 }
 

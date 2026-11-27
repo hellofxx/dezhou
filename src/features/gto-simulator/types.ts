@@ -62,6 +62,9 @@ export interface HandStrategy {
   raiseAmount?: number;      // 加注大小（BB）
 }
 
+/** 策略数据可信度：表数据 / 启发式估算 / 缺失不可用 */
+export type StrategyCalibration = 'calibrated' | 'heuristic' | 'unavailable';
+
 // 训练会话
 export interface GTOSession {
   scenarios: Scenario[];
@@ -78,9 +81,18 @@ export interface GTODecision {
   evLoss: number;            // EV损失（BB，单决策）
   isOptimal: boolean;        // 是否在容差范围内
   timeTaken: number;         // 毫秒（P1C-19：每题用时，非累计）
+  calibration?: StrategyCalibration;
 }
 
 // 场景配置选项
+export interface LegalActionContext {
+  callAmount: number;
+  canCheck: boolean;
+  minRaiseTo: number;
+  maxRaiseTo: number;
+  canRaise: boolean;
+}
+
 export interface ScenarioConfig {
   gameType: GameType;
   effectiveStack: number;
@@ -101,4 +113,7 @@ export interface GTOResult {
   worstSpots: Array<{ scenario: Scenario; evLoss: number }>;
   accuracy: number;          // 最优决策比例
   totalTime: number;
+  calibration: StrategyCalibration;
+  calibratedDecisions: number;
+  unavailableDecisions: number;
 }

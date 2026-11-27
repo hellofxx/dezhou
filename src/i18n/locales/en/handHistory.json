@@ -1,18 +1,26 @@
 {
   "deviation": {
-    "title": "GTO Deviation Analysis",
-    "decisions": "Decisions",
+    "title": "Strategy Deviation Analysis (Heuristic)",
+    "heuristicNote": "Heuristic estimate, not solver GTO. No conclusion is drawn when analysis is unavailable.",
+    "decisions": "Available Decisions",
     "optimal": "Optimal Rate",
     "avgEvLoss": "Avg EV Loss",
     "worstDecision": "Worst Decision",
     "loading": "Analyzing...",
-    "loadingWithProgress": "GTO analyzing ({{completed}}/{{total}})",
+    "loadingWithProgress": "Strategy analyzing ({{completed}}/{{total}})",
     "noData": "No deviation data",
     "streetComparison": "Street Comparison",
     "youActed": "You: {{action}}",
-    "gtoActed": "GTO: {{action}}",
+    "gtoActed": "Suggested: {{action}}",
     "avgLossPerHand": "Avg loss per hand {{evLoss}}BB",
-    "worstOnStreet": ", worst decision on {{street}}"
+    "worstOnStreet": ", worst decision on {{street}}",
+    "partialUnavailable": "{{unavailable}}/{{total}} decisions unavailable; stats cover available decisions only",
+    "unavailable": {
+      "title": "Analysis temporarily unavailable",
+      "description": "The analysis engine was unavailable or timed out, so no grade or EV conclusion is provided.",
+      "count": "{{unavailable}} decisions were not analyzed",
+      "row": "Analysis unavailable for this street"
+    }
   },
   "dbError": {
     "unavailable": "Storage unavailable, please check browser settings or private mode",

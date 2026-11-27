@@ -9,6 +9,8 @@ export type {
   ScenarioConfig,
   GTOResult,
   DecisionNode,
+  StrategyCalibration,
+  LegalActionContext,
 } from './types';
 
 export type { BoardTexture } from './utils/boardGenerator';
@@ -24,6 +26,8 @@ export {
   estimateHeroEquity,
   getOptimalAction,
 } from './utils/strategyCompare';
+export { getDecisionCalibration } from './utils/calibration';
+export { computeCallAmount, getLegalActionContext } from './utils/legalActions';
 export { ScenarioSetup } from './components/ScenarioSetup';
 export { ActionSelector } from './components/ActionSelector';
 export { StrategyMatrix } from './components/StrategyMatrix';
