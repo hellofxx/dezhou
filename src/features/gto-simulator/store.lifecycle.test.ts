@@ -66,6 +66,7 @@ function makeNode(id: string, gtoStrategy: HandStrategy): DecisionNode {
 }
 
 const store = () => useGTOSimulatorStore.getState();
+const FOLD_OPTIMAL: HandStrategy = { fold: 1, call: 0, raise: 0 };
 
 describe('gto-simulator store 配置与模式', () => {
   beforeEach(() => {
@@ -161,6 +162,25 @@ describe('gto-simulator store 会话启动与答题', () => {
     expect(store().feedback).toBeNull();
   });
 
+  it('同一决策节点重复提交只受理一次', () => {
+    store().startSession([makePreflopScenario('single', [makeNode('n0', FOLD_OPTIMAL)])]);
+
+    expect(store().submitDecision(FOLD)).toBe(true);
+    expect(store().submitDecision(FOLD)).toBe(false);
+    expect(store().session!.decisions).toHaveLength(1);
+    expect(store().stepFeedbacks).toHaveLength(1);
+  });
+
+  it('continueNext 仅在反馈态受理，重复点击不重复推进', () => {
+    store().startSession([makePreflopScenario('single', [makeNode('n0', FOLD_OPTIMAL)])]);
+
+    expect(store().continueNext()).toBe(false);
+    store().submitDecision(FOLD);
+    expect(store().continueNext()).toBe(true);
+    expect(store().continueNext()).toBe(false);
+    expect(store().session!.isComplete).toBe(true);
+  });
+
   it('单步场景 submitDecision：写入决策、反馈与步骤反馈', () => {
     const node = makeNode('n0', { fold: 1, call: 0, raise: 0 });
     store().startSession([makePreflopScenario('single', [node])]);
@@ -203,7 +223,7 @@ describe('gto-simulator store 会话启动与答题', () => {
     const fb = store().feedback!;
     // Nit：raise +0.15 / fold -0.10 / call 归一化
     expect(fb.exploitStrategy).toEqual({ fold: 0, call: 0.25, raise: 0.75, raiseAmount: 2.5 });
-    expect(fb.gtoStrategy).toBe(fb.exploitStrategy);
+    expect(fb.gtoStrategy).toEqual(node.gtoStrategy);
     expect(store().session!.decisions[0]!.gtoStrategy).toEqual(fb.exploitStrategy);
   });
 

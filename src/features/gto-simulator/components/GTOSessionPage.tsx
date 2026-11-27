@@ -112,7 +112,7 @@ export default function GTOSessionPage() {
 
   const handleDecision = useCallback(
     (decision: Decision) => {
-      submitDecision(decision);
+      if (!submitDecision(decision)) return;
       const latestFeedback = useGTOSimulatorStore.getState().feedback;
       if (latestFeedback && scenario) {
         // P1C-06: ELO 仅在首决策节点记录（对齐 SRS/Emotion）
@@ -128,7 +128,7 @@ export default function GTOSessionPage() {
   );
 
   const handleContinue = useCallback(() => {
-    continueNext();
+    if (!continueNext()) return;
     const updatedSession = useGTOSimulatorStore.getState().session;
     if (updatedSession?.isComplete) {
       const result = useGTOSimulatorStore.getState().lastResult;
@@ -285,9 +285,27 @@ export default function GTOSessionPage() {
           callAmount={computeCallAmount(scenario, currentNode, activePotSize)}
         />
       ) : isMobile ? (
-        <MobileFeedbackSheet open={sheetOpen} onOpenChange={setSheetOpen}>
-          {renderFeedbackContent()}
-        </MobileFeedbackSheet>
+        <>
+          <MobileFeedbackSheet open={sheetOpen} onOpenChange={setSheetOpen}>
+            {renderFeedbackContent()}
+          </MobileFeedbackSheet>
+          {!sheetOpen && (
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setSheetOpen(true)}
+                className="min-h-11 rounded-xl bg-[var(--walnut-raised)] text-[var(--ivory)] font-display font-semibold text-sm"
+              >
+                {t('gto.session.viewFeedback')}
+              </button>
+              <button
+                onClick={handleContinue}
+                className="min-h-11 rounded-xl bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-display font-bold text-sm"
+              >
+                {continueLabel}
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="space-y-4">{renderFeedbackContent()}</div>
       )}
@@ -314,7 +332,7 @@ export default function GTOSessionPage() {
           onTryAgain={handleContinue}
           feedback={(() => {
             if (!feedback) return null;
-            const gtoStrat = feedback.gtoStrategy;
+            const gtoStrat = feedback.exploitStrategy ?? feedback.gtoStrategy;
             const optimal = gtoStrat ? getOptimalAction(gtoStrat) : null;
             const correctAction = optimal
               ? `${optimal.action}${optimal.amount ? ` ${optimal.amount}BB` : ''}`

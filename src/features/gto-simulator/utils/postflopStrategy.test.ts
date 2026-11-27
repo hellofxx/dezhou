@@ -60,6 +60,45 @@ describe('classifyHandStrength（P1C-04/23）', () => {
     expect(classifyHandStrength(hero, board)).toBe('air');
   });
 
+  it('hero 与公共牌组成同花 → strong_hand', () => {
+    const hero: [Card, Card] = [
+      { suit: Suit.Hearts, rank: Rank.Ace },
+      { suit: Suit.Hearts, rank: Rank.King },
+    ];
+    const board = makeBoard([
+      { suit: Suit.Hearts, rank: Rank.Queen },
+      { suit: Suit.Hearts, rank: Rank.Jack },
+      { suit: Suit.Hearts, rank: Rank.Two },
+    ]);
+    expect(classifyHandStrength(hero, board)).toBe('strong_hand');
+  });
+
+  it('公共牌三条加 hero 小对子组成葫芦 → strong_hand', () => {
+    const hero: [Card, Card] = [
+      { suit: Suit.Hearts, rank: Rank.Two },
+      { suit: Suit.Diamonds, rank: Rank.Two },
+    ];
+    const board = makeBoard([
+      { suit: Suit.Clubs, rank: Rank.Seven },
+      { suit: Suit.Spades, rank: 7 as Rank },
+      { suit: Suit.Hearts, rank: 7 as Rank },
+    ]);
+    expect(classifyHandStrength(hero, board)).toBe('strong_hand');
+  });
+
+  it('公共牌三条加 hero 同点组成四条 → strong_hand', () => {
+    const hero: [Card, Card] = [
+      { suit: Suit.Hearts, rank: Rank.Seven },
+      { suit: Suit.Diamonds, rank: Rank.Two },
+    ];
+    const board = makeBoard([
+      { suit: Suit.Clubs, rank: Rank.Seven },
+      { suit: Suit.Spades, rank: 7 as Rank },
+      { suit: Suit.Hearts, rank: 7 as Rank },
+    ]);
+    expect(classifyHandStrength(hero, board)).toBe('strong_hand');
+  });
+
   it('wheel 顺子（hero A2 + board 3-4-5）→ strong_hand（回归：旧窗口检测漏 A-2-3-4-5）', () => {
     const hero: [Card, Card] = [
       { suit: Suit.Hearts, rank: Rank.Ace },

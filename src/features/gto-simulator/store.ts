@@ -26,9 +26,9 @@ interface GTOSimulatorStore {
 
   session: GTOSession | null;
   startSession: (scenarios: Scenario[]) => void;
-  submitDecision: (decision: Decision) => void;
+  submitDecision: (decision: Decision) => boolean;
   nextScenario: () => void;
-  continueNext: () => void;
+  continueNext: () => boolean;
   endSession: () => void;
   resetSession: () => void;
 
@@ -84,25 +84,24 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
 
   submitDecision: (decision) => {
     const { session, currentNodeIndex, decisionStartAt } = get();
-    if (!session || session.isComplete) return;
+    if (!session || session.isComplete || get().showFeedback) return false;
 
     const scenario = session.scenarios[session.currentIndex];
-    if (!scenario) return;
+    if (!scenario) return false;
 
     const nodes = scenario.decisionNodes;
     const node: DecisionNode | undefined = nodes?.[currentNodeIndex];
 
     // P1C-03/04: 统一 GTO 策略查找（preflop 查表 + postflop texture_strategy）
-    let gtoStrategy = node ? node.gtoStrategy : getGTOStrategyForScenario(scenario);
+    const gtoStrategy = node ? node.gtoStrategy : getGTOStrategyForScenario(scenario);
 
     // P1C-16: Exploit 模式保留原始 gtoStrategy，同时传递 exploit 调整后策略
     const { exploitMode, selectedOpponent } = get();
     let exploitStrategy: HandStrategy | null = null;
     if (exploitMode && selectedOpponent) {
       exploitStrategy = adjustForOpponent(gtoStrategy, selectedOpponent, scenario);
-      // 判分使用 exploit 策略
-      gtoStrategy = exploitStrategy;
     }
+    const scoringStrategy = exploitStrategy ?? gtoStrategy;
 
     const nodeBoard = node?.board;
     const nodeStreet = node?.street ?? scenario.street;
@@ -119,19 +118,19 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
     // P1C-12: 真实 callAmount（preflop: 最后一个 raise 减去 hero 已投入；postflop: pot × cbet sizing）
     const callAmount = computeCallAmount(scenario, node, nodePotSize);
 
-    const result = compareDecision(decision, gtoStrategy, nodePotSize, heroEquity, callAmount);
+    const result = compareDecision(decision, scoringStrategy, nodePotSize, heroEquity, callAmount);
 
     // P1C-19: timeTaken 使用每题开始时间戳
     const gtoDecision: GTODecision = {
       scenarioId: scenario.id,
       userAction: decision,
-      gtoStrategy: exploitMode && exploitStrategy ? exploitStrategy : gtoStrategy,
+      gtoStrategy: exploitStrategy ?? gtoStrategy,
       evLoss: result.evLoss,
       isOptimal: result.isOptimal,
       timeTaken: Date.now() - decisionStartAt,
     };
 
-    const feedbackState: GTOFeedbackState = { ...result, gtoStrategy: exploitMode ? exploitStrategy : gtoStrategy, exploitStrategy };
+    const feedbackState: GTOFeedbackState = { ...result, gtoStrategy, exploitStrategy };
 
     set({
       currentDecision: decision,
@@ -140,14 +139,15 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
       stepFeedbacks: [...get().stepFeedbacks, feedbackState],
       session: { ...session, decisions: [...session.decisions, gtoDecision] },
     });
+    return true;
   },
 
   continueNext: () => {
     const { session, currentNodeIndex } = get();
-    if (!session) return;
+    if (!session || !get().showFeedback) return false;
 
     const scenario = session.scenarios[session.currentIndex];
-    if (!scenario) return;
+    if (!scenario) return false;
 
     const nodes = scenario.decisionNodes;
     if (nodes && currentNodeIndex < nodes.length - 1) {
@@ -155,6 +155,7 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
     } else {
       get().nextScenario();
     }
+    return true;
   },
 
   nextScenario: () => {
@@ -233,10 +234,14 @@ export function computeCallAmount(scenario: Scenario, node: DecisionNode | undef
   const street = node?.street ?? scenario.street;
 
   if (street === 'preflop') {
+    const heroCommitment = actions
+      .filter((a) => a.position === scenario.position && (a.action === 'raise' || a.action === 'call'))
+      .at(-1)?.amount;
+    const heroInvested = heroCommitment ?? (scenario.position === Position.BB ? 1 : scenario.position === Position.SB ? 0.5 : 0);
     const raises = actions.filter((a) => a.action === 'raise');
     const lastRaise = raises[raises.length - 1];
-    if (!lastRaise) return 1; // limping scenario: call 1BB
-    return lastRaise.amount ?? 2.5;
+    const target = lastRaise?.amount ?? (scenario.position === Position.BB ? 0 : 1);
+    return Math.round(Math.max(0, target - heroInvested) * 10) / 10;
   }
   // postflop: 面对 c-bet，callAmount = pot × sizing multiplier
   // P1 fix: 多步节点（turn/river）的 board 已变化，texture 应按 node 实际 board 重新分类，
@@ -255,7 +260,7 @@ function computeResult(session: GTOSession): GTOResult {
   const totalEVLoss = decisions.reduce((sum, d) => sum + d.evLoss, 0);
   const avgEVLoss = totalEVLoss / count;
 
-  const sorted = [...decisions].toSorted((a, b) => b.evLoss - a.evLoss);
+  const sorted = decisions.filter((d) => d.evLoss > 0).toSorted((a, b) => b.evLoss - a.evLoss);
   // GTO-10：移除非空断言，scenarioId 缺失时过滤该条目（防御性兜底）
   const worstSpots = sorted.slice(0, 5).flatMap((d) => {
     const scenario = scenarios.find((s) => s.id === d.scenarioId);

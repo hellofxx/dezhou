@@ -78,14 +78,39 @@ describe('computeCallAmount（P1-01 node 实际 board texture）', () => {
     expect(callAmount).toBe(3.3);
   });
 
-  it('preflop 仍按 raise 尺寸返回（语义不变）', () => {
+  it('BB 面对 2.5BB open 只需再跟 1.5BB', () => {
     const preflopScenario: Scenario = {
       ...makeScenario(undefined),
+      position: Position.BB,
       street: 'preflop',
       board: undefined,
       previousActions: [{ position: Position.CO, action: ActionType.Raise, amount: 2.5 }],
     };
-    const callAmount = computeCallAmount(preflopScenario, undefined, 3);
-    expect(callAmount).toBe(2.5);
+    expect(computeCallAmount(preflopScenario, undefined, 4)).toBe(1.5);
+  });
+
+  it('SB 未面对加注时只需补足 0.5BB', () => {
+    const preflopScenario: Scenario = {
+      ...makeScenario(undefined),
+      position: Position.SB,
+      street: 'preflop',
+      board: undefined,
+      previousActions: [],
+    };
+    expect(computeCallAmount(preflopScenario, undefined, 1.5)).toBe(0.5);
+  });
+
+  it('hero 已 raise-to 2.5BB，面对 9BB 3-bet 需再跟 6.5BB', () => {
+    const preflopScenario: Scenario = {
+      ...makeScenario(undefined),
+      position: Position.CO,
+      street: 'preflop',
+      board: undefined,
+      previousActions: [
+        { position: Position.CO, action: ActionType.Raise, amount: 2.5 },
+        { position: Position.BTN, action: ActionType.Raise, amount: 9 },
+      ],
+    };
+    expect(computeCallAmount(preflopScenario, undefined, 11.5)).toBe(6.5);
   });
 });

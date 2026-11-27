@@ -92,6 +92,19 @@ describe('ScenarioSetup Exploit 模式与对手画像', () => {
     expect(findButton(container, 'Unknown')).toBeUndefined();
   });
 
+  it('Exploit 模式未选对手时禁止开始并显示提示', () => {
+    const onStart = vi.fn();
+    const { container } = render(<ScenarioSetup onStart={onStart} />);
+
+    clickText(container, 'Exploit 模式');
+
+    const start = findButton(container, '开始 GTO 训练')!;
+    expect(start.disabled).toBe(true);
+    expect(screen.getByText(/请先选择对手类型/)).toBeTruthy();
+    fireEvent.click(start);
+    expect(onStart).not.toHaveBeenCalled();
+  });
+
   it('选中 Nit 后写入 store 并展示画像名称与关键数据', () => {
     const { container } = render(<ScenarioSetup onStart={() => {}} />);
     clickText(container, 'Exploit 模式');

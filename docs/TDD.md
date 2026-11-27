@@ -1,6 +1,6 @@
 # 德州扑克训练平台 — 技术设计文档 (TDD)
 
-> 状态：Current · 最后复核：2026-11-26
+> 状态：Current · 最后复核：2026-11-27
 
 ## 1. 文档信息
 
@@ -8,7 +8,7 @@
 |------|------|
 | 文档版本 | 不单独维护；以文件头最后复核日期与 git 历史为准 |
 | 作者 | 开发团队 |
-| 最后复核 | 2026-11-26 |
+| 最后复核 | 2026-11-27 |
 | 状态 | Current；承接 PRD 职责分离回归（从 PRD 迁入 Streak/ELO/SRS/反馈补救/Drill 题库等技术实现细节） |
 
 > **文档职责**：本文件描述技术实现细节（How）。产品规格见 `PRD.md`，版本演进与执行历史见 `CHANGELOG.md`。
@@ -830,7 +830,7 @@ interface DailyRecommendation {
    - **翻前生成域受策略表约束**（不再按「前方 fold 概率 70%」自由生成动作）：非 BB 位置一律前面全 fold → `{pos}_open`；BB → opener ∈ {HJ, CO, BTN} → `bb_vs_{hj,co,btn}_open`。等效把生成空间收缩到 `preflop-ranges.json` 的 11 个真实 spot key
    - **出口过滤**：`generateScenario` 对 preflop 且 `resolveSpotKey(...)` 返回 `null` 的场景，强制回退到必然命中的 open 场景，并在 DEV 下打一次性 `console.warn`（`loggedPreflopFallback` 防刷屏）暴露缺口
    - `PREFLOP_FALLBACK` 常量仅作理论不可达路径的最后兜底，**禁止**作为常规判分来源（产品规格见 PRD §5.3.6）
-   - **确定性生成**：传入 `seed` 时经 `shared/utils/seededShuffle` 的 `seededRandom`（mulberry32）驱动全部随机分支，未传 `seed` 时用 `Math.random`；模块内禁止再实现第二份 PRNG
+   - **确定性生成**：传入 `seed` 时以 `seed + index` 派生 `shared/utils/seededShuffle` 的 `seededRandom`（mulberry32），驱动全部随机分支；未传 `seed` 时用 `Math.random`。决策节点 id 使用街道语义键，不依赖系统时间；模块内禁止再实现第二份 PRNG
    - 决策树构造逻辑位于 `utils/decisionNodes.ts`（自 `scenarioGenerator.ts` 拆出，满足单文件 ≤300 行硬约束）
 
 5. **EV 计算标准化**（v2.1 新增）：
@@ -861,6 +861,14 @@ interface DailyRecommendation {
 9. **动作术语单一来源**（`utils/actionTerms.ts`）：
    - `ACTION_TERMS` 为 Fold / Check / Call / Raise / All-In 等动作术语的**唯一**常量出口，`actionTerm(action)` 与 `actionLabel(action, amount?)` 为渲染入口，模块内禁止再散落硬编码字面量
    - 术语**刻意不做 i18n 本地化**（属产品决策，见 PRD §5.20.5），因此该文件不接 `t()`；文件头注释记录此决策，防止后续被当作 i18n 遗漏「修复」
+
+10. **会话交互与状态不变量**：
+    - `submitDecision` / `continueNext` 返回是否受理；同一决策节点只允许一次提交，`continueNext` 仅在反馈态推进，页面 ELO / SRS / Emotion / 训练事件副作用只在受理后执行
+    - 移动端首页为固定底栏预留安全高度；反馈 Sheet 关闭后保留「查看反馈 / 继续」入口，不把关闭反馈误判为可重新提交
+    - Exploit 模式必须显式选择对手；反馈同时保留原始 GTO 策略与剥削策略，判分使用剥削策略
+    - `worstSpots` 只收录 `evLoss > 0` 的决策
+
+11. **翻前金额口径**：`PreviousAction.amount` 对 raise 表示 raise-to 总额；`computeCallAmount` 扣除 hero 已投入（BB 1BB / SB 0.5BB / 既有 call 或 raise 金额）。无加注时 BB 为 0，其他位置补足到 1BB
 
 ### 5.4 Hand History（手牌历史）
 
@@ -1557,7 +1565,7 @@ UI 组件：`Dashboard` 段位徽章按钮、`WeaknessAnalysis` 五维雷达图�
 - `ReviewItemMetadata`：元数据接口（`front` / `back` / `options` / `source`（`range` | `odds` | `gto` | `strategy` | `theory`）/ `scenario` / `route`（复习项点击跳转的目标路由，可选）/ `params`（`t()` 插值参数），全部可选）
 - `ReviewItem` 接口扩展：新增 `metadata?: ReviewItemMetadata`
 - 核心函数：`processReview` / `getTodayReviewItems` / `getReviewStats` / `getDaysSinceLastReview`
-- 训练模块记录器（答题后注册/更新复习项）：range-trainer `useQuizEngine.recordSrsForAnswer` / pot-odds `useOddsSrsRecorder` / gto-simulator `useGtoSrsRecorder` / theory-academy `TheoryChapterView` 经 `utils/theorySrs.ts`（见 §5.8b 第 10 条）；题目 ID 规范 `range:{position}:{hand}` / `odds:{questionId}` / `gto:{scenarioId}` / `theory:{questionId}`
+- 训练模块记录器（答题后注册/更新复习项）：range-trainer `useQuizEngine.recordSrsForAnswer` / pot-odds `useOddsSrsRecorder` / gto-simulator `useGtoSrsRecorder` / theory-academy `TheoryChapterView` 经 `utils/theorySrs.ts`（见 §5.8b 第 10 条）；题目 ID 规范 `range:{position}:{hand}` / `odds:{questionId}` / `gto:{variant}:{players}p:{stack}bb:{spotOrStreetBoardPot}:{hand}` / `theory:{questionId}`；标准 6-max/100BB 翻前保留既有 `gto:{spot}:{hand}` id，避免存量复习项孤儿化，其余 GTO id 必须包含变体、人数、筹码、街道与板面
 - **复习项载荷的语言契约**：`label` 与 `metadata.front|back|options[].text` 存的是 **i18n key**（语言中立，随 localStorage 长期存活），渲染层 `t()` 解析；禁止写入任何语言的原文（英文环境会直接回显中文）。产品口径见 PRD §12.4.3
 - **来源包按需补加载**（与上一条配对，只做其一比原状更糟）：复习队列 / 复习会话渲染于 Dashboard 与 progress 路由，而 `i18n/moduleRegistry.ts` 为控制首屏体积刻意不把 theory / rangeTrainer / potOdds / gto 归入这些分组，冷启动直达首页时 `t(key)` 原样回显 key 字面量。故 `features/progress/components/srs/useEnsureReviewSourceI18n.ts` 按当前复习项的 `metadata.source` 收集来源模块并调 `preloadI18n`（幂等，注入后经 `config.ts` 的 `bindI18nStore: 'added'` 自动重渲染，无需本地 loading 态；`strategy` 的 academy 属 CORE_MODULES 故不列出）。缓存语义遵循 §9.1 的「成功才入缓存、失败可重试、并发共享句柄」
 - **跳转路由解析**：`features/progress/utils/reviewRoute.ts` 的 `getReviewRoute(item)` 为纯函数（自 `SpacedRepetitionPanel` 内联 switch 提取以便单测）：`metadata.route` 以 `/` 开头时优先，其后按 `category` 映射；`theory` 缺 route 时回退 `/theory` 主页（禁止落到 default 拼出 `/academy/lesson/theory:...` 死链），default 落 `/lesson/<id>`，任何分支不得抛错（存量复习项可能没有 `metadata.route`）

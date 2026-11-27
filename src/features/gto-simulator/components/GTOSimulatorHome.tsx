@@ -22,7 +22,7 @@ export default function GTOSimulatorHome() {
   };
 
   return (
-    <div className="py-4 space-y-5">
+    <div className="py-4 pb-24 md:pb-4 space-y-5">
       <BackLink to="/drill" label={t('common.ui.back')} variant="text" />
       {/* 标题 */}
       <div className="space-y-1">

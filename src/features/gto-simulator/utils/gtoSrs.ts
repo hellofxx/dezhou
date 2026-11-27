@@ -1,3 +1,4 @@
+import type { Board } from '@/shared/types/poker';
 import type { Scenario } from '../types';
 import type { Decision } from '@/shared/types/action';
 import { classifyHand } from '@/shared/utils/handClassifier';
@@ -44,6 +45,13 @@ export function gtoReviewItemId(spotKey: string, handNotation: string): string {
   return `${GTO_REVIEW_ID_PREFIX}${spotKey}:${handNotation}`;
 }
 
+function boardKey(board: Board | undefined): string {
+  if (!board) return 'none';
+  return [...board.flop, ...(board.turn ? [board.turn] : []), ...(board.river ? [board.river] : [])]
+    .map((card) => `${card.rank}-${card.suit}`)
+    .join('_');
+}
+
 /** 构造最优动作对应的 back key（动作枚举值直接作为 key 末段，无动作时回退） */
 export function gtoReviewBackKey(action?: string): string {
   return action ? `gto.review.back.${action}` : GTO_REVIEW_BACK_UNAVAILABLE_KEY;
@@ -59,7 +67,21 @@ export function buildGtoReviewItemInput(
   scenario: Scenario,
   optimal: Decision | null,
 ): GtoReviewItemInput {
-  const spotKey = resolveSpotKey(scenario.position, scenario.previousActions) ?? 'unknown';
+  const firstNode = scenario.decisionNodes?.[0];
+  const street = firstNode?.street ?? scenario.street;
+  const board = firstNode?.board ?? scenario.board;
+  const variant = scenario.gameVariant ?? 'standard';
+  const context = `${variant}:${scenario.playerCount}p:${scenario.effectiveStack}bb`;
+  const resolvedSpot = resolveSpotKey(scenario.position, firstNode?.previousActions ?? scenario.previousActions);
+  const legacyStandardPreflop = variant === 'standard' && scenario.playerCount === 6 && scenario.effectiveStack === 100;
+  let spotKey: string;
+  if (street === 'preflop') {
+    spotKey = legacyStandardPreflop
+      ? resolvedSpot ?? `uncovered:${scenario.position}`
+      : `${context}:${resolvedSpot ?? 'uncovered'}`;
+  } else {
+    spotKey = `${context}:${street}:${boardKey(board)}:pot${scenario.potSize}`;
+  }
   const hand = classifyHand(scenario.heroHand[0], scenario.heroHand[1]);
   return {
     id: gtoReviewItemId(spotKey, hand),

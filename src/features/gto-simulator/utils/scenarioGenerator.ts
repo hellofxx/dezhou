@@ -122,7 +122,7 @@ function warnPreflopFallbackOnce(position: Position): void {
  * （源头约束已保证命中，此处为防御性兜底 + 一次性 warn 日志）。
  */
 export function generateScenario(config: ScenarioConfig, index: number, seed?: number): Scenario {
-  const rng = seed === undefined ? Math.random : seededRandom(seed);
+  const rng = seed === undefined ? Math.random : seededRandom(seed + index);
   const variant = config.gameVariant ?? 'standard';
   const heroHand = selectHandForDifficulty(config.difficulty, variant, rng);
   const street = pickStreet(config.difficulty, rng);

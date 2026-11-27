@@ -194,6 +194,20 @@ describe('gto-simulator store 结果聚合', () => {
     expect(worst.map((spot) => spot.evLoss)).toEqual([3, 1]);
   });
 
+  it('全对时 worstSpots 不展示零损失决策', () => {
+    store().startSession([makePreflopScenario('s1'), makePreflopScenario('s2')]);
+    useGTOSimulatorStore.setState({
+      session: {
+        ...store().session!,
+        decisions: [makeDecision('s1', 0, true), makeDecision('s2', 0, true)],
+      },
+    });
+
+    store().endSession();
+
+    expect(store().lastResult!.worstSpots).toEqual([]);
+  });
+
   it('无决策时结算不产生 NaN（除零防御）', () => {
     store().startSession([makePreflopScenario('empty')]);
 

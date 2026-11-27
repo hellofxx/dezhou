@@ -54,7 +54,16 @@ export function classifyHandStrength(heroHand: [Card, Card], board: Board): Hand
   const allCards = [...heroHand, ...flat];
   const suitCounts = new Map<string, number>();
   for (const c of allCards) suitCounts.set(c.suit, (suitCounts.get(c.suit) ?? 0) + 1);
+  const hasFlush = [...suitCounts.values()].some((v) => v >= 5);
   const hasFlushDraw = [...suitCounts.values()].some((v) => v === 4);
+
+  const rankCounts = new Map<number, number>();
+  for (const c of allCards) rankCounts.set(c.rank, (rankCounts.get(c.rank) ?? 0) + 1);
+  const counts = [...rankCounts.values()];
+  const hasQuads = counts.some((count) => count >= 4);
+  const hasFullHouse = counts.some((count) => count >= 3) && counts.some((count) => count >= 2);
+  const hasTrips = counts.some((count) => count >= 3);
+  if (hasFlush || hasQuads || hasFullHouse || hasTrips) return 'strong_hand';
 
   const uniqueRanks = [...new Set(allCards.map((c) => c.rank))].toSorted((a, b) => a - b);
 

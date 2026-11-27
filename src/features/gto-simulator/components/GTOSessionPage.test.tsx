@@ -276,6 +276,34 @@ describe('GTOSessionPage 移动端反馈 Sheet', () => {
     window.matchMedia = originalMatchMedia;
   });
 
+  it('移动端关闭反馈 Sheet 后仍可重开反馈或继续训练', () => {
+    window.matchMedia = ((query: string) => ({
+      matches: query.includes('max-width'),
+      media: query,
+      onchange: null,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+      dispatchEvent: () => false,
+    })) as typeof window.matchMedia;
+
+    store().startSession([makeScenario('mobile-close', [FOLD_OPTIMAL])]);
+    const { container } = renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Fold' }));
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }));
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(findButton(container, '查看反馈')).toBeTruthy();
+    fireEvent.click(findButton(container, '查看反馈')!);
+    expect(screen.getByRole('dialog')).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }));
+    fireEvent.click(findButton(container, '训练结果')!);
+    expect(store().session!.isComplete).toBe(true);
+  });
+
   it('移动端作答后反馈渲染进底部 dialog Sheet', () => {
     window.matchMedia = ((query: string) => ({
       matches: query.includes('max-width'),

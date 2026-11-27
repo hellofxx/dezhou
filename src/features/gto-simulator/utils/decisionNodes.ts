@@ -49,7 +49,6 @@ export function generateDecisionNodes(
   rng: () => number = Math.random
 ): DecisionNode[] {
   const nodes: DecisionNode[] = [];
-  const ts = Date.now();
   const actionOrder = getActionOrder(playerCount, 'preflop');
   const heroIdx = actionOrder.indexOf(position);
 
@@ -68,7 +67,7 @@ export function generateDecisionNodes(
   // P1C-05：首节点用与单步一致的 preflop 查表逻辑（不再硬编码）
   const preflopStrategy = getPreflopHandStrategy(position, preflopActions, heroHand) ?? PREFLOP_FALLBACK;
   nodes.push({
-    id: `node-preflop-${ts}`,
+    id: 'node-preflop',
     street: 'preflop',
     description: `Hero ${position} preflop`,
     descriptionKey: 'gto.nodeDesc.preflop',
@@ -84,7 +83,7 @@ export function generateDecisionNodes(
   const { cards: flopCards, texture: flopTexture } = generateFlop(variant, heroHand, rng);
   const flopBoard = buildBoard(flopCards);
   nodes.push({
-    id: `node-flop-${ts}`,
+    id: 'node-flop',
     street: 'flop',
     description: `Flop pot ${flopPot}BB`,
     descriptionKey: 'gto.nodeDesc.flop',
@@ -103,7 +102,7 @@ export function generateDecisionNodes(
   const turnBoard = buildBoard(flopCards, turnCard);
   const turnTexture = classifyBoardTexture(boardToFlat(turnBoard));
   nodes.push({
-    id: `node-turn-${ts}`,
+    id: 'node-turn',
     street: 'turn',
     description: `Turn pot ${turnPot}BB`,
     descriptionKey: 'gto.nodeDesc.turn',
@@ -122,7 +121,7 @@ export function generateDecisionNodes(
   const riverBoard = buildBoard(flopCards, turnCard, riverCard);
   const riverTexture = classifyBoardTexture(boardToFlat(riverBoard));
   nodes.push({
-    id: `node-river-${ts}`,
+    id: 'node-river',
     street: 'river',
     description: `River pot ${riverPot}BB`,
     descriptionKey: 'gto.nodeDesc.river',

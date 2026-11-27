@@ -7,7 +7,7 @@ import {
   GTO_REVIEW_BACK_UNAVAILABLE_KEY,
 } from './gtoSrs';
 import type { Scenario } from '../types';
-import type { Card } from '@/shared/types/poker';
+import type { Board, Card } from '@/shared/types/poker';
 import { Rank, Suit } from '@/shared/types/poker';
 import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
@@ -63,6 +63,34 @@ describe('buildGtoReviewItemInput（GTO 复习项载荷）', () => {
     const b = buildGtoReviewItemInput(scenario(), null);
     expect(a.id).toBe(b.id);
     expect(a.id.startsWith('gto:')).toBe(true);
+  });
+
+  it('同手牌不同翻后板面使用不同 id，避免复习项互相覆盖', () => {
+    const boardA: Board = {
+      flop: [
+        { suit: Suit.Hearts, rank: Rank.Ace },
+        { suit: Suit.Clubs, rank: Rank.Seven },
+        { suit: Suit.Diamonds, rank: Rank.Two },
+      ],
+      turn: null,
+      river: null,
+    };
+    const boardB: Board = {
+      flop: [
+        { suit: Suit.Spades, rank: Rank.Ace },
+        { suit: Suit.Clubs, rank: Rank.Seven },
+        { suit: Suit.Diamonds, rank: Rank.Two },
+      ],
+      turn: null,
+      river: null,
+    };
+    const base = scenario({ street: 'flop', board: boardA, gameVariant: 'standard' });
+    const a = buildGtoReviewItemInput(base, null);
+    const b = buildGtoReviewItemInput({ ...base, board: boardB }, null);
+    const shortDeck = buildGtoReviewItemInput({ ...base, gameVariant: 'short-deck' }, null);
+
+    expect(a.id).not.toBe(b.id);
+    expect(a.id).not.toBe(shortDeck.id);
   });
 
   it('label / front 为常量 key，back 随最优动作分键', () => {

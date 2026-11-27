@@ -196,8 +196,8 @@ export function useGtoEloRecorder() {
  * P1-3.2: GTO 训练 SRS 记录器
  *
  * 调用方（GTOSessionPage）在 submitDecision 后调用返回的 recordSrsForAnswer 函数。
- * 题目 → ReviewItem 映射：使用 `gto:${scenario.id}` 作为 id，metadata 携带
- * 场景描述与最优动作，复习模式可渲染为决策自评。
+ * 题目 → ReviewItem 映射：使用变体、人数、筹码、spot/街道/板面与手牌
+ * 组成稳定语义 id，metadata 携带静态 i18n key 与最优动作参数。
  *
  * 注：GTO 训练为开放式决策（无固定选项），复习模式回退为自评 UI：
  * 用户对照 back（最优动作）自评是否记得，quality 由用户在 ReviewSession 中选择。

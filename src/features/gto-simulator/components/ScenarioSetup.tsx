@@ -40,6 +40,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
 
   const opponentIds = Object.keys(OPPONENT_PROFILES).filter((id) => id !== 'unknown');
   const selectedProfile = selectedOpponent ? getOpponentProfile(selectedOpponent) : null;
+  const canStart = !exploitMode || selectedOpponent !== null;
 
   const handleVariantChange = (variant: GameVariant) => {
     const cfg = GAME_VARIANT_CONFIGS[variant];
@@ -113,6 +114,11 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   );
                 })}
               </div>
+              {!selectedProfile && (
+                <p className="text-xs text-[var(--clay-text)] bg-[var(--clay)]/10 rounded-md px-3 py-1.5">
+                  {t('gto.setup.opponentRequired')}
+                </p>
+              )}
               {selectedProfile && (
                 <div className="rounded-lg bg-black/20 p-3 space-y-1">
                   <div className="text-xs font-display font-semibold" style={{ color: selectedProfile.color }}>
@@ -299,7 +305,8 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
       {/* 开始按钮 */}
       <button
         onClick={onStart}
-        className="hover-bright w-full py-3 rounded-xl bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-display font-bold text-lg shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+        disabled={!canStart}
+        className="hover-bright w-full py-3 rounded-xl bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-display font-bold text-lg shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         {t('gto.setup.startGtoTraining')}
       </button>

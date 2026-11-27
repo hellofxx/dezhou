@@ -7,13 +7,15 @@
 //
 // BUG-GTO-012 守卫测试：同 seed 产出完全相同场景（可复现训练）。
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { Position } from '@/shared/types/position';
 import { seededRandom } from '@/shared/utils/seededShuffle';
-import { generatePreviousActions, generateScenario } from './scenarioGenerator';
+import { generateDecisionNodes, generatePreviousActions, generateScenario } from './scenarioGenerator';
 import { resolveSpotKey } from './spotKey';
 import { actionTerm, actionLabel } from './actionTerms';
 import { ActionType } from '@/shared/types/action';
+import { Rank, Suit } from '@/shared/types/poker';
+import type { Card } from '@/shared/types/poker';
 
 const ALL_TRAINABLE_POSITIONS = [
   Position.UTG, Position.HJ, Position.CO, Position.BTN, Position.SB, Position.BB,
@@ -70,8 +72,7 @@ describe('BUG-GTO-009：preflop 场景生成与 GTO 表覆盖契约（命中率 
 });
 
 describe('BUG-GTO-012：场景生成可复现（同 seed 产出相同场景）', () => {
-  /** 递归剥离所有 id 字段（顶层 id 与多步节点 id 均为时间戳/种子派生，属装饰性标识），
-   *  只比较训练语义内容（手牌/板面/底池/street/策略/前置动作）。 */
+  /** 递归剥离所有 id 字段，只比较训练语义内容（手牌/板面/底池/street/策略/前置动作）。 */
   function stripIds(value: unknown): unknown {
     if (Array.isArray(value)) return value.map(stripIds);
     if (value !== null && typeof value === 'object') {
@@ -100,6 +101,53 @@ describe('BUG-GTO-012：场景生成可复现（同 seed 产出相同场景）',
       const b = stripIds(generateScenario(cfg, i, i));
       expect(JSON.stringify(a)).toBe(JSON.stringify(b));
     }
+  });
+
+  it('相同 config+index+seed 连 id 也完全一致', () => {
+    vi.useFakeTimers();
+    try {
+      const cfg = {
+        gameType: 'cash' as const,
+        effectiveStack: 100,
+        position: Position.BTN,
+        playerCount: 6,
+        gameVariant: 'standard' as const,
+        difficulty: 'advanced' as const,
+        scenarioCount: 1,
+      };
+      vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+      const a = generateScenario(cfg, 3, 42);
+      vi.setSystemTime(new Date('2026-01-01T00:01:00Z'));
+      const b = generateScenario(cfg, 3, 42);
+      expect(a).toEqual(b);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('同 seed 不同 index 不应生成完全相同的训练内容', () => {
+    const cfg = {
+      gameType: 'cash' as const,
+      effectiveStack: 100,
+      position: Position.BTN,
+      playerCount: 6,
+      gameVariant: 'standard' as const,
+      difficulty: 'intermediate' as const,
+      scenarioCount: 1,
+    };
+    const semantic = Array.from({ length: 10 }, (_, index) => stripIds(generateScenario(cfg, index, 42)));
+    expect(new Set(semantic.map((scenario) => JSON.stringify(scenario))).size).toBeGreaterThan(1);
+  });
+
+  it('决策节点 id 与内容不依赖系统时间', () => {
+    const hero: [Card, Card] = [
+      { suit: Suit.Spades, rank: Rank.Ace },
+      { suit: Suit.Hearts, rank: Rank.King },
+    ];
+    const a = generateDecisionNodes('flop', hero, Position.BTN, 'standard', 100, 'advanced', 6, seededRandom(7));
+    const b = generateDecisionNodes('flop', hero, Position.BTN, 'standard', 100, 'advanced', 6, seededRandom(7));
+    expect(a).toEqual(b);
+    expect(a.map((node) => node.id)).toEqual(['node-flop', 'node-turn', 'node-river']);
   });
 
   it('不同 seed 通常产生不同内容（未破坏随机性分布）', () => {

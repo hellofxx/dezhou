@@ -69,13 +69,14 @@ beforeEach(() => {
 
 describe('GTOSimulatorHome 标签页', () => {
   it('默认展示场景训练设置与两个标签页', () => {
-    renderHome();
+    const { container } = renderHome();
 
     expect(screen.getByText('GTO 决策模拟器')).toBeTruthy();
     expect(screen.getByText('场景训练')).toBeTruthy();
     expect(screen.getByText('Spot 练习')).toBeTruthy();
     expect(screen.getByText('开始 GTO 训练')).toBeTruthy();
     expect(screen.queryByText('选择训练场景')).toBeNull();
+    expect(container.firstElementChild?.classList.contains('pb-24')).toBe(true);
   });
 
   it('切到 Spot 练习展示 SpotTrainer，点返回回到场景设置', () => {
