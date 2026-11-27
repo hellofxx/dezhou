@@ -118,21 +118,29 @@ describe('analyzeHandDeviations（Worker 不可用时的 fallback）', () => {
     expect(await mod.analyzeHandDeviations([hand], 'Hero')).toEqual([]);
   });
 
-  it('结果写入缓存：getCachedDeviation 可取回，clearDeviationCache 清空，重复分析跳过', async () => {
+  it('全不可用结果不写入缓存，Worker 恢复后可重试', async () => {
     await mod.analyzeHandDeviations([makeHand('h4')], 'Hero');
-    expect(mod.getCachedDeviation('h4')?.handId).toBe('h4');
-
-    // 已缓存手牌再次分析：全部命中缓存，不再提取决策（total = 已完成手牌数）
-    const onProgress = vi.fn();
-    const cachedOnly = await mod.analyzeHandDeviations([makeHand('h4')], 'Hero', onProgress);
-    expect(cachedOnly).toHaveLength(1);
-    expect(onProgress).toHaveBeenLastCalledWith(1, 1);
-
-    mod.clearDeviationCache();
     expect(mod.getCachedDeviation('h4')).toBeUndefined();
   });
 
   it('部分命中缓存时只为未缓存手牌提取决策', async () => {
+    class CacheWorker {
+      onmessage: ((e: MessageEvent) => void) | null = null;
+      onerror: (() => void) | null = null;
+      postMessage(msg: { id: number; payload: Array<{ id: string }> }): void {
+        const result = msg.payload.map((entry) => ({
+          id: entry.id,
+          gtoAction: 'raise',
+          evLoss: 0,
+          grade: 'best',
+          available: true,
+        }));
+        this.onmessage?.({ data: { id: msg.id, result } } as MessageEvent);
+      }
+      terminate(): void {}
+    }
+    vi.stubGlobal('Worker', CacheWorker);
+    await loadModule();
     await mod.analyzeHandDeviations([makeHand('h5')], 'Hero');
     const onProgress = vi.fn();
     const results = await mod.analyzeHandDeviations([makeHand('h5'), makeHand('h6')], 'Hero', onProgress);
@@ -181,6 +189,22 @@ describe('analyzeHandDeviations（Worker 可用）', () => {
     }
     terminate(): void {}
   }
+
+  it('可用结果写入缓存，重复分析跳过', async () => {
+    vi.stubGlobal('Worker', ReplyingWorker);
+    await loadModule();
+
+    await mod.analyzeHandDeviations([makeHand('w-cache')], 'Hero');
+    expect(mod.getCachedDeviation('w-cache')?.handId).toBe('w-cache');
+
+    const onProgress = vi.fn();
+    const cachedOnly = await mod.analyzeHandDeviations([makeHand('w-cache')], 'Hero', onProgress);
+    expect(cachedOnly).toHaveLength(1);
+    expect(onProgress).toHaveBeenLastCalledWith(1, 1);
+
+    mod.clearDeviationCache();
+    expect(mod.getCachedDeviation('w-cache')).toBeUndefined();
+  });
 
   it('Worker 回传结果按批次顺序映射到对应决策', async () => {
     vi.stubGlobal('Worker', ReplyingWorker);

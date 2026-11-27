@@ -8,6 +8,7 @@ import { selectHandForDifficulty } from './handDifficulty';
 import { buildBoard, boardToFlat, getCbetSizingMultiplier } from './postflopStrategy';
 import { resolveSpotKey } from './spotKey';
 import { computePreflopPot, generateDecisionNodes } from './decisionNodes';
+import { appendCurrentStreetBet, tagStreet } from './actionStory';
 import { seededRandom } from '@/shared/utils/seededShuffle';
 
 // ─── 前置动作生成（支持 Multiway）─────────────────
@@ -134,7 +135,10 @@ export function generateScenario(config: ScenarioConfig, index: number, seed?: n
   let previousActions: PreviousAction[] = [];
 
   if (street === 'preflop') {
-    previousActions = generatePreviousActions('preflop', config.position, config.playerCount, config.difficulty, rng);
+    previousActions = tagStreet(
+      generatePreviousActions('preflop', config.position, config.playerCount, config.difficulty, rng),
+      'preflop'
+    );
     potSize = computePreflopPot(previousActions);
     // BUG-GTO-009：出口过滤——preflop 场景必须命中 GTO 表。若源头约束失效返回
     // null 的 spot，视为理论不可达 / 生成缺陷，强制回退到已保证命中的 open 场景。
@@ -142,7 +146,7 @@ export function generateScenario(config: ScenarioConfig, index: number, seed?: n
       warnPreflopFallbackOnce(config.position);
       const order = getActionOrder(config.playerCount, 'preflop');
       // 回退：非 BB → hero open（{pos}_open 有表）；BB → BB vs BTN open（bb_vs_btn_open 有表）
-      previousActions =
+      previousActions = tagStreet(
         config.position === Position.BB
           ? order.slice(0, -1).map((pos) =>
               pos === Position.BTN
@@ -151,36 +155,61 @@ export function generateScenario(config: ScenarioConfig, index: number, seed?: n
             )
           : order
               .slice(0, order.indexOf(config.position))
-              .map((pos) => ({ position: pos as Position, action: ActionType.Fold }));
+              .map((pos) => ({ position: pos as Position, action: ActionType.Fold })),
+        'preflop'
+      );
       potSize = computePreflopPot(previousActions);
     }
   } else {
-    previousActions = generatePreviousActions(street, config.position, config.playerCount, config.difficulty, rng);
+    previousActions = tagStreet(
+      generatePreviousActions(street, config.position, config.playerCount, config.difficulty, rng),
+      'preflop'
+    );
     const preflopPot = computePreflopPot(previousActions);
     // P1C-01：发公共牌时排除 hero 手牌，确保 hero 2 张 + board 5 张全局唯一
     const { cards: flopCards, texture: flopTexture } = generateFlop(variant, heroHand, rng);
+    const betStory = (history: PreviousAction[], betStreet: 'flop' | 'turn' | 'river', pot: number, multiplier: number) =>
+      appendCurrentStreetBet(history, {
+        street: betStreet,
+        heroPosition: config.position,
+        playerCount: config.playerCount,
+        potSize: pot,
+        sizingMultiplier: multiplier,
+        effectiveStack: config.effectiveStack,
+      });
 
     if (street === 'flop') {
       board = buildBoard(flopCards);
       boardTexture = flopTexture;
       potSize = preflopPot;
+      previousActions = betStory(previousActions, 'flop', potSize, getCbetSizingMultiplier(flopTexture));
     } else if (street === 'turn') {
       const turnCard = generateTurnCard(flopCards, variant, heroHand, rng);
       board = buildBoard(flopCards, turnCard);
       // P1C-21：turn 重算 texture（不再沿用 flop texture）
-      boardTexture = classifyBoardTexture(boardToFlat(board));
-      const flopBet = flopTexture ? preflopPot * getCbetSizingMultiplier(flopTexture) : preflopPot * 0.5;
+      const turnTexture = classifyBoardTexture(boardToFlat(board));
+      boardTexture = turnTexture;
+      const flopBet = Math.round(preflopPot * getCbetSizingMultiplier(flopTexture) * 10) / 10;
       potSize = Math.round((preflopPot + flopBet * 2) * 10) / 10;
+      previousActions = betStory(previousActions, 'flop', preflopPot, getCbetSizingMultiplier(flopTexture));
+      previousActions = [...previousActions, { position: config.position, action: ActionType.Call, amount: flopBet, street: 'flop' }];
+      previousActions = betStory(previousActions, 'turn', potSize, getCbetSizingMultiplier(turnTexture));
     } else {
       const turnCard = generateTurnCard(flopCards, variant, heroHand, rng);
       const riverCard = generateRiverCard([...flopCards, turnCard], variant, heroHand, rng);
       board = buildBoard(flopCards, turnCard, riverCard);
+      const turnTexture = classifyBoardTexture(boardToFlat(buildBoard(flopCards, turnCard)));
       // P1C-21：river 重算 texture
       boardTexture = classifyBoardTexture(boardToFlat(board));
-      const flopBet = preflopPot * getCbetSizingMultiplier(flopTexture);
-      const turnPot = preflopPot + flopBet * 2;
-      const turnBet = turnPot * 0.66;
+      const flopBet = Math.round(preflopPot * getCbetSizingMultiplier(flopTexture) * 10) / 10;
+      const turnPot = Math.round((preflopPot + flopBet * 2) * 10) / 10;
+      const turnBet = Math.round(turnPot * 0.66 * 10) / 10;
       potSize = Math.round((turnPot + turnBet * 2) * 10) / 10;
+      previousActions = betStory(previousActions, 'flop', preflopPot, getCbetSizingMultiplier(flopTexture));
+      previousActions = [...previousActions, { position: config.position, action: ActionType.Call, amount: flopBet, street: 'flop' }];
+      previousActions = betStory(previousActions, 'turn', turnPot, getCbetSizingMultiplier(turnTexture));
+      previousActions = [...previousActions, { position: config.position, action: ActionType.Call, amount: turnBet, street: 'turn' }];
+      previousActions = betStory(previousActions, 'river', potSize, getCbetSizingMultiplier(boardTexture));
     }
   }
 

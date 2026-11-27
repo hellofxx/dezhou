@@ -293,12 +293,12 @@ function computeDecisionEVs(
   const evLoss = inSupport
     ? 0
     : Math.round(Math.max(GRADE_THRESHOLDS.correct, rawLoss) * 1000) / 1000;
-  return { userEV, optimalEV, evLoss };
+  // 支持频率内动作展示为“与最优一致”，避免出现 Loss 0 但 Optimal EV 不同的矛盾。
+  return { userEV, optimalEV: inSupport ? userEV : optimalEV, evLoss };
 }
 
 /**
- * 计算 EV 损失（BB）：最优策略 EV − 用户动作 EV。
- * P1C-02：结果 clamp ≥ 0，且超注（>GTO 尺寸）按边际惩罚折价，见 calculateUserRaiseEV。
+ * 计算 EV 损失（BB）：支持频率内动作记 0；频率外/超注动作至少记 0.5BB。
  */
 export function calculateEVLoss(
   userAction: string,

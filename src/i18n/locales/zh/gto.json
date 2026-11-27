@@ -175,6 +175,7 @@
     "restart": "重新训练",
     "backHome": "返回首页",
     "noData": "没有结果数据",
+    "referenceRateLabel": "参考一致率",
     "calibrationHeuristic": "本次包含启发式场景，不展示精确 EV 汇总。",
     "calibrationUnavailable": "本次没有可用策略数据，无法生成偏差结论。"
   },
@@ -182,6 +183,8 @@
     "lastTraining": "上次训练",
     "optimalRate": "最优决策率",
     "referenceRate": "参考一致率",
+    "unavailableRate": "无可用数据",
+    "scenariosCountUnavailable": "{{count}} 个决策 · 无可用策略",
     "scenariosCount": "{{count}} 个决策 · EV 损失率 {{ev}} BB/100",
     "scenariosCountReference": "{{count}} 个决策 · 启发式参考",
     "scenarioCount": "个场景",

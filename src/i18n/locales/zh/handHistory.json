@@ -18,7 +18,9 @@
     "unavailable": {
       "title": "分析暂不可用",
       "description": "分析引擎不可用或超时，本次不提供评级与 EV 结论。",
-      "count": "{{unavailable}} 条决策未分析",
+      "count": "{{count}} 条决策未分析",
+        "count_one": "{{count}} 条决策未分析",
+        "count_other": "{{count}} 条决策未分析",
       "row": "本街分析不可用"
     }
   },

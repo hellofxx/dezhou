@@ -28,6 +28,7 @@ function renderFeedback(props: Partial<ComponentProps<typeof GTOFeedback>>) {
     evLoss: 0,
     explanation: 'explanation-body',
     gtoStrategy: null,
+    calibration: 'calibrated',
     ...props,
   };
   return render(
@@ -186,10 +187,13 @@ describe('GTOFeedback 非标定场景', () => {
       evLoss: 0,
       calibration: 'unavailable',
       recommendedAction: 'fold',
+      gtoStrategy: { fold: 0.2, call: 0, raise: 0.8, raiseAmount: 2.5 },
     });
 
     expect(screen.getByText(/无可用策略数据/)).toBeTruthy();
     expect(screen.getByText('参考动作')).toBeTruthy();
+    expect(screen.queryByText('参考频率分布')).toBeNull();
+    expect(screen.queryByText(/Raise 80%/)).toBeNull();
   });
 });
 

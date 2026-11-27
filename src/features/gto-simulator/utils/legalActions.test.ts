@@ -93,8 +93,14 @@ describe('getLegalActionContext', () => {
     expect(ctx).toMatchObject({ callAmount: 6.5, minRaiseTo: 15.5, canRaise: true });
   });
 
-  it('翻后按 texture 的 c-bet 推算跟注与最小加注，筹码不足时禁止加注', () => {
-    const flop = scenario({ street: 'flop', board: DRY_FLOP, effectiveStack: 5, potSize: 10 });
+  it('翻后读取本街下注：跟注/最小加注一致，筹码不足时禁止加注', () => {
+    const flop = scenario({
+      street: 'flop',
+      board: DRY_FLOP,
+      effectiveStack: 5,
+      potSize: 10,
+      previousActions: [{ position: Position.CO, action: ActionType.Raise, amount: 3.3, street: 'flop' }],
+    });
     expect(getLegalActionContext(flop, undefined, 10)).toEqual({
       callAmount: 3.3,
       canCheck: false,
@@ -102,5 +108,27 @@ describe('getLegalActionContext', () => {
       maxRaiseTo: 5,
       canRaise: false,
     });
+  });
+
+  it('翻后本街无下注时可过牌，最小下注 2BB', () => {
+    const flop = scenario({ street: 'flop', board: DRY_FLOP, potSize: 10 });
+    expect(getLegalActionContext(flop, undefined, 10)).toMatchObject({
+      callAmount: 0,
+      canCheck: true,
+      minRaiseTo: 2,
+    });
+  });
+
+  it('翻后最小加注忽略翻前 raise，只按本街下注计算', () => {
+    const flop = scenario({
+      street: 'flop',
+      board: DRY_FLOP,
+      potSize: 10,
+      previousActions: [
+        { position: Position.BTN, action: ActionType.Raise, amount: 2.5, street: 'preflop' },
+        { position: Position.CO, action: ActionType.Raise, amount: 2.1, street: 'flop' },
+      ],
+    });
+    expect(getLegalActionContext(flop, undefined, 10).minRaiseTo).toBe(4.2);
   });
 });

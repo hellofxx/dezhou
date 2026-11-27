@@ -300,6 +300,7 @@ export default function GTOSessionPage() {
           callAmount={legalActions?.callAmount}
           canCheck={legalActions?.canCheck}
           minRaiseTo={legalActions?.minRaiseTo}
+          canRaise={legalActions?.canRaise}
         />
       ) : isMobile ? (
         <>

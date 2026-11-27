@@ -1,13 +1,12 @@
 import { Position } from '@/shared/types/position';
+import { ActionType } from '@/shared/types/action';
 import type { DecisionNode, LegalActionContext, Scenario } from '../types';
-import { classifyBoardTexture } from './boardGenerator';
-import { boardToFlat, getCbetSizingMultiplier } from './postflopStrategy';
 
 /** PreviousAction.amount 对 raise 表示 raise-to 总额；call 表示本街已投入总额。 */
 export function computeCallAmount(
   scenario: Scenario,
   node: DecisionNode | undefined,
-  potSize: number
+  _potSize: number
 ): number {
   const actions = node?.previousActions ?? scenario.previousActions;
   const street = node?.street ?? scenario.street;
@@ -23,9 +22,14 @@ export function computeCallAmount(
     return Math.round(Math.max(0, target - heroInvested) * 10) / 10;
   }
 
-  const flat = node?.board ? boardToFlat(node.board) : scenario.board ? boardToFlat(scenario.board) : undefined;
-  const texture = flat ? classifyBoardTexture(flat) : scenario.boardTexture;
-  return Math.round(potSize * getCbetSizingMultiplier(texture) * 10) / 10;
+  const currentStreet = actions.filter((action) => action.street === street);
+  const heroCommitment = currentStreet
+    .filter((action) => action.position === scenario.position && (action.action === ActionType.Raise || action.action === ActionType.Call || action.action === ActionType.AllIn))
+    .at(-1)?.amount ?? 0;
+  const villainBet = currentStreet
+    .filter((action) => action.position !== scenario.position && (action.action === ActionType.Raise || action.action === ActionType.AllIn))
+    .at(-1);
+  return Math.round(Math.max(0, (villainBet?.amount ?? 0) - heroCommitment) * 10) / 10;
 }
 
 function computeMinRaiseTo(
@@ -40,13 +44,20 @@ function computeMinRaiseTo(
 
   if (street === 'preflop') {
     if (!lastRaise) return 2;
+    // NLHE：最小加注增量 = 上一次加注增量。2.5BB open（BB 1 → 2.5）最小 3-bet 到 4.0BB。
     const previousRaiseTo = raises.at(-2)?.amount ?? 1;
     const increment = Math.max(1, (lastRaise.amount ?? 2.5) - previousRaiseTo);
     return Math.round(((lastRaise.amount ?? 2.5) + increment) * 10) / 10;
   }
 
-  if (lastRaise) return Math.round(((lastRaise.amount ?? callAmount) + Math.max(callAmount, 1)) * 10) / 10;
-  return Math.round(Math.max(callAmount * 2, 2) * 10) / 10;
+  const currentRaises = actions.filter((action) => action.street === street && action.action === ActionType.Raise);
+  const lastStreetRaise = currentRaises.at(-1);
+  if (!lastStreetRaise) return Math.round(Math.max(callAmount * 2, 2) * 10) / 10;
+
+  const betTo = lastStreetRaise.amount ?? callAmount;
+  const previousTo = currentRaises.at(-2)?.amount ?? 0;
+  const increment = Math.max(betTo - previousTo, callAmount, 1);
+  return Math.round((betTo + increment) * 10) / 10;
 }
 
 export function getLegalActionContext(

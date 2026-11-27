@@ -53,7 +53,7 @@ export function GTOFeedback({
   feedback,
   userAction,
   onTryAgain,
-  calibration = 'calibrated',
+  calibration = 'unavailable',
   recommendedAction,
 }: GTOFeedbackProps) {
   const { t } = useTranslation();
@@ -200,7 +200,7 @@ export function GTOFeedback({
       )}
 
       {/* 频率条形图 — Raise=brass, Call=sage, Fold=clay（术语源自 actionTerms，英文单源） */}
-      {gtoStrategy && (
+      {gtoStrategy && calibration !== 'unavailable' && (
         <div className="space-y-2">
           <div className="text-xs font-medium opacity-80">
             {t(calibrated ? 'gto.feedback.frequencyDistribution' : 'gto.feedback.referenceDistribution')}
@@ -235,7 +235,7 @@ export function GTOFeedback({
         </div>
       )}
 
-      {exploitMode && exploitStrategy && gtoStrategy && (
+      {exploitMode && exploitStrategy && gtoStrategy && calibration !== 'unavailable' && (
         <div className="space-y-2">
           <div className="text-xs font-medium opacity-80">{t('gto.feedback.exploitSuggestion', { name: opponent?.shortName ?? t('gto.feedback.opponentPrefix') })}</div>
           <div className="flex h-6 rounded overflow-hidden">

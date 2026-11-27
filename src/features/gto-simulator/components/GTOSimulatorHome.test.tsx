@@ -117,6 +117,16 @@ describe('GTOSimulatorHome 上次训练摘要', () => {
     expect(screen.queryByText(/EV 损失率/)).toBeNull();
   });
 
+  it('无可用数据结果使用不可用口径', () => {
+    useGTOSimulatorStore.setState({
+      lastResult: { ...RESULT, calibration: 'unavailable', unavailableDecisions: 20 },
+    });
+    renderHome();
+
+    expect(screen.getByText('无可用数据')).toBeTruthy();
+    expect(screen.getByText('20 个决策 · 无可用策略')).toBeTruthy();
+  });
+
   it('点击「查看完整结果」跳转到结果页', () => {
     useGTOSimulatorStore.setState({ lastResult: RESULT });
     const { container } = renderHome();

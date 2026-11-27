@@ -23,6 +23,8 @@ interface ResultSummaryProps {
   subtitle?: string;
   accuracy: number; // 0-1
   accuracyLabel?: string;
+  /** 正确率环内的指标名；缺省为「准确率」 */
+  accuracyMetricLabel?: string;
   stats: StatItem[];
   onRetry: () => void;
   onBack: () => void;
@@ -60,6 +62,7 @@ export function ResultSummary({
   subtitle,
   accuracy,
   accuracyLabel,
+  accuracyMetricLabel,
   stats,
   onRetry,
   onBack,
@@ -113,7 +116,9 @@ export function ResultSummary({
               >
                 {accuracyPercent}%
               </motion.span>
-              <span className="text-xs text-[var(--ivory-muted)]">{t('common.resultSummary.accuracy')}</span>
+              <span className="text-xs text-[var(--ivory-muted)]">
+                {accuracyMetricLabel ?? t('common.resultSummary.accuracy')}
+              </span>
             </div>
           </div>
         </motion.div>

@@ -160,6 +160,7 @@ describe('GTOResultPage 结果摘要', () => {
     expect(screen.queryByText('最需要改进的 Spots')).toBeNull();
     expect(screen.getByText('与参考一致')).toBeTruthy();
     expect(screen.getByText('偏离参考')).toBeTruthy();
+    expect(screen.getByText('参考一致率')).toBeTruthy();
   });
 
   it('无可用数据的结果展示不可用说明', () => {

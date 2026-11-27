@@ -133,6 +133,12 @@ describe('混合策略：支持频率内动作不罚，频率外动作不为最�
     }
   });
 
+  it('支持频率内动作的 optimalEV 与 userEV 一致，避免 Loss 0 但 EV 不同的矛盾', () => {
+    const result = compareDecision({ action: ActionType.Raise, amount: 3 }, mixed, 10, 0.55, 2);
+    expect(result.evLoss).toBe(0);
+    expect(result.optimalEV).toBe(result.userEV);
+  });
+
   it('零频率 call 不再因 EV 更高而被判最优', () => {
     const result = compareDecision({ action: ActionType.Call }, { fold: 0.7, call: 0, raise: 0.3, raiseAmount: 2.5 }, 1.5, 0.503, 1);
     expect(result.evLoss).toBeGreaterThanOrEqual(0.5);

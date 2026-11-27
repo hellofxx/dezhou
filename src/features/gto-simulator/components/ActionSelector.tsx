@@ -13,6 +13,8 @@ interface ActionSelectorProps {
   canCheck?: boolean;
   /** 场景给定的最小加注**到**的总额；缺省沿用 2×callAmount / 2 */
   minRaiseTo?: number;
+  /** 场景给定的加注可用性；缺省由 minRaiseTo 与筹码推导 */
+  canRaise?: boolean;
   onDecision: (decision: Decision) => void;
   disabled?: boolean;
 }
@@ -23,6 +25,7 @@ export function ActionSelector({
   callAmount,
   canCheck = false,
   minRaiseTo,
+  canRaise,
   onDecision,
   disabled = false,
 }: ActionSelectorProps) {
@@ -34,7 +37,7 @@ export function ActionSelector({
   /** 滑块 / 提交用的最小加注：始终不超过有效筹码，避免 min > max 的非法区间 */
   const minRaise = Math.min(rawMinRaise, maxRaise);
   /** 最小加注超过有效筹码 → 没有合法加注空间 */
-  const raiseBlocked = rawMinRaise > maxRaise;
+  const raiseBlocked = canRaise === false || rawMinRaise > maxRaise;
   const raiseDisabled = disabled || raiseBlocked;
 
   const [raiseAmount, setRaiseAmount] = useState(() => Math.min(Math.max(2.5, minRaise), maxRaise));
@@ -49,12 +52,14 @@ export function ActionSelector({
   /** 当前展示 / 提交的加注尺寸（prop 变化导致区间收窄时保持合法） */
   const raiseValue = clampRaise(raiseAmount);
 
+  const showCheck = canCheck || !callAmount;
+
   /** 中间按钮语义：可过牌时提交 Check，否则提交 Call 带跟注额 */
   const commitMiddle = useCallback(() => {
     onDecision(
-      canCheck ? { action: ActionType.Check } : { action: ActionType.Call, amount: callAmount }
+      showCheck ? { action: ActionType.Check } : { action: ActionType.Call, amount: callAmount }
     );
-  }, [canCheck, callAmount, onDecision]);
+  }, [showCheck, callAmount, onDecision]);
 
   // 快捷键
   const handleKeyDown = useCallback(
@@ -112,11 +117,9 @@ export function ActionSelector({
   };
 
   // BUG-GTO-010：动作词统一取 shared 级扑克动作术语源（actionTerms），刻意保留英文。
-  const callLabel = canCheck
+  const callLabel = showCheck
     ? actionTerm(ActionType.Check)
-    : callAmount
-      ? actionLabel(ActionType.Call, callAmount)
-      : actionTerm(ActionType.Check);
+    : actionLabel(ActionType.Call, callAmount);
 
   return (
     <div className="space-y-4">

@@ -42,11 +42,14 @@ export interface Scenario {
   decisionNodes?: DecisionNode[]; // 多步决策节点（为空时使用单步模式）
 }
 
+export type Street = 'preflop' | 'flop' | 'turn' | 'river';
+
 // 前置动作
 export interface PreviousAction {
   position: Position;
   action: ActionType;
   amount?: number;
+  street?: Street;
 }
 
 // GTO策略数据（预计算）

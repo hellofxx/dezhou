@@ -64,18 +64,24 @@ describe('computeCallAmount（P1-01 node 实际 board texture）', () => {
       potSize: 20,
       heroHand: scenario.heroHand,
       gtoStrategy: { fold: 0, call: 1, raise: 0 },
-      previousActions: [{ position: Position.BTN, action: ActionType.Call, amount: 3.3 }],
+      previousActions: [{ position: Position.CO, action: ActionType.Raise, amount: 6.6, street: 'turn' }],
     };
-    // dry → sizingMultiplier 0.33 → callAmount = 20 * 0.33 = 6.6
     const callAmount = computeCallAmount(scenario, node, 20);
     expect(callAmount).toBe(6.6);
   });
 
-  it('无 node 时回退 scenario.board 分类（与 scenario.boardTexture 不同则用实际分类）', () => {
-    // scenario.boardTexture 缓存为 wet，但 scenario.board 实际是 dry → 用 dry 0.33
-    const scenario = makeScenario('wet', dryBoard);
+  it('无 node 时读取本街实际下注额', () => {
+    const scenario = {
+      ...makeScenario('wet', dryBoard),
+      previousActions: [{ position: Position.CO, action: ActionType.Raise, amount: 3.3, street: 'flop' as const }],
+    };
     const callAmount = computeCallAmount(scenario, undefined, 10);
     expect(callAmount).toBe(3.3);
+  });
+
+  it('本街无下注时返回 0（可过牌），不再虚构 c-bet', () => {
+    const scenario = makeScenario('wet', dryBoard);
+    expect(computeCallAmount(scenario, undefined, 10)).toBe(0);
   });
 
   it('BB 面对 2.5BB open 只需再跟 1.5BB', () => {

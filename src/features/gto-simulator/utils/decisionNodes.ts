@@ -5,6 +5,7 @@ import type { PreviousAction, DecisionNode, HandStrategy } from '../types';
 import { generateFlop, generateTurnCard, generateRiverCard, classifyBoardTexture } from './boardGenerator';
 import { buildBoard, boardToFlat, estimatePostflopStrategy, getCbetSizingMultiplier } from './postflopStrategy';
 import { getPreflopHandStrategy } from './spotKey';
+import { appendCurrentStreetBet, tagStreet } from './actionStory';
 
 // ─── 真实底池累加（P1C-20）───────────────────────
 
@@ -43,7 +44,7 @@ export function generateDecisionNodes(
   heroHand: [Card, Card],
   position: Position,
   variant: GameVariant,
-  _effectiveStack: number,
+  effectiveStack: number,
   difficulty: string,
   playerCount: number,
   rng: () => number = Math.random
@@ -55,14 +56,16 @@ export function generateDecisionNodes(
   // Preflop 节点：hero open 故事线（BB 无 open 场景 → BB vs BTN open）。
   // 这两个分支均命中 GTO 表（非 BB 的 {pos}_open；BB 的 bb_vs_btn_open），
   // 不产生 resolveSpotKey 返回 null 的场景（BUG-GTO-009 约束）。
-  const preflopActions: PreviousAction[] =
+  const preflopActions = tagStreet(
     position === Position.BB
       ? actionOrder.slice(0, heroIdx).map((pos) =>
           pos === Position.BTN
             ? { position: pos, action: ActionType.Raise, amount: 2.5 }
             : { position: pos, action: ActionType.Fold }
         )
-      : actionOrder.slice(0, heroIdx).map((pos) => ({ position: pos, action: ActionType.Fold }));
+      : actionOrder.slice(0, heroIdx).map((pos) => ({ position: pos, action: ActionType.Fold })),
+    'preflop'
+  );
   const preflopPot = computePreflopPot(preflopActions);
   // P1C-05：首节点用与单步一致的 preflop 查表逻辑（不再硬编码）
   const preflopStrategy = getPreflopHandStrategy(position, preflopActions, heroHand) ?? PREFLOP_FALLBACK;
@@ -78,10 +81,37 @@ export function generateDecisionNodes(
     previousActions: preflopActions,
   });
 
+  // 翻后故事线需要真实对手：非 BB → hero open + 下家 call；BB → BTN open + BB call。
+  const caller = actionOrder[heroIdx + 1] ?? actionOrder[heroIdx - 1]!;
+  const postflopPreflop = position === Position.BB
+    ? tagStreet([
+        ...actionOrder.slice(0, heroIdx).map((pos) => (
+          pos === Position.BTN
+            ? { position: pos, action: ActionType.Raise, amount: 2.5 }
+            : { position: pos, action: ActionType.Fold }
+        )),
+        { position, action: ActionType.Call, amount: 2.5 },
+      ], 'preflop')
+    : tagStreet([
+        { position, action: ActionType.Raise, amount: 2.5 },
+        { position: caller, action: ActionType.Call, amount: 2.5 },
+      ], 'preflop');
+  const betStory = (history: PreviousAction[], betStreet: 'flop' | 'turn' | 'river', pot: number, multiplier: number) =>
+    appendCurrentStreetBet(history, {
+      street: betStreet,
+      heroPosition: position,
+      playerCount,
+      potSize: pot,
+      sizingMultiplier: multiplier,
+      effectiveStack,
+    });
+
   // Flop 节点（P1C-01：排除 hero 手牌；P1C-20：真实底池累加）
-  const flopPot = potAfterPreflopCall(preflopActions, position !== Position.BB);
+  const flopPot = potAfterPreflopCall(postflopPreflop, position !== Position.BB);
   const { cards: flopCards, texture: flopTexture } = generateFlop(variant, heroHand, rng);
   const flopBoard = buildBoard(flopCards);
+  let flopHistory = betStory(postflopPreflop, 'flop', flopPot, getCbetSizingMultiplier(flopTexture));
+  const flopBet = flopHistory.at(-1)?.amount ?? Math.round(flopPot * getCbetSizingMultiplier(flopTexture) * 10) / 10;
   nodes.push({
     id: 'node-flop',
     street: 'flop',
@@ -92,15 +122,17 @@ export function generateDecisionNodes(
     potSize: flopPot,
     heroHand,
     gtoStrategy: estimatePostflopStrategy(heroHand, flopBoard, flopTexture, 'flop'),
-    previousActions: [{ position, action: ActionType.Call, amount: 2.5 }],
+    previousActions: flopHistory,
   });
 
   // Turn 节点：flop 双方各投一次 c-bet（尺寸来自 cbet_frequencies）
-  const flopBet = Math.round(flopPot * getCbetSizingMultiplier(flopTexture) * 10) / 10;
   const turnPot = Math.round((flopPot + flopBet * 2) * 10) / 10;
   const turnCard = generateTurnCard(flopCards, variant, heroHand, rng);
   const turnBoard = buildBoard(flopCards, turnCard);
   const turnTexture = classifyBoardTexture(boardToFlat(turnBoard));
+  flopHistory = [...flopHistory, { position, action: ActionType.Call, amount: flopBet, street: 'flop' }];
+  let turnHistory = betStory(flopHistory, 'turn', turnPot, getCbetSizingMultiplier(turnTexture));
+  const turnBet = turnHistory.at(-1)?.amount ?? Math.round(turnPot * 0.66 * 10) / 10;
   nodes.push({
     id: 'node-turn',
     street: 'turn',
@@ -111,15 +143,16 @@ export function generateDecisionNodes(
     potSize: turnPot,
     heroHand,
     gtoStrategy: estimatePostflopStrategy(heroHand, turnBoard, turnTexture, 'turn'),
-    previousActions: [{ position, action: ActionType.Call, amount: flopBet }],
+    previousActions: turnHistory,
   });
 
   // River 节点：turn 双方各投一次 2/3 pot
-  const turnBet = Math.round(turnPot * 0.66 * 10) / 10;
   const riverPot = Math.round((turnPot + turnBet * 2) * 10) / 10;
   const riverCard = generateRiverCard([...flopCards, turnCard], variant, heroHand, rng);
   const riverBoard = buildBoard(flopCards, turnCard, riverCard);
   const riverTexture = classifyBoardTexture(boardToFlat(riverBoard));
+  turnHistory = [...turnHistory, { position, action: ActionType.Call, amount: turnBet, street: 'turn' }];
+  const riverHistory = betStory(turnHistory, 'river', riverPot, getCbetSizingMultiplier(riverTexture));
   nodes.push({
     id: 'node-river',
     street: 'river',
@@ -130,7 +163,7 @@ export function generateDecisionNodes(
     potSize: riverPot,
     heroHand,
     gtoStrategy: estimatePostflopStrategy(heroHand, riverBoard, riverTexture, 'river'),
-    previousActions: [{ position, action: ActionType.Call, amount: turnBet }],
+    previousActions: riverHistory,
   });
 
   const streetOrder: Array<'preflop' | 'flop' | 'turn' | 'river'> = ['preflop', 'flop', 'turn', 'river'];

@@ -195,7 +195,7 @@ describe('GtoDeviationPanel', () => {
     expect(status.textContent).toContain(i18n.t('handHistory.deviation.unavailable.title'));
     expect(status.textContent).toContain(i18n.t('handHistory.deviation.unavailable.description'));
     expect(status.textContent).toContain(
-      i18n.t('handHistory.deviation.unavailable.count', { unavailable: 4 }),
+      i18n.t('handHistory.deviation.unavailable.count', { count: 4 }),
     );
 
     // 不显示假的统计口径
@@ -289,7 +289,8 @@ describe('handHistory.deviation i18n 文案', () => {
     'partialUnavailable',
     'unavailable.title',
     'unavailable.description',
-    'unavailable.count',
+    'unavailable.count_one',
+    'unavailable.count_other',
     'unavailable.row',
   ] as const;
 

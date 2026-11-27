@@ -16,6 +16,7 @@ export default function GTOSimulatorHome() {
   const { generateScenarios } = useScenarioEngine();
   const { lastResult } = useGTOSimulatorStore();
   const calibratedResult = lastResult?.calibration === 'calibrated';
+  const unavailableResult = lastResult?.calibration === 'unavailable';
 
   const handleStart = () => {
     generateScenarios();
@@ -63,14 +64,18 @@ export default function GTOSimulatorHome() {
                 {Math.round(lastResult.accuracy * 100)}%
               </span>
               <span className="text-sm text-[var(--ivory-muted)] ml-2">
-                {t(calibratedResult ? 'gto.home.optimalRate' : 'gto.home.referenceRate')}
+                {t(calibratedResult
+                  ? 'gto.home.optimalRate'
+                  : unavailableResult ? 'gto.home.unavailableRate' : 'gto.home.referenceRate')}
               </span>
             </div>
             <div className="text-right">
               <div className="text-sm text-[var(--ivory-muted)] font-numeric">
                 {calibratedResult
                   ? t('gto.home.scenariosCount', { count: lastResult.scenarios, ev: lastResult.evLossBB100.toFixed(2) })
-                  : t('gto.home.scenariosCountReference', { count: lastResult.scenarios })}
+                  : unavailableResult
+                    ? t('gto.home.scenariosCountUnavailable', { count: lastResult.scenarios })
+                    : t('gto.home.scenariosCountReference', { count: lastResult.scenarios })}
               </div>
             </div>
           </div>

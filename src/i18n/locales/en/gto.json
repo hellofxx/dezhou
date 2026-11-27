@@ -175,6 +175,7 @@
     "restart": "Train Again",
     "backHome": "Back to Home",
     "noData": "No result data",
+    "referenceRateLabel": "Reference Match Rate",
     "calibrationHeuristic": "This session includes heuristic spots — precise EV summary is hidden.",
     "calibrationUnavailable": "No strategy data was available for this session, so no deviation assessment is shown."
   },
@@ -182,6 +183,8 @@
     "lastTraining": "Last Training",
     "optimalRate": "Optimal Decision Rate",
     "referenceRate": "Reference Match Rate",
+    "unavailableRate": "No available data",
+    "scenariosCountUnavailable": "{{count}} decisions · no available strategy",
     "scenariosCount": "{{count}} decisions · EV loss {{ev}} BB/100",
     "scenariosCountReference": "{{count}} decisions · heuristic reference",
     "scenarioCount": "scenarios",

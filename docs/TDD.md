@@ -875,8 +875,10 @@ interface DailyRecommendation {
     - 表内未列出的手牌按 100% fold 处理并补齐 169 手；禁止把缺项回退成 `40/30/30`
     - 非标定场景不展示精确 EV / 五级评级，会话页与结果页改用「参考策略」口径；结果汇总只在全部决策标定时展示 EV 与 worstSpots
     - 混合策略中任一正频率动作（raise 尺寸不超过建议尺寸）视为最优；零频率或超注动作至少记 0.5BB 损失
-    - `getLegalActionContext` 统一给出 callAmount / 可过牌 / 最小与最大加注；ActionSelector 据此渲染 Check / Call，并在最小加注超过筹码时禁用 Raise
-    - 结果路由校验 `:sessionId` 与内存结果一致；结果矩阵为只读，移动端使用 11px 字号与横向滚动
+    - 翻后故事线必须把本街对手下注写入 `previousActions`（必要时 Hero 先 Check）；`callAmount` 从本街实际下注减去 Hero 投入，不得用 pot×cbet 虚构跟注额
+    - `getLegalActionContext` 统一给出 callAmount / 可过牌 / 最小与最大加注；翻后最小加注只统计本街下注，ActionSelector 据此渲染 Check / Call，并在最小加注超过筹码时禁用 Raise
+    - 支持频率内动作的 `optimalEV` 与 `userEV` 对齐，避免 Loss 0 但 EV 不同的展示矛盾
+    - 结果路由校验 `:sessionId` 与内存结果一致；结果矩阵为只读，移动端使用 11px 字号与横向滚动；非标定结果环标签使用「参考一致率」
 
 ### 5.4 Hand History（手牌历史）
 
@@ -929,7 +931,7 @@ interface DailyRecommendation {
    - 标注随 HandHistory 一起持久化到 IndexedDB
    - 在回放任意时刻可添加/查看标注
 
-5. **策略偏差分析（启发式）**：Worker 仅按手牌与位置估算，board / pot / amount 未参与；UI 标题与说明明确为启发式参考，不宣称求解器 GTO。每条结果携带 `available`；Worker 不可用、崩溃、超时或回传不足时为 false，`getDeviationSummary` 只对可用项计算最优率与平均损失，失败路径禁止补成 best
+5. **策略偏差分析（启发式）**：Worker 仅按手牌与位置估算，board / pot / amount 未参与；UI 标题与说明明确为启发式参考，不宣称求解器 GTO。每条结果携带 `available`；Worker 不可用、崩溃、超时或回传不足时为 false，`getDeviationSummary` 只对可用项计算最优率与平均损失，失败路径禁止补成 best。全不可用结果不写入缓存，Worker 恢复后重新挂载可自动重试
 
 ### 5.5 Progress Tracking（进度追踪）
 

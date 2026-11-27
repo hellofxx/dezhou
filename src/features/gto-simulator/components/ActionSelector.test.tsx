@@ -55,12 +55,12 @@ describe('ActionSelector 主动作', () => {
     expect(onDecision).toHaveBeenNthCalledWith(3, { action: ActionType.AllIn, amount: 100 });
   });
 
-  it('无 callAmount（check 语境）时按钮回调 Call 且不带金额（未传 canCheck 的既有语义）', () => {
+  it('无 callAmount（check 语境）时按钮与提交语义一致，均为 Check', () => {
     const { onDecision } = setup({ callAmount: null });
 
     clickButton('Check');
 
-    expect(onDecision).toHaveBeenCalledWith({ action: ActionType.Call, amount: undefined });
+    expect(onDecision).toHaveBeenCalledWith({ action: ActionType.Check });
   });
 
   it('canCheck 时中间按钮显示 Check 并提交 Check（不带金额，不是 Call undefined）', () => {

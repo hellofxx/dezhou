@@ -62,6 +62,7 @@ export default function GTOResultPage() {
         stack: config.effectiveStack,
       })}
       accuracy={lastResult.accuracy}
+      accuracyMetricLabel={calibrated ? undefined : t('gto.result.referenceRateLabel')}
       stats={[
         { icon: <Target className="w-4 h-4" />, label: t('gto.result.statTotalScenarios'), value: `${lastResult.scenarios}` },
         { icon: <span className="text-[var(--paper-success)] text-sm font-bold">✓</span>, label: t(calibrated ? 'gto.result.statOptimal' : 'gto.result.statReferenceMatched'), value: `${lastResult.optimalDecisions}` },

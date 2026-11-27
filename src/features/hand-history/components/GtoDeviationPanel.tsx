@@ -141,7 +141,7 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
             <p className="font-semibold">{t('handHistory.deviation.unavailable.title')}</p>
             <p className="text-[var(--ivory-muted)]">{t('handHistory.deviation.unavailable.description')}</p>
             <p className="text-[var(--ivory-muted)]">
-              {t('handHistory.deviation.unavailable.count', { unavailable: unavailableCount })}
+              {t('handHistory.deviation.unavailable.count', { count: unavailableCount })}
             </p>
           </div>
         </div>

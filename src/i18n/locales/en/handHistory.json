@@ -18,7 +18,9 @@
     "unavailable": {
       "title": "Analysis temporarily unavailable",
       "description": "The analysis engine was unavailable or timed out, so no grade or EV conclusion is provided.",
-      "count": "{{unavailable}} decisions were not analyzed",
+      "count": "{{count}} decisions were not analyzed",
+        "count_one": "{{count}} decision was not analyzed",
+        "count_other": "{{count}} decisions were not analyzed",
       "row": "Analysis unavailable for this street"
     }
   },

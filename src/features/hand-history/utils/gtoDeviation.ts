@@ -334,7 +334,10 @@ export async function analyzeHandDeviations(
       deviations,
       analyzedAt: Date.now(),
     };
-    analysisCache.set(handId, result);
+    // 全不可用结果不缓存：Worker 恢复后再次挂载面板可自动重试。
+    if (deviations.some((decision) => decision.available)) {
+      analysisCache.set(handId, result);
+    }
     results.push(result);
   }
 
