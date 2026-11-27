@@ -1622,7 +1622,7 @@ UI 组件：
 
 - **模块边界**：`features/help-center` 是纯静态教程与检索模块，无 store、无 persist、无 `trainingEvents`；仅经路由字符串跳转其他 feature，不引入跨模块状态。
 - **内容单源**：`data/helpContent.ts` 持有教程、快速上手、概念与 FAQ 清单；`zh/en/help.json` 持有全部用户文案。Hero 数量承诺由清单长度经 i18n 插值生成，完整性测试同时校验双语 key、段落结构与数量占位符。
-- **全文检索**：`utils/helpSearch.ts` 对查询与语料执行 NFKC、trim、小写归一化；空白分词后要求所有词命中。检索范围包含教程标题、简介、正文、步骤、概念标题/正文与 FAQ 问答；空查询返回全量，组件按命中结果分区渲染并播报数量。
+- **全文检索**：`utils/helpSearch.ts` 对查询与语料执行 NFKC、trim、小写归一化；空白分词后要求所有词命中。检索范围包含快速上手步骤、教程标题、简介、正文、步骤、概念标题/正文与 FAQ 问答；空查询返回全量，组件按命中结果分区渲染并播报数量。
 - **交互与可访问性**：搜索框使用共享 `Input`，提供清除按钮与 Escape 清空；Hero 使用真实 hash 链接，点击后按 reduced-motion 选择滚动行为并把焦点移入 `tabIndex=-1` 的目标 section。FAQ 以 `questionKey` 作为展开状态与 ARIA id 的稳定键，折叠态保留 `aria-controls`，筛选后编号仍取原清单顺序。
 - **文章导航**：`HelpArticle` 使用 `article` 语义与 `aria-labelledby`，按清单顺序提供上一篇/下一篇真实链接；未知 id 复用共享 `EmptyState`。
 - **内容边界**：每日谜题描述为本地日期种子的固定题库，不宣称真实联网排名；手牌偏差描述为规则化参考，不宣称求解器级精确分析；数据清除区分训练记录与浏览器站点数据。

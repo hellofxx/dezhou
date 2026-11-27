@@ -183,7 +183,7 @@
 .help-anchor {
   scroll-margin-top: 84px;
 }
-.help-anchor:focus { outline: none; }
+.help-anchor:focus:not(:focus-visible) { outline: none; }
 
 /* ---- House Rules 立牌（签名元素） ---- */
 .help-hero-plaque-wrap {
@@ -538,7 +538,6 @@
   min-width: 0;
   min-height: 44px;
   white-space: normal;
-  text-align: left;
 }
 .help-article-nav-label,
 .help-article-nav-title { display: block; }

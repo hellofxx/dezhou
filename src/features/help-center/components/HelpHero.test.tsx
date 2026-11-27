@@ -89,6 +89,18 @@ describe('HelpHero 组件测试', () => {
     expect(onRuleClick).toHaveBeenCalledWith(anchor);
   });
 
+  it('修饰键点击交还浏览器原生行为', () => {
+    const onRuleClick = renderHero();
+    const cta = container.querySelector<HTMLAnchorElement>('.help-hero-cta');
+    expect(cta).not.toBeNull();
+
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true });
+    act(() => cta?.dispatchEvent(event));
+
+    expect(event.defaultPrevented).toBe(false);
+    expect(onRuleClick).not.toHaveBeenCalled();
+  });
+
   it('点击主 CTA 回传 quickstart', () => {
     const onRuleClick = renderHero();
     const cta = container.querySelector<HTMLAnchorElement>('.help-hero-cta');

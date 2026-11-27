@@ -170,6 +170,20 @@ describe('HelpHome 组件测试', () => {
     expect(container.querySelector('[role="status"]')?.textContent).toContain('找到 1 条匹配内容');
   });
 
+  it('检索命中快速上手步骤时保留该 section 并只渲染命中步骤', () => {
+    renderHelp();
+    typeSearch('每日谜题');
+
+    const section = container.querySelector('#help-quickstart');
+    expect(section).not.toBeNull();
+    const labels = Array.from(
+      section?.querySelectorAll('.quick-path-node-label') ?? [],
+    ).map((node) => node.textContent);
+    expect(labels).toContain('每日谜题');
+    expect(labels.every((label) => label?.includes('每日谜题'))).toBe(true);
+    expect(section?.querySelector('.quick-path-node-num')?.textContent).toBe('4');
+  });
+
   it('检索无结果时显示空态，清除后恢复全部内容', () => {
     renderHelp();
     typeSearch('not-a-real-help-keyword');

@@ -21,12 +21,12 @@ export default function FaqAccordion({ items = FAQ_ITEMS }: FaqAccordionProps) {
 
   return (
     <div className="faq-list">
-      {items.map((item) => {
+      {items.map((item, index) => {
         const isOpen = openKey === item.questionKey;
         const panelId = `faq-panel-${item.questionKey}`;
         const buttonId = `faq-button-${item.questionKey}`;
         const sourceIndex = FAQ_ITEMS.indexOf(item);
-        const num = String(sourceIndex + 1).padStart(2, '0');
+        const num = String((sourceIndex >= 0 ? sourceIndex : index) + 1).padStart(2, '0');
         return (
           <div key={item.questionKey} className={`faq-item${isOpen ? ' open' : ''}`}>
             <button

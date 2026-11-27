@@ -28,6 +28,8 @@ export default function HelpHero({ onRuleClick }: HelpHeroProps) {
   ];
 
   const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>, anchor: HelpHeroAnchor) => {
+    // 修饰键点击保留浏览器原生行为（新标签页打开锚点）
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     onRuleClick(anchor);
   };

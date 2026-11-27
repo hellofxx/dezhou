@@ -44,6 +44,12 @@ describe('FaqAccordion 组件测试', () => {
     expect(first?.getAttribute('aria-controls')).toBeNull();
   });
 
+  it('非 FAQ_ITEMS 条目按传入顺序编号', () => {
+    const first = FAQ_ITEMS[0] as (typeof FAQ_ITEMS)[number];
+    renderItems([{ ...first }]);
+    expect(container.querySelector('.faq-item-num')?.textContent).toBe('01');
+  });
+
   it('筛选后编号保持原清单顺序', () => {
     renderItems([FAQ_ITEMS[8] as (typeof FAQ_ITEMS)[number]]);
     expect(container.querySelectorAll('button[aria-expanded]')).toHaveLength(1);

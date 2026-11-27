@@ -52,6 +52,7 @@ export default function HelpArticle() {
           <Button asChild variant="outline" size="sm" className="help-article-nav-link justify-start">
             <Link
               to={`/help/article/${previousArticle.id}`}
+              title={t(`help.${previousArticle.titleKey}`)}
               aria-label={t('help.article.previousNamed', { title: t(`help.${previousArticle.titleKey}`) })}
             >
               <ArrowLeft size={14} aria-hidden="true" />
@@ -66,6 +67,7 @@ export default function HelpArticle() {
           <Button asChild variant="outline" size="sm" className="help-article-nav-link justify-end text-right">
             <Link
               to={`/help/article/${nextArticle.id}`}
+              title={t(`help.${nextArticle.titleKey}`)}
               aria-label={t('help.article.nextNamed', { title: t(`help.${nextArticle.titleKey}`) })}
             >
               <span className="min-w-0">
@@ -121,15 +123,17 @@ function SectionRenderer({ section }: { section: HelpSection }) {
       );
 
     case 'link': {
-      if (!section.to) return null;
+      const to = section.to;
       return (
         <div className="flex flex-wrap items-center gap-3">
           <p className="text-sm text-[var(--ivory-muted)] flex-1 min-w-0">
             {t(`help.${section.key}`)}
           </p>
-          <Button variant="outline" size="sm" asChild>
-            <Link to={section.to}>{t('help.article.useModule')}</Link>
-          </Button>
+          {to ? (
+            <Button variant="outline" size="sm" asChild>
+              <Link to={to}>{t('help.article.useModule')}</Link>
+            </Button>
+          ) : null}
         </div>
       );
     }

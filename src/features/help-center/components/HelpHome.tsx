@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Zap, BookOpen, Layers, MessageCircle, SearchX } from 'lucide-react';
-import { HELP_ARTICLES, CONCEPT_CARDS, FAQ_ITEMS } from '../data/helpContent';
+import { HELP_ARTICLES, CONCEPT_CARDS, FAQ_ITEMS, QUICK_START_STEPS } from '../data/helpContent';
 import { filterHelpItems, normalizeHelpQuery } from '../utils/helpSearch';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import HelpHero, { type HelpHeroAnchor } from './HelpHero';
@@ -20,30 +20,67 @@ export default function HelpHome() {
 
   const quickStartRef = useRef<HTMLElement>(null);
   const articlesRef = useRef<HTMLElement>(null);
-  const conceptsRef = useRef<HTMLElement>(null);
   const faqRef = useRef<HTMLElement>(null);
 
-  const filteredArticles = useMemo(() => filterHelpItems(HELP_ARTICLES, query, (article) => [
-    t(`help.${article.titleKey}`),
-    t(`help.${article.introKey}`),
-    ...article.sections.flatMap((section) => [
-      t(`help.${section.key}`),
-      ...(section.stepKeys ?? []).map((stepKey) => t(`help.${stepKey}`)),
-    ]),
-  ].join(' ')), [query, t]);
+  // 检索语料只在语言切换时重建，按键仅过滤预建文本
+  const articleCorpus = useMemo(
+    () => HELP_ARTICLES.map((article) => ({
+      article,
+      text: [
+        t(`help.${article.titleKey}`),
+        t(`help.${article.introKey}`),
+        ...article.sections.flatMap((section) => [
+          t(`help.${section.key}`),
+          ...(section.stepKeys ?? []).map((stepKey) => t(`help.${stepKey}`)),
+        ]),
+      ].join(' '),
+    })),
+    [t],
+  );
 
-  const filteredConcepts = useMemo(() => filterHelpItems(CONCEPT_CARDS, query, (card) => [
-    t(`help.${card.key}.title`),
-    t(`help.${card.key}.body`),
-  ].join(' ')), [query, t]);
+  const conceptCorpus = useMemo(
+    () => CONCEPT_CARDS.map((card) => ({
+      card,
+      text: [t(`help.${card.key}.title`), t(`help.${card.key}.body`)].join(' '),
+    })),
+    [t],
+  );
 
-  const filteredFaq = useMemo(() => filterHelpItems(FAQ_ITEMS, query, (item) => [
-    t(`help.${item.questionKey}`),
-    t(`help.${item.answerKey}`),
-  ].join(' ')), [query, t]);
+  const faqCorpus = useMemo(
+    () => FAQ_ITEMS.map((item) => ({
+      item,
+      text: [t(`help.${item.questionKey}`), t(`help.${item.answerKey}`)].join(' '),
+    })),
+    [t],
+  );
+
+  const stepCorpus = useMemo(
+    () => QUICK_START_STEPS.map((step) => ({ step, text: t(`help.${step.key}`) })),
+    [t],
+  );
+
+  const filteredArticles = useMemo(
+    () => filterHelpItems(articleCorpus, query, (entry) => entry.text).map((entry) => entry.article),
+    [articleCorpus, query],
+  );
+
+  const filteredConcepts = useMemo(
+    () => filterHelpItems(conceptCorpus, query, (entry) => entry.text).map((entry) => entry.card),
+    [conceptCorpus, query],
+  );
+
+  const filteredFaq = useMemo(
+    () => filterHelpItems(faqCorpus, query, (entry) => entry.text).map((entry) => entry.item),
+    [faqCorpus, query],
+  );
+
+  const filteredSteps = useMemo(
+    () => filterHelpItems(stepCorpus, query, (entry) => entry.text).map((entry) => entry.step),
+    [stepCorpus, query],
+  );
 
   const hasQuery = normalizeHelpQuery(query).length > 0;
-  const matchCount = filteredArticles.length + filteredConcepts.length + filteredFaq.length;
+  const matchCount = filteredSteps.length + filteredArticles.length + filteredConcepts.length + filteredFaq.length;
 
   const focusAnchor = useCallback((anchor: HelpHeroAnchor) => {
     const target = { quickstart: quickStartRef, articles: articlesRef, faq: faqRef }[anchor].current;
@@ -89,15 +126,16 @@ export default function HelpHome() {
           />
         ) : null}
 
-        {!hasQuery ? (
+        {(!hasQuery || filteredSteps.length > 0) ? (
           <section ref={quickStartRef} className="panel help-anchor" id="help-quickstart" tabIndex={-1} aria-labelledby="help-quickstart-title">
             <SectionHead
               id="help-quickstart-title"
               icon={<Zap size={15} aria-hidden="true" />}
               title={t('help.quickStart.title')}
               subtitle={t('help.quickStart.subtitle')}
+              count={hasQuery ? `${filteredSteps.length}/${QUICK_START_STEPS.length}` : undefined}
             />
-            <QuickStartPath />
+            <QuickStartPath steps={filteredSteps} />
           </section>
         ) : null}
 
@@ -119,7 +157,7 @@ export default function HelpHome() {
         ) : null}
 
         {(!hasQuery || filteredConcepts.length > 0) ? (
-          <section ref={conceptsRef} className="help-anchor" id="help-concepts" tabIndex={-1} aria-labelledby="help-concepts-title">
+          <section className="help-anchor" id="help-concepts" tabIndex={-1} aria-labelledby="help-concepts-title">
             <SectionHead
               id="help-concepts-title"
               icon={<Layers size={15} aria-hidden="true" />}
