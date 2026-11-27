@@ -73,22 +73,23 @@ describe('HelpHome 组件测试', () => {
     expect(hrefs).toEqual(['/academy/placement', '/lesson', '/quick', '/drill/puzzle', '/progress']);
   });
 
-  it('FAQ 展开后显示答案，收起后进入退出动画并保留 aria-controls', () => {
+  it('FAQ 展开后显示答案并声明 aria-controls，收起后进入退出动画并清除引用', () => {
     renderHelp();
 
     const first = container.querySelector<HTMLButtonElement>('#help-faq button[aria-expanded]');
     expect(first).not.toBeNull();
     const panelId = 'faq-panel-faq.q0.question';
     expect(first?.getAttribute('aria-expanded')).toBe('false');
-    expect(first?.getAttribute('aria-controls')).toBe(panelId);
+    expect(first?.getAttribute('aria-controls')).toBeNull();
 
     act(() => first?.click());
     expect(first?.getAttribute('aria-expanded')).toBe('true');
+    expect(first?.getAttribute('aria-controls')).toBe(panelId);
     expect(document.getElementById(panelId)?.textContent).toContain('localStorage');
 
     act(() => first?.click());
     expect(first?.getAttribute('aria-expanded')).toBe('false');
-    expect(first?.getAttribute('aria-controls')).toBe(panelId);
+    expect(first?.getAttribute('aria-controls')).toBeNull();
     expect(document.getElementById(panelId)?.getAttribute('style')).toContain('height: 0px');
   });
 
@@ -142,8 +143,24 @@ describe('HelpHome 组件测试', () => {
     }
   });
 
+  it('检索态下点击 Hero 锚点会退出检索并滚动聚焦到目标', () => {
+    renderHelp();
+    typeSearch('冻结 导出');
+    expect(container.querySelector('#help-quickstart')).toBeNull();
+
+    const cta = container.querySelector<HTMLAnchorElement>('.help-hero-cta');
+    expect(cta).not.toBeNull();
+    act(() => cta?.click());
+
+    expect(container.querySelector<HTMLInputElement>('#help-search')?.value).toBe('');
+    expect(container.querySelector('#help-quickstart')).not.toBeNull();
+    expect(scrollCalls.map((call) => call.el.id)).toEqual(['help-quickstart']);
+    expect(document.activeElement?.id).toBe('help-quickstart');
+  });
+
   it('全文检索按多个关键词同时匹配文章正文', () => {
     renderHelp();
+    expect(container.querySelector('[role="status"]')?.textContent).toBe('');
     typeSearch('冻结 导出');
 
     const cards = Array.from(container.querySelectorAll<HTMLAnchorElement>('.module-card'));

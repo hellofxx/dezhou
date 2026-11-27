@@ -30,6 +30,8 @@
     "placeholder": "Search tutorials, concepts or questions, e.g. freeze card, GTO, export",
     "hint": "Chinese and English keywords are supported; multiple terms must all match.",
     "summary": "{{count}} matching items found",
+    "summary_one": "{{count}} matching item found",
+    "summary_other": "{{count}} matching items found",
     "noResultsTitle": "No matching content",
     "noResultsDescription": "Try a shorter keyword, or clear the search to browse all help content.",
     "clear": "Clear search"

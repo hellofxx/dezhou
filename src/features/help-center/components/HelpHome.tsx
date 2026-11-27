@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Zap, BookOpen, Layers, MessageCircle, SearchX } from 'lucide-react';
@@ -16,17 +16,12 @@ export default function HelpHome() {
   const { t } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
   const [query, setQuery] = useState('');
+  const [pendingAnchor, setPendingAnchor] = useState<HelpHeroAnchor | null>(null);
 
   const quickStartRef = useRef<HTMLElement>(null);
   const articlesRef = useRef<HTMLElement>(null);
   const conceptsRef = useRef<HTMLElement>(null);
   const faqRef = useRef<HTMLElement>(null);
-
-  const anchorMap: Record<HelpHeroAnchor, RefObject<HTMLElement | null>> = {
-    quickstart: quickStartRef,
-    articles: articlesRef,
-    faq: faqRef,
-  };
 
   const filteredArticles = useMemo(() => filterHelpItems(HELP_ARTICLES, query, (article) => [
     t(`help.${article.titleKey}`),
@@ -50,26 +45,38 @@ export default function HelpHome() {
   const hasQuery = normalizeHelpQuery(query).length > 0;
   const matchCount = filteredArticles.length + filteredConcepts.length + filteredFaq.length;
 
-  const handleRuleClick = (anchor: HelpHeroAnchor) => {
-    const target = anchorMap[anchor].current;
-    if (!target) return;
+  const focusAnchor = useCallback((anchor: HelpHeroAnchor) => {
+    const target = { quickstart: quickStartRef, articles: articlesRef, faq: faqRef }[anchor].current;
+    if (!target) return false;
     target.scrollIntoView({
       behavior: prefersReducedMotion ? 'auto' : 'smooth',
       block: 'start',
     });
     target.focus({ preventScroll: true });
+    return true;
+  }, [prefersReducedMotion]);
+
+  const handleRuleClick = (anchor: HelpHeroAnchor) => {
+    if (focusAnchor(anchor)) return;
+    // 检索态下目标 section 已卸载：先退出检索，待重新挂载后再滚动聚焦
+    setQuery('');
+    setPendingAnchor(anchor);
   };
+
+  useEffect(() => {
+    if (!pendingAnchor) return;
+    focusAnchor(pendingAnchor);
+    setPendingAnchor(null);
+  }, [focusAnchor, pendingAnchor]);
 
   return (
     <div className="space-y-7">
       <HelpHero onRuleClick={handleRuleClick} />
       <HelpSearch query={query} onQueryChange={setQuery} />
 
-      {hasQuery ? (
-        <p className="help-search-status" role="status" aria-live="polite">
-          {t('help.search.summary', { count: matchCount })}
-        </p>
-      ) : null}
+      <p className="help-search-status" role="status" aria-live="polite">
+        {hasQuery ? t('help.search.summary', { count: matchCount }) : null}
+      </p>
 
       <div id="help-results" className="space-y-7">
         {hasQuery && matchCount === 0 ? (

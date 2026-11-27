@@ -30,6 +30,8 @@
     "placeholder": "搜索教程、概念或问题，如：冻结卡、GTO、导出",
     "hint": "支持中英文关键词；多个关键词按同时匹配筛选。",
     "summary": "找到 {{count}} 条匹配内容",
+    "summary_one": "找到 {{count}} 条匹配内容",
+    "summary_other": "找到 {{count}} 条匹配内容",
     "noResultsTitle": "没有找到匹配内容",
     "noResultsDescription": "换一个更短的关键词，或清除搜索查看全部帮助。",
     "clear": "清除搜索"

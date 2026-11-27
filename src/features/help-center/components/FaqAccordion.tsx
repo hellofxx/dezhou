@@ -33,7 +33,7 @@ export default function FaqAccordion({ items = FAQ_ITEMS }: FaqAccordionProps) {
               id={buttonId}
               type="button"
               aria-expanded={isOpen}
-              aria-controls={panelId}
+              aria-controls={isOpen ? panelId : undefined}
               onClick={() => setOpenKey(isOpen ? null : item.questionKey)}
               className="faq-item-button"
             >

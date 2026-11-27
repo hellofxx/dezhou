@@ -159,10 +159,22 @@
   top: 50%;
   transform: translateY(-50%);
 }
+/* 40×40 视觉尺寸下用伪元素补足 44×44 命中区（DESIGN.md §6.3） */
+.help-search-clear::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+}
 .help-search-status {
-  margin: -10px 2px 0;
+  margin-top: -10px;
+  margin-inline: 2px;
   font-size: 11px;
   color: var(--ivory-muted);
+}
+/* 常驻 aria-live 区域：无检索词时不参与排版，避免 space-y 额外间距 */
+.help-search-status:empty {
+  position: absolute;
+  margin: 0;
 }
 .help-section-count {
   font-size: 10px;

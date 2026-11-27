@@ -23,12 +23,25 @@ describe('FaqAccordion 组件测试', () => {
     act(() => root.render(<FaqAccordion items={items} />));
   };
 
-  it('默认渲染 11 条 FAQ，折叠态也保持 aria-controls', () => {
+  it('默认渲染 11 条 FAQ，折叠态不声明 aria-controls', () => {
     renderItems();
     const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('button[aria-expanded]'));
     expect(buttons).toHaveLength(11);
-    expect(buttons[0]?.getAttribute('aria-controls')).toBe('faq-panel-faq.q0.question');
+    expect(buttons[0]?.getAttribute('aria-controls')).toBeNull();
     expect(buttons[0]?.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('展开后 aria-controls 指向实际存在的面板，收起后清除', () => {
+    renderItems();
+    const first = container.querySelector<HTMLButtonElement>('button[aria-expanded]');
+    const panelId = 'faq-panel-faq.q0.question';
+
+    act(() => first?.click());
+    expect(first?.getAttribute('aria-controls')).toBe(panelId);
+    expect(document.getElementById(panelId)).not.toBeNull();
+
+    act(() => first?.click());
+    expect(first?.getAttribute('aria-controls')).toBeNull();
   });
 
   it('筛选后编号保持原清单顺序', () => {
