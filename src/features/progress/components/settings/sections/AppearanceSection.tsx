@@ -24,14 +24,14 @@ export function AppearanceSection() {
     { value: 'light', label: <><Sun className="h-3.5 w-3.5" aria-hidden="true" />{themeLabels.light}</> },
     { value: 'system', label: <><Monitor className="h-3.5 w-3.5" aria-hidden="true" />{themeLabels.system}</> },
   ];
-  const languageOptions: SegmentOption<Language>[] = [
-    { value: 'zh', label: t('settings.languageZh', { defaultValue: '中文' }) },
-    { value: 'en', label: t('settings.languageEn', { defaultValue: 'English' }) },
-  ];
   const languageLabels: Record<Language, string> = {
     zh: t('settings.languageZh', { defaultValue: '中文' }),
     en: t('settings.languageEn', { defaultValue: 'English' }),
   };
+  const languageOptions: SegmentOption<Language>[] = (['zh', 'en'] as const).map((value) => ({
+    value,
+    label: languageLabels[value],
+  }));
 
   const languageName = languageLabels[settings.language];
 

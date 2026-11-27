@@ -53,7 +53,6 @@ const BASELINE: Readonly<Record<string, number>> = {
   'src/features/progress/components/replay/ProgressReplay.tsx': 4,
   'src/features/progress/components/replay/RecentTrainingPanel.tsx': 3,
   'src/features/progress/components/settings/GameVariantSelector.tsx': 3,
-  'src/features/progress/components/settings/SettingsPage.tsx': 1,
   'src/features/progress/components/srs/ReviewSession.tsx': 3,
   'src/features/progress/components/srs/SpacedRepetitionPanel.tsx': 4,
   'src/features/progress/components/streak/StreakRail.tsx': 4,

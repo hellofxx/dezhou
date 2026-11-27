@@ -26,12 +26,11 @@ export function GameStreakSection() {
   const useStreakFreeze = useProgressStore((s) => s.useStreakFreeze);
 
   const [freezeStatus, setFreezeStatus] = useState<'success' | 'fail' | null>(null);
-  // 状态自动复位定时器：组件卸载时统一清理，避免卸载后 setState 告警
-  const statusTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  // 单一定时器：重复点击先清旧计时，避免旧计时提前清掉新状态；卸载时统一清理
+  const freezeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    const timers = statusTimersRef.current;
     return () => {
-      timers.forEach((timer) => clearTimeout(timer));
+      if (freezeTimerRef.current) clearTimeout(freezeTimerRef.current);
     };
   }, []);
 
@@ -41,7 +40,8 @@ export function GameStreakSection() {
   const handleUseFreeze = () => {
     const ok = useStreakFreeze();
     setFreezeStatus(ok ? 'success' : 'fail');
-    statusTimersRef.current.push(setTimeout(() => setFreezeStatus(null), 3000));
+    if (freezeTimerRef.current) clearTimeout(freezeTimerRef.current);
+    freezeTimerRef.current = setTimeout(() => setFreezeStatus(null), 3000);
   };
 
   const variantName = t(`variant.name.${currentGameVariant}`, {

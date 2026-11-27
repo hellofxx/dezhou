@@ -561,7 +561,7 @@ describe('SettingsPage 开发者选项', () => {
   it('默认折叠，错误调试码提示错误，正确调试码解锁并可关闭', () => {
     const { container, getByText, getByLabelText } = renderPage();
     // 折叠态：调试码输入框未挂载
-    expect(container.querySelector('input[type="number"]')).toBeNull();
+    expect(container.querySelector('input[inputmode="numeric"]')).toBeNull();
 
     // 分区标题与折叠按钮同名，取分区折叠按钮（带 aria-expanded）
     const sectionToggle = Array.from(

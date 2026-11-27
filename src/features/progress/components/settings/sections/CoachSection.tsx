@@ -52,7 +52,7 @@ export function CoachSection() {
                     {t(`mentor.profiles.${profile.id}.name`, { defaultValue: profile.name })}
                   </span>
                   {selected && (
-                    <span className="font-numeric text-[10px] uppercase tracking-wider text-[var(--brass-text)]">
+                    <span className="font-numeric text-[11px] uppercase tracking-wider text-[var(--brass-text)]">
                       {t('mentor.settings.selected')}
                     </span>
                   )}

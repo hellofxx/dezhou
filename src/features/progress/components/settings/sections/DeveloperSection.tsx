@@ -44,7 +44,7 @@ export function DeveloperSection() {
         <>
           <div className="flex flex-wrap items-center gap-2">
             <Input
-              type="number"
+              type="text"
               inputMode="numeric"
               value={debugCodeInput}
               onChange={(event) => {
