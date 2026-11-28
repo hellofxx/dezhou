@@ -19,6 +19,8 @@ interface MobileFeedbackSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   children: ReactNode;
+  /** 关闭 Sheet 后保留的续做入口，由消费方注入。 */
+  dismissedContent?: ReactNode;
   /** 可选的 sr-only 标题文案（缺省 common.ui.feedback） */
   ariaLabel?: string;
 }
@@ -27,6 +29,7 @@ export function MobileFeedbackSheet({
   open,
   onOpenChange,
   children,
+  dismissedContent,
   ariaLabel,
 }: MobileFeedbackSheetProps) {
   const { t } = useTranslation();
@@ -37,7 +40,8 @@ export function MobileFeedbackSheet({
   const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+    <>
+      <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
         {/* 遮罩单源在 ui/dialog；点击关闭由 Radix DismissableLayer（modal 外部指针/点击）接管 */}
         <DialogOverlay />
@@ -50,8 +54,10 @@ export function MobileFeedbackSheet({
               active instanceof HTMLElement && active !== document.body ? active : null;
           }}
           onCloseAutoFocus={(event) => {
-            const target = restoreFocusRef.current;
-            if (target?.isConnected) {
+            const target = restoreFocusRef.current?.isConnected
+              ? restoreFocusRef.current
+              : document.getElementById('main-content');
+            if (target) {
               event.preventDefault();
               target.focus();
             }
@@ -79,6 +85,10 @@ export function MobileFeedbackSheet({
           <div className="min-h-0 overflow-y-auto p-4">{children}</div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+      </DialogPrimitive.Root>
+      {!open && dismissedContent ? (
+        <div className="mt-3 grid grid-cols-2 gap-3">{dismissedContent}</div>
+      ) : null}
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act } from 'react';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, createEvent, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { PracticeDrillComponent } from './PracticeDrill';
 import { useAcademyStore } from '../store';
@@ -187,12 +187,23 @@ describe('PracticeDrill：自适应难度', () => {
 });
 
 describe('PracticeDrill：答错后的复习跳转', () => {
-  it('题目声明 relatedLessonId 时渲染「去复习相关课程」并跳转到该课程', async () => {
-    renderDrill(makeDrill(1, { relatedLessonId: 'l1-basics' }));
+  it('聚焦「去复习相关课程」按 Enter 不切题，原生激活后仍跳转到该课程', async () => {
+    const onComplete = renderDrill(makeDrill(2, { relatedLessonId: 'l1-basics' }));
 
     fireEvent.click(screen.getByText('Fold'));
-    fireEvent.click(screen.getByText('去复习相关课程 →'));
+    const reviewLink = screen.getByRole('button', { name: '去复习相关课程 →' });
+    reviewLink.focus();
+    expect(document.activeElement).toBe(reviewLink);
 
+    const enterEvent = createEvent.keyDown(reviewLink, { key: 'Enter', cancelable: true });
+    fireEvent(reviewLink, enterEvent);
+
+    expect(enterEvent.defaultPrevented).toBe(false);
+    expect(screen.getByText('1 / 2')).toBeTruthy();
+    expect(screen.queryByText(RELATED_LESSON_PROBE)).toBeNull();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(reviewLink);
     await waitFor(() => expect(screen.getByText(RELATED_LESSON_PROBE)).toBeTruthy());
   });
 });

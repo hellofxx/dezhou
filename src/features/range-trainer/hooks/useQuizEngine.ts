@@ -94,6 +94,7 @@ export function buildRangeFeedback(
 
 export function useQuizEngine() {
   const quizState = useRangeTrainerStore((s) => s.quizState);
+  const gameVariant = useRangeTrainerStore((s) => s.gameVariant);
   const answerQuestion = useRangeTrainerStore((s) => s.answerQuestion);
   const nextQuestion = useRangeTrainerStore((s) => s.nextQuestion);
   const pauseQuiz = useRangeTrainerStore((s) => s.pauseQuiz);
@@ -213,8 +214,9 @@ export function useQuizEngine() {
 
   const recordSrsForAnswer = useCallback(
     (question: QuizQuestion, isCorrect: boolean, timeTakenMs: number) => {
-      // 题目 → ReviewItem 映射：使用 position:hand 作为 id，label 显示场景
-      const id = `range:${question.position}:${question.hand}`;
+      // 题目 → ReviewItem 映射：变体 / 动作 / 位置 / 手牌共同构成稳定键。
+      const actionType = quizState.actionType;
+      const id = `range:${gameVariant}:${actionType}:${question.position}:${question.hand}`;
       const label = `${question.hand} @ ${question.position}${question.context ? ` (${question.context})` : ''}`;
       const metadata = {
         front: 'rangeTrainer.srs.howToAct',
@@ -224,7 +226,12 @@ export function useQuizEngine() {
           { text: 'rangeTrainer.srs.optionCall', isCorrect: question.correctAction === 'call' },
           { text: 'rangeTrainer.srs.optionRaise', isCorrect: question.correctAction === 'raise' },
         ],
-        params: { hand: question.hand, position: question.position },
+        params: {
+          variant: gameVariant,
+          actionType,
+          hand: question.hand,
+          position: question.position,
+        },
         source: 'range' as const,
       };
 
@@ -243,7 +250,7 @@ export function useQuizEngine() {
         updateReviewItem(updated);
       }
     },
-    [reviewItems, addReviewItem, updateReviewItem]
+    [reviewItems, addReviewItem, updateReviewItem, gameVariant, quizState.actionType]
   );
 
   return {

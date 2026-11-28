@@ -10,6 +10,7 @@ import { RangeInfo } from './RangeInfo';
 import { useRangeTrainerStore } from '../store';
 import { getPositionsForPlayerCount } from '@/shared/types/position';
 import { getPlayerCountOptions } from '@/shared/constants/poker';
+import { progressCommands, useProgressState } from '@/features/progress/api';
 import type { GameVariant } from '@/shared/types/poker';
 
 const VARIANT_OPTIONS: { value: GameVariant; labelKey: string }[] = [
@@ -33,6 +34,17 @@ export default function RangeTrainerHome() {
     setGameVariant,
     setPlayerCount,
   } = useRangeTrainerStore();
+  const activeVariant = useProgressState((state) => state.activeVariant);
+
+  // progress 是活动变体事实源：挂载时校正本地题库，用户切换时双向同步。
+  React.useEffect(() => {
+    if (gameVariant !== activeVariant) setGameVariant(activeVariant);
+  }, [activeVariant, gameVariant, setGameVariant]);
+
+  const handleVariantChange = (variant: GameVariant) => {
+    setGameVariant(variant);
+    progressCommands.switchActiveVariant(variant);
+  };
 
   // 当前选中预设的手牌，如果没有预设则用空数组
   const selectedHands = learnState.selectedPreset?.hands ?? [];
@@ -117,7 +129,7 @@ export default function RangeTrainerHome() {
                 {VARIANT_OPTIONS.map((v) => (
                   <button
                     key={v.value}
-                    onClick={() => setGameVariant(v.value)}
+                    onClick={() => handleVariantChange(v.value)}
                     className={`pill flex-1 ${gameVariant === v.value ? 'active' : ''}`}
                   >
                     {t(v.labelKey)}

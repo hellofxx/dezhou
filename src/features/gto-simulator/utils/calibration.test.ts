@@ -67,4 +67,8 @@ describe('getDecisionCalibration', () => {
   it('标准翻前但 spot 未覆盖时标记为 unavailable', () => {
     expect(getDecisionCalibration(scenario({ position: Position.BB }))).toBe('unavailable');
   });
+
+  it('Exploit 调整策略参与判分时不再标记 calibrated', () => {
+    expect(getDecisionCalibration(scenario(), undefined, true)).toBe('heuristic');
+  });
 });

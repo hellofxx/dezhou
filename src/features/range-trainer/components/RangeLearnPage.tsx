@@ -4,41 +4,78 @@ import { useTranslation } from 'react-i18next';
 import { BackLink } from '@/shared/components/layout/BackLink';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/components/ui/card';
 import { BookOpen } from 'lucide-react';
+import type { GameVariant, HandNotation } from '@/shared/types/poker';
+import type { RangePreset } from '../types';
 import { RangeGrid } from './RangeGrid';
 import { RangeSelector } from './RangeSelector';
 import { RangeInfo } from './RangeInfo';
 import { useRangeTrainerStore } from '../store';
 
+const EMPTY_HANDS: HandNotation[] = [];
+
+interface LearnRangeInfoProps {
+  preset: RangePreset | null;
+  variant: GameVariant;
+}
+
+/** 悬停状态只驱动信息卡，避免父页与范围选择器随之重渲染。 */
+function LearnRangeInfo({ preset, variant }: LearnRangeInfoProps) {
+  const highlightedHand = useRangeTrainerStore((state) => state.learnState.highlightedHand);
+  return (
+    <RangeInfo
+      selectedHands={preset?.hands ?? EMPTY_HANDS}
+      highlightedHand={highlightedHand}
+      preset={preset}
+      variant={variant}
+    />
+  );
+}
+
+interface LearnRangeGridProps {
+  selectedHands: HandNotation[];
+  variant: GameVariant;
+}
+
+/** 网格自身订阅悬停状态与写入 action，父页仅订阅稳定的范围配置字段。 */
+function LearnRangeGrid({ selectedHands, variant }: LearnRangeGridProps) {
+  const highlightedHand = useRangeTrainerStore((state) => state.learnState.highlightedHand);
+  const setHighlightedHand = useRangeTrainerStore((state) => state.setHighlightedHand);
+  return (
+    <RangeGrid
+      selectedHands={selectedHands}
+      highlightedHand={highlightedHand}
+      onCellHover={setHighlightedHand}
+      variant={variant}
+      className="max-w-[640px]"
+    />
+  );
+}
+
 export default function RangeLearnPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const {
-    learnState,
-    setSelectedPreset,
-    setSelectedPosition,
-    setSelectedActionType,
-    setHighlightedHand,
-    presets,
-    gameVariant,
-  } = useRangeTrainerStore();
+  const selectedPreset = useRangeTrainerStore((state) => state.learnState.selectedPreset);
+  const selectedPosition = useRangeTrainerStore((state) => state.learnState.selectedPosition);
+  const selectedActionType = useRangeTrainerStore((state) => state.learnState.selectedActionType);
+  const setSelectedPreset = useRangeTrainerStore((state) => state.setSelectedPreset);
+  const setSelectedPosition = useRangeTrainerStore((state) => state.setSelectedPosition);
+  const setSelectedActionType = useRangeTrainerStore((state) => state.setSelectedActionType);
+  const presets = useRangeTrainerStore((state) => state.presets);
+  const gameVariant = useRangeTrainerStore((state) => state.gameVariant);
 
-  const selectedHands = learnState.selectedPreset?.hands ?? [];
-
-  const handlePresetSelect = (preset: typeof learnState.selectedPreset) => {
-    setSelectedPreset(preset);
-  };
+  const selectedHands = selectedPreset?.hands ?? EMPTY_HANDS;
 
   // 自动选择第一个匹配的预设
   // P1A-11 修复：改用 store 的变体化 presets（含 ADVANCED / HU / 短牌 / 4-max），
   // 不再直接读 6-max 基础 PRESET_RANGES
   React.useEffect(() => {
-    if (!learnState.selectedPreset) {
+    if (!selectedPreset) {
       const match = presets.find(
-        (p) => p.position === learnState.selectedPosition && p.actionType === learnState.selectedActionType
+        (p) => p.position === selectedPosition && p.actionType === selectedActionType
       );
       if (match) setSelectedPreset(match);
     }
-  }, [learnState.selectedPreset, learnState.selectedPosition, learnState.selectedActionType, presets, setSelectedPreset]);
+  }, [selectedPreset, selectedPosition, selectedActionType, presets, setSelectedPreset]);
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -75,12 +112,12 @@ export default function RangeLearnPage() {
               </CardHeader>
               <CardContent>
                 <RangeSelector
-                  selectedPosition={learnState.selectedPosition}
-                  selectedActionType={learnState.selectedActionType}
+                  selectedPosition={selectedPosition}
+                  selectedActionType={selectedActionType}
                   onPositionChange={setSelectedPosition}
                   onActionTypeChange={setSelectedActionType}
                   presets={presets}
-                  onPresetSelect={handlePresetSelect}
+                  onPresetSelect={setSelectedPreset}
                 />
               </CardContent>
             </Card>
@@ -90,12 +127,7 @@ export default function RangeLearnPage() {
                 <CardTitle className="text-base">{t('rangeTrainer.rangeInfo.title')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <RangeInfo
-                  selectedHands={selectedHands}
-                  highlightedHand={learnState.highlightedHand}
-                  preset={learnState.selectedPreset}
-                  variant={gameVariant}
-                />
+                <LearnRangeInfo preset={selectedPreset} variant={gameVariant} />
               </CardContent>
             </Card>
           </div>
@@ -109,13 +141,7 @@ export default function RangeLearnPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <RangeGrid
-                selectedHands={selectedHands}
-                highlightedHand={learnState.highlightedHand}
-                onCellHover={setHighlightedHand}
-                variant={gameVariant}
-                className="max-w-[640px]"
-              />
+              <LearnRangeGrid selectedHands={selectedHands} variant={gameVariant} />
             </CardContent>
           </Card>
         </div>

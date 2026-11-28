@@ -16,10 +16,8 @@ interface UseTimerReturn {
 }
 
 /**
- * P1A-12 修复：
- * - elapsed 以 Date.now() 时间戳为基准计算（累计段起点 + 段内墙钟差），
- *   不再依赖 100ms tick 累加，消除后台节流导致的计时误差；
- * - onTimeUp 的 setTimeout 句柄存入 ref，暂停/卸载时统一清理，避免泄漏。
+ * elapsed 以 Date.now() 时间戳为基准计算，100ms tick 只负责刷新 UI。
+ * 超时回调延迟到下一个宏任务执行；暂停、reset、换题与卸载都会取消待执行句柄。
  */
 export function useTimer({ timeLimit, onTimeUp, autoStart = true }: UseTimerOptions): UseTimerReturn {
   const [elapsed, setElapsed] = useState(0);
@@ -32,88 +30,99 @@ export function useTimer({ timeLimit, onTimeUp, autoStart = true }: UseTimerOpti
   const accumulatedRef = useRef(0);
   const segmentStartRef = useRef<number | null>(null);
 
-  // Keep callback ref fresh
   useEffect(() => {
     onTimeUpRef.current = onTimeUp;
   }, [onTimeUp]);
 
-  const start = useCallback(() => {
-    setIsRunning(true);
+  const clearTimeUpTimeout = useCallback(() => {
+    if (timeUpTimeoutRef.current !== null) {
+      clearTimeout(timeUpTimeoutRef.current);
+      timeUpTimeoutRef.current = null;
+    }
   }, []);
 
+  const scheduleTimeUp = useCallback(() => {
+    if (timeLimit <= 0 || hasTriggeredRef.current || timeUpTimeoutRef.current !== null) return;
+    timeUpTimeoutRef.current = setTimeout(() => {
+      timeUpTimeoutRef.current = null;
+      if (hasTriggeredRef.current) return;
+      hasTriggeredRef.current = true;
+      onTimeUpRef.current();
+    }, 0);
+  }, [timeLimit]);
+
+  const checkTimeUp = useCallback(() => {
+    const segStart = segmentStartRef.current;
+    const next = accumulatedRef.current + (segStart !== null ? (Date.now() - segStart) / 1000 : 0);
+    if (timeLimit <= 0 || next < timeLimit || hasTriggeredRef.current || timeUpTimeoutRef.current !== null) {
+      return false;
+    }
+    accumulatedRef.current = timeLimit;
+    segmentStartRef.current = null;
+    setElapsed(timeLimit);
+    setIsRunning(false);
+    scheduleTimeUp();
+    return true;
+  }, [timeLimit, scheduleTimeUp]);
+
+  const start = useCallback(() => {
+    if (hasTriggeredRef.current || timeUpTimeoutRef.current !== null) return;
+    if (segmentStartRef.current === null) segmentStartRef.current = Date.now();
+    if (!checkTimeUp()) setIsRunning(true);
+  }, [checkTimeUp]);
+
   const pause = useCallback(() => {
-    // 结算当前运行段到累计值（暂停期间不计时）
     if (segmentStartRef.current !== null) {
       accumulatedRef.current += (Date.now() - segmentStartRef.current) / 1000;
       segmentStartRef.current = null;
     }
+    clearTimeUpTimeout();
+    setElapsed(accumulatedRef.current);
     setIsRunning(false);
-  }, []);
+  }, [clearTimeUpTimeout]);
 
   const reset = useCallback(() => {
+    clearTimeUpTimeout();
     accumulatedRef.current = 0;
-    // 若当前正处于运行段（isRunning 不变、effect 不重跑），需就地重置段起点；
-    // 否则置 null，由 start 后的 effect 重新开段
-    segmentStartRef.current = segmentStartRef.current !== null ? Date.now() : null;
+    // reset 总会恢复运行；同步重建段起点，覆盖停止态尚未提交时的同 tick 竞态。
+    segmentStartRef.current = Date.now();
     hasTriggeredRef.current = false;
     setElapsed(0);
     setIsRunning(true);
-  }, []);
+  }, [clearTimeUpTimeout]);
 
-  // Reset elapsed when timeLimit changes (new question)
+  // timeLimit 变化代表新题：旧待执行超时不得落入新题。
   useEffect(() => {
+    clearTimeUpTimeout();
     accumulatedRef.current = 0;
     segmentStartRef.current = segmentStartRef.current !== null ? Date.now() : null;
     hasTriggeredRef.current = false;
     setElapsed(0);
-  }, [timeLimit]);
+  }, [timeLimit, clearTimeUpTimeout]);
 
   useEffect(() => {
-    if (!isRunning) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-      return;
-    }
+    if (!isRunning || hasTriggeredRef.current) return;
 
-    // 开启新运行段：以 Date.now() 为基准，tick 只负责刷新 UI
     segmentStartRef.current = Date.now();
+    // 恢复时可能已经达到时限，立即检查，不等待下一个 100ms tick。
+    if (checkTimeUp()) return;
     intervalRef.current = setInterval(() => {
+      if (checkTimeUp()) return;
       const segStart = segmentStartRef.current;
-      const next =
-        accumulatedRef.current + (segStart !== null ? (Date.now() - segStart) / 1000 : 0);
-
-      if (timeLimit > 0 && next >= timeLimit && !hasTriggeredRef.current) {
-        hasTriggeredRef.current = true;
-        accumulatedRef.current = timeLimit;
-        segmentStartRef.current = null;
-        setElapsed(timeLimit);
-        setIsRunning(false);
-        // Use setTimeout to avoid setState inside setState; 句柄入 ref 以便清理
-        timeUpTimeoutRef.current = setTimeout(() => onTimeUpRef.current(), 0);
-        return;
-      }
-      setElapsed(next);
+      setElapsed(accumulatedRef.current + (segStart !== null ? (Date.now() - segStart) / 1000 : 0));
     }, 100);
 
     return () => {
-      if (intervalRef.current) {
+      if (intervalRef.current !== null) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
     };
-  }, [isRunning, timeLimit]);
+  }, [isRunning, timeLimit, checkTimeUp]);
 
-  // 卸载时清理 onTimeUp 的延迟句柄
   useEffect(() => {
-    return () => {
-      if (timeUpTimeoutRef.current) {
-        clearTimeout(timeUpTimeoutRef.current);
-        timeUpTimeoutRef.current = null;
-      }
-    };
-  }, []);
+    return clearTimeUpTimeout;
+  }, [clearTimeUpTimeout]);
 
   const timeRemaining = timeLimit > 0 ? Math.max(0, timeLimit - elapsed) : elapsed;
 

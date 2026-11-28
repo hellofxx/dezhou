@@ -184,9 +184,14 @@ export function GTOFeedback({
 
       {exploitMode && opponent && (
         <div className="flex items-center gap-2 rounded-lg bg-black/20 px-3 py-2">
-          <OpponentGlyph iconId={opponent.iconId} size={18} />
+          <span
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+            style={{ backgroundColor: `${opponent.color}30` }}
+          >
+            <OpponentGlyph iconId={opponent.iconId} size={18} className="text-[var(--brass)]" />
+          </span>
           <div className="flex-1">
-            <span className="text-xs font-display font-semibold" style={{ color: opponent.color }}>
+            <span className="text-xs font-display font-semibold text-[var(--ivory)]">
               {t('gto.feedback.opponentPrefix')}{' '}
               {t(`gto.setup.opponentProfile.${opponent.id}.name`, { defaultValue: opponent.name })}
             </span>

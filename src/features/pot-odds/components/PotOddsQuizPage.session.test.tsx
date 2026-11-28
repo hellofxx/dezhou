@@ -122,7 +122,7 @@ afterEach(() => {
 });
 
 describe('PotOddsQuizPage 完整会话结算', () => {
-  it('19 题全对：结算 100%、emit 一次 pot-odds 事件、记录训练日一次', { timeout: 30000 }, async () => {
+  it('19 题全对：结算 100%、emit 一次、记录训练日一次，语言重渲染不重复结算', { timeout: 30000 }, async () => {
     const recordTrainingDay = useProgressStore.getState().recordTrainingDay;
     const { container } = renderQuiz();
 
@@ -152,13 +152,21 @@ describe('PotOddsQuizPage 完整会话结算', () => {
     expect(record.result.details.every((detail) => detail.isCorrect)).toBe(true);
     expect(record.id).toBe(record.result.sessionId);
 
+    await act(async () => {
+      await i18n.changeLanguage('en');
+    });
+    await pumpFrames();
+    expect(recordTrainingDay).toHaveBeenCalledTimes(1);
+    expect(emitted).toHaveLength(1);
+
     // 三处同步覆盖整场会话
     expect(useProgressStore.getState().reviewItems).toHaveLength(19);
     expect(useProgressStore.getState().emotion.dailyQuestionsAnswered).toBe(19);
     expect(useProgressStore.getState().eloByVariant.standard.math).toBeGreaterThan(DEFAULT_ELO.math);
   });
 
-  it('结算面板的返回计算器跳转与再来一轮重置', { timeout: 30000 }, async () => {
+  it('结算面板的返回计算器跳转与再来一轮重置，第二轮可独立结算', { timeout: 30000 }, async () => {
+    const recordTrainingDay = useProgressStore.getState().recordTrainingDay;
     const { container } = renderQuiz();
     for (const question of QUIZ_QUESTIONS.slice(0, QUIZ_QUESTIONS.length - 1)) {
       await answerAndAdvance(container, question, true);
@@ -176,6 +184,17 @@ describe('PotOddsQuizPage 完整会话结算', () => {
     expect(container.textContent).toContain('1 / 19');
     expect(screen.queryByText('正确！')).toBeNull();
     expect(optionButtons(container).some((b) => b.disabled)).toBe(false);
+
+    for (const question of QUIZ_QUESTIONS.slice(0, QUIZ_QUESTIONS.length - 1)) {
+      await answerAndAdvance(container, question, true);
+    }
+    await screen.findByText(i18n.t(EASY.scenario));
+    await answerAndAdvance(container, EASY, true);
+
+    expect(await screen.findByRole('heading', { level: 2, name: '训练完成！' })).toBeTruthy();
+    expect(recordTrainingDay).toHaveBeenCalledTimes(2);
+    expect(emitted).toHaveLength(2);
+    expect(emitted[1]!.result.sessionId).not.toBe(emitted[0]!.result.sessionId);
   });
 
   it('末题答错追加补救题（total 20），补救答对后以最后一题答对收尾', { timeout: 30000 }, async () => {

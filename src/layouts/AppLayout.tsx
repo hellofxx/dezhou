@@ -249,7 +249,7 @@ export default function AppLayout() {
         <main
           id="main-content"
           tabIndex={-1}
-          className="flex-1 overflow-auto p-4 md:p-6 pb-20 md:pb-6 outline-none"
+          className="flex-1 overflow-auto p-4 md:p-6 pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-6 outline-none"
         >
           {/* G1: 全局限宽——操作台/统计页随 main 收敛（L1 1400）；课程总览走 L2 展宽 1680（DESIGN.md §6.5）；阅读型页面正文由各模块 agent 单独 max-w-prose */}
           <div

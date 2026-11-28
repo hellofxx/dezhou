@@ -23,7 +23,6 @@ import { PuzzleResult } from './PuzzleResult';
 import { usePuzzleEngine } from '../hooks/usePuzzleEngine';
 // 会话接线（选中项 / recordAnswer / 完成提交 / emit）下沉至 usePuzzleSession
 import { usePuzzleSession } from '../hooks/usePuzzleSession';
-import { getDailyKey } from '../data/dailyPuzzles';
 import { getDailyCompletionCount } from '../utils/dateSeed';
 import { usePuzzleStore } from '../store';
 import { progressCommands } from '@/features/progress/api';
@@ -34,29 +33,29 @@ export default function DailyPuzzle() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // 获取今日题目（用于引擎初始化前显示日期信息）
-  // P1D-07 修复：today/dateKey 改为 state，重试时刷新；旧实现 mount 时冻结，
-  // 跨午夜 retry 会抽今天的题却 markDailyCompleted(昨天)
+  // 同伴数按本次题源日期展示；retry 时随引擎一起刷新。
   const [today, setToday] = useState(() => new Date());
-  const dateKey = useMemo(() => getDailyKey(today), [today]);
   const completionCount = useMemo(() => getDailyCompletionCount(today), [today]);
 
   const engine = usePuzzleEngine({ mode: 'daily' });
+  const dateKey = engine.state.sourceDateKey;
   const isDailyCompleted = usePuzzleStore((s) => s.isDailyCompleted);
   const markDailyCompleted = usePuzzleStore((s) => s.markDailyCompleted);
   const shouldDownshiftDifficulty = progressCommands.shouldDownshiftDifficulty;
   // P2-5.4: 每日题量上限（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
 
-  const alreadyCompleted = isDailyCompleted(dateKey);
+  const alreadyCompleted = dateKey !== null && isDailyCompleted(dateKey);
 
   // 会话接线：选中状态 / recordAnswer / 完成提交（submitResult + recordTrainingDay + emit）
   const { finalResult, selectedOptionId, handleSelect, handleRetry } = usePuzzleSession(engine, {
-    // P1D-07 修复：完成时实时计算 dateKey（不用 mount 时冻结值），
-    // 避免跨午夜会话把完成标记写到错误日期；标记本身幂等
-    onComplete: () => markDailyCompleted(getDailyKey(new Date())),
-    // P1D-07 修复：重试时同步刷新 today/dateKey，与 engine.reset()
-    // 重抽的题目（内部用 new Date()）保持同一天
+    // 完成标记与本次题目同源；跨午夜不得改记到新日期。
+    onComplete: () => {
+      if (engine.state.sourceDateKey !== null) {
+        markDailyCompleted(engine.state.sourceDateKey);
+      }
+    },
+    // 重试刷新同伴数日期；engine.reset() 同步重抽并刷新 sourceDateKey。
     onRetry: () => setToday(new Date()),
   });
 

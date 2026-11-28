@@ -351,7 +351,7 @@ src/
 
 ### 3.3 共享层材质与交互基础设施
 
-- **移动端反馈 Sheet**：`MobileFeedbackSheet` 由 Radix Dialog 承载（焦点陷阱 / Escape 关闭 / 关闭后焦点归还 / 背景滚动锁），内容面为 `.dealer-slip` 纸张（DESIGN.md §1.5 材质契约 / §5.23 / §13.7.2），入场 300ms、退场 200ms 由 `components-core.css` 的 `[data-state]` keyframes 驱动（未启用 tailwindcss-animate，`animate-in` 系列类属空操作）。
+- **移动端反馈 Sheet**：`MobileFeedbackSheet` 由 Radix Dialog 承载（焦点陷阱 / Escape 关闭 / 关闭后焦点归还 / 背景滚动锁），内容面为 `.dealer-slip` 纸张（DESIGN.md §1.5 材质契约 / §5.23 / §13.7.2），入场 300ms、退场 200ms 由 `components-core.css` 的 `[data-state]` keyframes 驱动（未启用 tailwindcss-animate，`animate-in` 系列类属空操作）。`dismissedContent` 是关闭后的续做插槽：消费方必须保留“查看反馈 / 继续或结算”，不得让关闭 Sheet 成为训练死路；打开者失效时焦点回退 `#main-content`。
 - **网格键盘导航**：`shared/hooks/useRovingGridNav` 取代已删除的 `useGridKeyboardNav`——整张网格只有一个 Tab 停靠点（13×13 网格 169 → 1，三处消费方合计 3），方向键按 `columns` 跨行移动、Home / End 到首尾，Enter / Space 触发 `onSelect`；消费方为 RangeGrid / StrategyMatrix / ConceptGraph，兼容 SVG 项。
 - **纸张作用域**：`.dealer-slip` 在自身作用域内把 ink / brass / 语义 / 表面 token 重锚为 §2.6 的 paper 值（canonical 与 globals.css alias、Tailwind `@theme` 颜色别名一并覆盖），纸面内禁止沿用暗色房间的亮阶色；层级取 z-index 100（§6.4），与弹窗 / Modal / 下拉菜单同层。
 
@@ -734,6 +734,12 @@ interface DailyRecommendation {
    - `buildRangeFeedback` 调用时传入 `relatedLessonId`，wrong/blunder 级别在 QuizCard 显示"去复习"链接
    - 自适应难度：`useQuizEngine` 读取 `progress.shouldDownshiftDifficulty()` 判断是否降级，连续答错 ≥3 次时 `TrainingSession` 显示降级提示 banner
 
+7. **会话与复习键不变量**（2026-11）：
+   - `RangeTrainerHome` 的本地变体与 `progress.activeVariant` 双向同步，位置解锁与 ELO 记分不得使用不同变体
+   - `answerQuestion` 仅在 running 且当前题未答时受理并返回 boolean；ELO / SRS / Emotion 只在受理后执行，暂停态 Space 不得推进
+   - `useTimer` 在暂停、换题、reset 与卸载时清理待执行超时句柄；恢复时已达时限立即且只触发一次 `onTimeUp`
+   - 新 SRS 键为 `range:{variant}:{actionType}:{position}:{hand}`；旧 `range:{position}:{hand}` 因载荷缺少变体/动作信息保留为 legacy，不猜测迁移、不删除
+
 ### 5.2 Pot Odds Calculator（赔率计算器）
 
 **模块职责**：实时计算底池赔率、所需权益、EV，帮助玩家理解跟注决策的数学基础。
@@ -747,14 +753,12 @@ interface DailyRecommendation {
 
 **关键算法**：
 
-1. **赔率计算公式**：
+1. **赔率计算公式**（`potSize` 为对手下注前底池）：
    ```
-   potOdds = betSize / (potSize + betSize)
+   winAmount = potSize + betSize + impliedGain
+   requiredEquity = betSize / (winAmount + betSize)
    ```
-   隐含赔率修正：
-   ```
-   impliedOdds = potOdds - impliedGain / (potSize + betSize)
-   ```
+   `impliedGain` 仅接受有限正数，非法/负值按 0；所需胜率与 EV 赢额使用同一 `winAmount`。
 
 2. **Rule of 2 and 4（权益估算）**：
    ```typescript
@@ -766,9 +770,9 @@ interface DailyRecommendation {
 
 3. **EV 计算模型**：
    ```
-   EV = equity × (potSize + betSize) - (1 - equity) × betSize
+   EV = equity × winAmount - (1 - equity) × betSize
    ```
-   当 `estimatedEquity > requiredEquity` 时，跟注有利可图。
+   当 `estimatedEquity > requiredEquity` 时，跟注有利可图，且 `isProfitable` 必须与 EV 符号一致。
 
 4. **Recharts 图表集成**：`EquityChart` 组件使用 Recharts 绘制赔率 vs 权益对比图，柱状图展示不同 outs 数下的盈亏分界。
 
@@ -779,6 +783,7 @@ interface DailyRecommendation {
 6. **trainingEvents.emit 合规**（v2.0 新增）：
    - `PotOddsQuizPage` 完成测验后调用 `trainingEvents.emit(record)`，progress store 自动收集训练记录
    - `relatedLessonId` 反馈闭环已确认合规（`useOddsCalculation.ts` 调用 `buildOddsFeedback` 时携带 `relatedLessonId`）
+   - `answerLockRef` 保证同 tick 双击只记一次 ELO/SRS/Emotion；`settledRef` 保证语言切换等重渲染不重复结算，重开后两者清零
 
 ### 5.3 GTO Simulator（GTO 模拟器）
 
@@ -865,10 +870,10 @@ interface DailyRecommendation {
 10. **会话交互与状态不变量**：
     - `submitDecision` / `continueNext` 返回是否受理；同一决策节点只允许一次提交，`continueNext` 仅在反馈态推进，页面 ELO / SRS / Emotion / 训练事件副作用只在受理后执行
     - 移动端首页为固定底栏预留安全高度；反馈 Sheet 关闭后保留「查看反馈 / 继续」入口，不把关闭反馈误判为可重新提交
-    - Exploit 模式必须显式选择对手；反馈同时保留原始 GTO 策略与剥削策略，判分使用剥削策略
+    - Exploit 模式必须显式选择对手；反馈同时保留原始 GTO 策略与剥削策略，判分使用剥削策略；剥削调整后的决策一律标 `heuristic`，不得展示精确 GTO/EV 口径
     - `worstSpots` 只收录 `evLoss > 0` 的决策
 
-11. **翻前金额口径**：`PreviousAction.amount` 对 raise 表示 raise-to 总额；`computeCallAmount` 扣除 hero 已投入（BB 1BB / SB 0.5BB / 既有 call 或 raise 金额）。无加注时 BB 为 0，其他位置补足到 1BB
+11. **翻前金额与 EV 投入口径**：`PreviousAction.amount` 对 raise/all-in 表示 raise-to 总额，call 表示当前街累计投入；`computePreflopPot` 按位置贡献额累计（SB=.5 / BB=1，同一玩家取 max），不再重复累加盲注。`computeCallAmount` 与 `computeHeroInvestment` 同源；EV 计算先把 raise-to 减去 hero 已投入得到本次新增投入，`calculateEVFromAction` 只接收新增投入。
 
 12. **策略可信度与动作合法性**（`utils/calibration.ts` / `utils/legalActions.ts`）：
     - `getDecisionCalibration` 只把标准 6-max / 100BB 翻前策略表标为 `calibrated`；其他人数、筹码、短牌与全部翻后策略为 `heuristic`；翻前 spot 未覆盖为 `unavailable`
@@ -876,6 +881,7 @@ interface DailyRecommendation {
     - 非标定场景不展示精确 EV / 五级评级，会话页与结果页改用「参考策略」口径；结果汇总只在全部决策标定时展示 EV 与 worstSpots
     - 混合策略中任一正频率动作（raise 尺寸不超过建议尺寸）视为最优；零频率或超注动作至少记 0.5BB 损失
     - 翻后故事线必须把本街对手下注写入 `previousActions`（必要时 Hero 先 Check）；`callAmount` 从本街实际下注减去 Hero 投入，不得用 pot×cbet 虚构跟注额
+    - 每街追加下注后读取 `getLastStreetBetAmount` 的实际值（含有效筹码钳制）再计算下一街底池和 Hero 跟注；禁止硬编码 `0.66` 或让 pot/call 与历史漂移
     - `getLegalActionContext` 统一给出 callAmount / 可过牌 / 最小与最大加注；翻后最小加注只统计本街下注，ActionSelector 据此渲染 Check / Call，并在最小加注超过筹码时禁用 Raise
     - 支持频率内动作的 `optimalEV` 与 `userEV` 对齐，避免 Loss 0 但 EV 不同的展示矛盾
     - 结果路由校验 `:sessionId` 与内存结果一致；结果矩阵为只读，移动端使用 11px 字号与横向滚动；非标定结果环标签使用「参考一致率」
@@ -1094,6 +1100,8 @@ interface DailyRecommendation {
 5. **Puzzle 引擎**（`hooks/usePuzzleEngine.ts`）：
    - 接口：`state` / `currentQuestion` / `answer(optionId)` / `next()` / `end()` / `reset()` / `buildResult()` / `isCurrentAnswered` / `currentAnswer` / `lastBonus` / `clearBonus`
    - `buildResult()` 返回 `PuzzleResult`（含 sessionId / mode / theme / totalQuestions / correctCount / wrongCount / accuracy / duration / averageTime / score / timestamp / answers / questions / status）
+   - Rush 唯一 deadline 为 `startTime + duration + bonusAwarded`；`answer` / `next` / tick 共用到期结算，tick 前超时点击不接收答案，末题到期 `timeRemaining=0`，不得获得剩余时间分
+   - Daily `sourceDateKey` 在开局冻结；跨午夜完成只标记题源日，retry 才刷新题源日期与题目
 
 6. **反馈系统**：五级反馈复用 `DecisionFeedback` 与 `GRADE_DISPLAY_CONFIG`，根据 EV 损失自动评级（best/correct/inaccuracy/wrong/blunder）。
 
@@ -1172,7 +1180,7 @@ interface DailyRecommendation {
 
 6. **能力评估（v8 收敛）**：用户可见能力画像以 `progress.eloByVariant` 为单一事实源；策略侧自适应难度只读 `recentPracticeResults`（由 `recordPracticeResult` 维护，cap 50）。`abilityAssessment` 随 v8 移除，不再有第二套能力值。
 
-7. **快速训练入口**：`QuickDrill` 组件接收 `quick=true` 参数进入快速模式（固定 5 题、自适应难度），`?quick=false` 为 8 题完整练习。5 题速训从策略学院课程新题池抽取并按学习状态混入到期 SRS；8 题完整练习只从课程新题池按手选难度抽取，不混 SRS。模式语义为翻前 / 数学 / 混合。完成时调用 `recordTrainingDay` 计入 Streak，XP 计算（每题 +10 / 全对 +20 奖励），训练记录 mode 为 `quick-drill`（课程练习保持 `practice`）；进度统计与最近训练标签将速训独立展示，不与课程练习合并。
+7. **快速训练入口**：`QuickDrill` 组件接收 `quick=true` 参数进入快速模式（目标 5 题、自适应难度），`?quick=false` 为目标 8 题完整练习。5 题速训从策略学院课程新题池抽取并按学习状态混入到期 SRS；8 题完整练习只从课程新题池按手选难度抽取，不混 SRS。模式语义为翻前 / 数学 / 混合：range 仅 preflop、odds 仅 math、mixed 全维度，难度必须匹配；严格池不足时按实际题数结算或空态，不异维度/异难度回填。SRS 先按模式过滤，再经注入的 `t(key, params)` 解析 front/options/解析。点击开始时冻结 `{drill, reviewCount}`，会话内 ELO/情绪/父级重渲染不得重抽，重开才清空冻结。完成时调用 `recordTrainingDay` 计入 Streak，XP 计算（每题 +10 / 全对 +20 奖励），训练记录 mode 为 `quick-drill`（课程练习保持 `practice`）；进度统计与最近训练标签将速训独立展示，不与课程练习合并。
 
 7b. **谜题弱项回流**：`progress/utils/learningWeakness.ts` 从训练明细的 `topic` / `relatedLessonId` 派生近 30 天、至少 3 次、正确率低于 70% 的前 3 个弱项；按正确率升序、样本量降序、最近训练时间降序稳定排序。`QuickDrill` 经 progress 公共入口读取弱项课程 ID，并在难度匹配前提下优先抽取对应课程题；无弱项时回退 ELO 维度。谜题成绩只作为弱项信号，不直接折算 ELO。
 

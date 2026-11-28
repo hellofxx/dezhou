@@ -16,25 +16,26 @@ import type { OddsCalculatorState, OddsResult } from '../types';
  * P1B-02：隐含赔率方向修正——预期额外收益并入底池：
  *   所需胜率 = bet / (pot + bet + bet + gain)，收益越大所需胜率越低。
  *   shared 的 calculateImpliedOdds（方向相反）已由专批 A 作为死代码删除。
- * P1B-03：EV 赢时获得 = 底池 + 对手下注（pot + bet），输时损失 = 跟注额（bet）。
- *   与 P1B-01 同批修复，保证 isProfitable 与 EV 符号一致（不再"错得自洽"）。
+ * P1B-03：EV 赢时获得 = 底池 + 对手下注 + 隐含收益（pot + bet + gain），
+ *   输时损失 = 跟注额（bet）。赢额与所需胜率共用同一分母，保证 isProfitable 与 EV 符号一致。
  */
 export function computeOddsResult(state: OddsCalculatorState): OddsResult {
   const { potSize, betSize, outs, street, impliedOddsGain, gameVariant } = state;
 
-  // P1B-01：对手下注并入底池参数 → 所需胜率 = bet / (pot + bet + bet)
-  const basePotOdds = calculatePotOdds(potSize + betSize, betSize);
-  // P1B-02：隐含收益并入底池 → 所需胜率 = bet / (pot + bet + bet + gain)
-  const potOdds = impliedOddsGain > 0
-    ? calculatePotOdds(potSize + betSize + impliedOddsGain, betSize)
-    : basePotOdds;
+  // 隐含收益只接受有限正数，与所需胜率口径保持一致；非法/负值按 0 处理。
+  const impliedGain = Number.isFinite(impliedOddsGain) && impliedOddsGain > 0
+    ? impliedOddsGain
+    : 0;
+  // P1B-01/02：赢时获得 = pot + bet + gain，所需胜率 = bet / (赢时获得 + bet)
+  const winAmount = potSize + betSize + impliedGain;
+  const potOdds = calculatePotOdds(winAmount, betSize);
 
   const requiredEquity = potOdds;
   const estimatedEquity = estimateEquity(outs, street, gameVariant);
   const profitable = isProfitableCall(estimatedEquity, requiredEquity);
 
-  // P1B-03：EV = eq × (pot + bet) - (1 - eq) × bet
-  const ev = calculateEV(estimatedEquity, potSize + betSize, betSize);
+  // P1B-03：EV = eq × winAmount - (1 - eq) × bet
+  const ev = calculateEV(estimatedEquity, winAmount, betSize);
 
   return {
     potOdds: potOdds * 100,

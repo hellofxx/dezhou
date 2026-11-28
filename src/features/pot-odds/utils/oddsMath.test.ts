@@ -84,6 +84,17 @@ describe('P1B-03 EV 赢时获得含对手下注', () => {
     // EV = 0.08×150 - 0.92×50 = 12 - 46 = -34
     expect(r.ev).toBeCloseTo(-34, 5);
   });
+
+  it('隐含收益纳入 EV：6 outs flop 从 -2 转为 +10，盈亏标记与 EV 同号', () => {
+    const base = computeOddsResult(makeState({ outs: 6, street: 'flop' }));
+    const withGain = computeOddsResult(makeState({ outs: 6, street: 'flop', impliedOddsGain: 50 }));
+
+    expect(base.ev).toBeCloseTo(-2, 5);
+    expect(base.isProfitable).toBe(false);
+    expect(withGain.ev).toBeCloseTo(10, 5);
+    expect(withGain.isProfitable).toBe(true);
+    expect(withGain.isProfitable).toBe(withGain.ev >= 0);
+  });
 });
 
 describe('P1B-04 补救题固定 id（SRS 去重）', () => {

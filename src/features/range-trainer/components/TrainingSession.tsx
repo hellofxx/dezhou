@@ -8,6 +8,7 @@ import { useQuizEngine, buildRangeFeedback } from '../hooks/useQuizEngine';
 import { useTimer } from '../hooks/useTimer';
 import { QuizCard } from './QuizCard';
 import { QuizTimer } from './QuizTimer';
+import { TrainingPauseDialog } from './TrainingPauseDialog';
 import { Button } from '@/shared/components/ui/button';
 import { Progress } from '@/shared/components/ui/progress';
 import { TRAINING_OVERLAY_EVENT } from '@/shared/constants/app';
@@ -55,6 +56,7 @@ export function TrainingSession({
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const feedbackAdvanceModeRef = useRef<'auto' | 'manual'>('auto');
   const completedRef = useRef(false);
+  const pauseButtonRef = useRef<HTMLButtonElement>(null);
   // 快捷键浮层开合状态 + "本次暂停由浮层触发"标记（关浮层时只恢复浮层造成的暂停）
   const overlayOpenRef = useRef(false);
   const pausedByOverlayRef = useRef(false);
@@ -84,8 +86,8 @@ export function TrainingSession({
     const q = getCurrentQuestion();
     if (!q) return;
 
-    // 记录为超时（store 内恒判错，即使正确答案恰为 fold）
-    answerQuestion('timeout');
+    // 记录为超时（store 内恒判错，即使正确答案恰为 fold）；拒重时不得写任何副作用。
+    if (!answerQuestion('timeout')) return;
 
     setFeedback({
       isCorrect: false,
@@ -150,7 +152,7 @@ export function TrainingSession({
       // P1-3.1: 在 answerQuestion 之前捕获用时（P1A-14：含暂停前已耗时）
       const timeTakenMs = quizState.pausedElapsed + (Date.now() - quizState.questionStartTime);
 
-      answerQuestion(action);
+      if (!answerQuestion(action)) return;
       pauseTimer();
 
       const isCorrect = action === q.correctAction;
@@ -177,14 +179,15 @@ export function TrainingSession({
     [showFeedback, quizState.status, quizState.questionStartTime, quizState.pausedElapsed, getCurrentQuestion, answerQuestion, scheduleFeedbackAdvance, pauseTimer, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion],
   );
 
-  // 手动推进：答错/超时由用户确认后进入下一题；答对也可提前跳过自动等待
+  // 手动推进：仅运行中的已反馈题可推进；答对也可提前跳过自动等待。
   const handleNext = useCallback(() => {
+    if (quizState.status !== 'running' || !feedback) return;
     clearFeedbackTimer();
     setShowFeedback(false);
     setFeedback(null);
     setDecisionFeedback(null);
     nextQuestion();
-  }, [nextQuestion, clearFeedbackTimer]);
+  }, [quizState.status, feedback, nextQuestion, clearFeedbackTimer]);
 
   // 键盘快捷键：Esc 暂停, Space 下一题（Sheet 内交互由 Radix 自行处理）
   useEffect(() => {
@@ -213,7 +216,7 @@ export function TrainingSession({
         return;
       }
 
-      if (e.key === ' ' && showFeedback) {
+      if (e.key === ' ' && showFeedback && quizState.status === 'running') {
         // 焦点在可用控件上时交给控件自身，避免按空格激活按钮同时切题
         if (target?.closest('button:not([disabled]), a[href], input, textarea, select')) return;
         e.preventDefault();
@@ -265,7 +268,6 @@ export function TrainingSession({
   };
 
   const handleResume = () => {
-    // P1A-03 修复：恢复时同步重启倒计时（store 续算由 pausedElapsed 承担，P1A-14）
     resumeQuiz();
     startTimer();
     // RNG-005：暂停打断的是自动推进；手动推进态恢复后不应自行跳题
@@ -285,9 +287,9 @@ export function TrainingSession({
 
   return (
     <div className="relative h-full flex flex-col">
-      {/* 顶部状态栏 */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--walnut-border)]">
-        <div className="flex items-center gap-4">
+      {/* 顶部状态栏：窄屏允许换行，计时器与操作按钮保持固定宽度不被挤压 */}
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-4 sm:px-6 border-b border-[var(--walnut-border)]">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1">
           <div className="text-sm text-[var(--ivory-dim)]">
             {t('rangeTrainer.session.question', {
               current: quizState.currentIndex + 1,
@@ -301,30 +303,35 @@ export function TrainingSession({
           </div>
         </div>
 
-        <QuizTimer
-          timeRemaining={timeRemaining}
-          timeLimit={timeLimit}
-          isPaused={quizState.status === 'paused'}
-        />
+        <div className="shrink-0">
+          <QuizTimer
+            timeRemaining={timeRemaining}
+            timeLimit={timeLimit}
+            isPaused={quizState.status === 'paused'}
+          />
+        </div>
 
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <Button
+            ref={pauseButtonRef}
             variant="ghost"
             size="sm"
+            aria-label={t('common.ui.pause')}
             onClick={handlePause}
             disabled={quizState.status !== 'running'}
           >
-            <Pause className="w-4 h-4" />
+            <Pause className="w-4 h-4" aria-hidden="true" />
           </Button>
           {/* P1A-04 修复：X 不再 endQuiz（全量入账），改为打开暂停遮罩作为确认层，
               由遮罩内"退出训练"走 onExit → resetQuiz，不入账、不 emit、不计 streak */}
           <Button
             variant="ghost"
             size="sm"
+            aria-label={t('rangeTrainer.session.exit')}
             onClick={handlePause}
             disabled={quizState.status !== 'running'}
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4" aria-hidden="true" />
           </Button>
         </div>
       </div>
@@ -374,26 +381,12 @@ export function TrainingSession({
         </span>
       </div>
 
-      {/* 暂停遮罩：全屏 backdrop 上居中一张发牌员纸条（黄铜主按钮 + 次级退出，均 44px 命中区） */}
-      {quizState.status === 'paused' && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-[var(--felt-deep)]/85 px-4 backdrop-blur-sm">
-          <div className="dealer-slip relative w-full max-w-sm space-y-4 p-6">
-            <div className="text-center font-display text-2xl text-[var(--ivory)] tracking-wide">
-              {t('rangeTrainer.session.paused')}
-            </div>
-            <Button onClick={handleResume} className="w-full min-h-11">
-              {t('rangeTrainer.session.resume')}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={onExit}
-              className="w-full min-h-11 border-[var(--poker-danger)]/40 text-[var(--danger-text)] hover:bg-[var(--poker-danger)]/10 hover:text-[var(--danger-text)]"
-            >
-              {t('rangeTrainer.session.exit')}
-            </Button>
-          </div>
-        </div>
-      )}
+      <TrainingPauseDialog
+        open={quizState.status === 'paused'}
+        onResume={handleResume}
+        onExit={onExit}
+        returnFocusRef={pauseButtonRef}
+      />
     </div>
   );
 }

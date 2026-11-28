@@ -71,6 +71,9 @@ export default function PotOddsQuizPage() {
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const startTimeRef = useRef<number>(Date.now());
   const sessionIdRef = useRef<string>(`${Date.now()}-${Math.random().toString(36).slice(2, 9)}`);
+  // state 提交前的同 tick 双击也要幂等；结算同样只允许本 session 执行一次。
+  const answerLockRef = useRef(false);
+  const settledRef = useRef(false);
 
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
@@ -115,7 +118,8 @@ export default function PotOddsQuizPage() {
   const currentQuestion = effectiveQuestions[currentIndex]!;
 
   const handleSelect = useCallback((option: PotOddsQuizOption) => {
-    if (isAnswered) return;
+    if (answerLockRef.current) return;
+    answerLockRef.current = true;
     setSheetDismissed(false);
     const elapsed = (Date.now() - startTimeRef.current) / 1000;
     const elapsedMs = elapsed * 1000;
@@ -141,7 +145,7 @@ export default function PotOddsQuizPage() {
       correctOption?.explanation,
       'l1-basics', // pot-odds 基础对应 Level 1 入门
     ));
-  }, [isAnswered, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion, currentQuestion]);
+  }, [recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion, currentQuestion]);
 
   const handleNext = useCallback(() => {
     const isLastQuestion = currentIndex + 1 >= totalQuestions;
@@ -160,6 +164,7 @@ export default function PotOddsQuizPage() {
         setCurrentIndex((i) => i + 1);
         setSelectedOption(null);
         setIsAnswered(false);
+        answerLockRef.current = false;
         setDecisionFeedback(null);
         startTimeRef.current = Date.now();
         return;
@@ -173,6 +178,7 @@ export default function PotOddsQuizPage() {
     setCurrentIndex((i) => i + 1);
     setSelectedOption(null);
     setIsAnswered(false);
+    answerLockRef.current = false;
     setDecisionFeedback(null);
     startTimeRef.current = Date.now();
   }, [currentIndex, totalQuestions, selectedOption, rescueUsed]);
@@ -181,6 +187,8 @@ export default function PotOddsQuizPage() {
     setCurrentIndex(0);
     setSelectedOption(null);
     setIsAnswered(false);
+    answerLockRef.current = false;
+    settledRef.current = false;
     setCorrectCount(0);
     setTimes([]);
     setFinished(false);
@@ -196,7 +204,8 @@ export default function PotOddsQuizPage() {
 
   // 训练完成时发布事件到 progress store
   useEffect(() => {
-    if (!finished) return;
+    if (!finished || settledRef.current) return;
+    settledRef.current = true;
     const accuracy = totalQuestions > 0 ? correctCount / totalQuestions : 0;
     const avgTime = times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : 0;
     const details: QuestionResult[] = effectiveQuestions.map((q, i) => ({
@@ -363,7 +372,21 @@ export default function PotOddsQuizPage() {
 
             {/* Feedback — §13.7.2：移动端渲染进底部 Sheet，桌面端保持内联展开 */}
             {isMobile ? (
-              <MobileFeedbackSheet open={sheetOpen} onOpenChange={(open) => { if (!open) setSheetDismissed(true); }}>
+              <MobileFeedbackSheet
+                open={sheetOpen}
+                onOpenChange={(open) => { if (!open) setSheetDismissed(true); }}
+                dismissedContent={isAnswered && selectedOption ? (
+                  <>
+                    <Button variant="secondary" onClick={() => setSheetDismissed(false)}>
+                      {t('common.ui.viewFeedback')}
+                    </Button>
+                    <Button variant="default" onClick={handleNext}>
+                      {currentIndex + 1 >= totalQuestions ? t('potOdds.quiz.viewResult') : t('potOdds.quiz.next')}
+                      <ArrowRight className="w-4 h-4" />
+                    </Button>
+                  </>
+                ) : null}
+              >
                 {renderFeedbackContent()}
               </MobileFeedbackSheet>
             ) : (

@@ -5,29 +5,26 @@ import type { PreviousAction, DecisionNode, HandStrategy } from '../types';
 import { generateFlop, generateTurnCard, generateRiverCard, classifyBoardTexture } from './boardGenerator';
 import { buildBoard, boardToFlat, estimatePostflopStrategy, getCbetSizingMultiplier } from './postflopStrategy';
 import { getPreflopHandStrategy } from './spotKey';
-import { appendCurrentStreetBet, tagStreet } from './actionStory';
+import { appendCurrentStreetBet, computeHeroInvestment, getLastStreetBetAmount, tagStreet } from './actionStory';
 
 // ─── 真实底池累加（P1C-20）───────────────────────
 
-/** 翻前底池 = 盲注 1.5 + 各家已投入（raise/call 金额） */
+/** 翻前底池按位置累计：SB=.5 / BB=1，raise/call/all-in 到注额取 max。 */
 export function computePreflopPot(previousActions: PreviousAction[]): number {
-  return previousActions.reduce((sum, a) => {
-    if (a.action === ActionType.Raise || a.action === ActionType.Call) return sum + (a.amount ?? 2.5);
-    return sum;
-  }, 1.5);
+  const positions = new Set<Position>([Position.SB, Position.BB]);
+  for (const action of previousActions) {
+    if (action.street === undefined || action.street === 'preflop') positions.add(action.position);
+  }
+  const pot = [...positions].reduce(
+    (sum, position) => sum + computeHeroInvestment(previousActions, position, 'preflop'),
+    0
+  );
+  return Math.round(pot * 10) / 10;
 }
 
-/**
- * 多步故事线的翻后起始底池：翻前 open 被 hero（或一人）跟注后进入翻牌。
- * openAmount 双方各投入一次 + 盲注。
- */
-function potAfterPreflopCall(preflopActions: PreviousAction[], heroIsOpener: boolean): number {
-  const raises = preflopActions.filter((a) => a.action === ActionType.Raise);
-  const openAmount = raises[0]?.amount ?? 2.5;
-  const callers = preflopActions.filter((a) => a.action === ActionType.Call).length;
-  // hero open 被一人 call，或 hero call 对手 open：均为 2 人各投 openAmount
-  const players = 2 + (heroIsOpener ? 0 : callers > 0 ? callers - 1 : 0);
-  return 1.5 + openAmount * players;
+/** 多步故事线的翻后起始底池与单步场景共用同一贡献额口径。 */
+function potAfterPreflopCall(preflopActions: PreviousAction[]): number {
+  return computePreflopPot(preflopActions);
 }
 
 /**
@@ -107,11 +104,11 @@ export function generateDecisionNodes(
     });
 
   // Flop 节点（P1C-01：排除 hero 手牌；P1C-20：真实底池累加）
-  const flopPot = potAfterPreflopCall(postflopPreflop, position !== Position.BB);
+  const flopPot = potAfterPreflopCall(postflopPreflop);
   const { cards: flopCards, texture: flopTexture } = generateFlop(variant, heroHand, rng);
   const flopBoard = buildBoard(flopCards);
   let flopHistory = betStory(postflopPreflop, 'flop', flopPot, getCbetSizingMultiplier(flopTexture));
-  const flopBet = flopHistory.at(-1)?.amount ?? Math.round(flopPot * getCbetSizingMultiplier(flopTexture) * 10) / 10;
+  const flopBet = getLastStreetBetAmount(flopHistory, 'flop');
   nodes.push({
     id: 'node-flop',
     street: 'flop',
@@ -132,7 +129,7 @@ export function generateDecisionNodes(
   const turnTexture = classifyBoardTexture(boardToFlat(turnBoard));
   flopHistory = [...flopHistory, { position, action: ActionType.Call, amount: flopBet, street: 'flop' }];
   let turnHistory = betStory(flopHistory, 'turn', turnPot, getCbetSizingMultiplier(turnTexture));
-  const turnBet = turnHistory.at(-1)?.amount ?? Math.round(turnPot * 0.66 * 10) / 10;
+  const turnBet = getLastStreetBetAmount(turnHistory, 'turn');
   nodes.push({
     id: 'node-turn',
     street: 'turn',
@@ -146,7 +143,7 @@ export function generateDecisionNodes(
     previousActions: turnHistory,
   });
 
-  // River 节点：turn 双方各投一次 2/3 pot
+  // River 节点：turn 双方各投一次实际历史下注额（尺寸由 texture 与筹码钳制决定）
   const riverPot = Math.round((turnPot + turnBet * 2) * 10) / 10;
   const riverCard = generateRiverCard([...flopCards, turnCard], variant, heroHand, rng);
   const riverBoard = buildBoard(flopCards, turnCard, riverCard);

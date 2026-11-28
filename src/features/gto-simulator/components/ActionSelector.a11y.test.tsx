@@ -67,6 +67,29 @@ describe('ActionSelector 无障碍（a11y 残留修复）', () => {
     expect(slider!.getAttribute('aria-label')).toBeTruthy();
   });
 
+  it('快捷加注按钮均提供 44px 最小触摸高度', () => {
+    renderSel();
+    const raiseBtn = container.querySelector<HTMLButtonElement>('[aria-label="Raise"]');
+    act(() => fireClick(raiseBtn!));
+
+    for (const label of ['1/2 Pot', '3/4 Pot', 'Pot', '2x Pot']) {
+      const button = Array.from(container.querySelectorAll<HTMLButtonElement>('button')).find(
+        (candidate) => candidate.textContent === label,
+      );
+      expect(button?.classList.contains('min-h-11'), label).toBe(true);
+    }
+  });
+
+  it('滑块由 44px label 命中区包裹，轨道视觉仍保持 h-2', () => {
+    renderSel();
+    const raiseBtn = container.querySelector<HTMLButtonElement>('[aria-label="Raise"]');
+    act(() => fireClick(raiseBtn!));
+
+    const slider = container.querySelector<HTMLInputElement>('input[type="range"]');
+    expect(slider?.closest('label')?.classList.contains('min-h-11')).toBe(true);
+    expect(slider?.classList.contains('h-2')).toBe(true);
+  });
+
   it('无 callAmount（limp/check 语境）时 Call 按钮呈现 Check 语义的 aria-label', () => {
     act(() => {
       root.render(

@@ -26,11 +26,17 @@ const pressEscape = async (dialog: HTMLElement | null) => {
 };
 
 /** 受控包装：harness 提供 main/h1，Sheet 通过 Portal 渲染到 document.body */
-function ControlledSheet({ onOpenChangeSpy }: { onOpenChangeSpy?: (open: boolean) => void }) {
+function ControlledSheet({
+  onOpenChangeSpy,
+  withDismissedContent = false,
+}: {
+  onOpenChangeSpy?: (open: boolean) => void;
+  withDismissedContent?: boolean;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
-    <main>
+    <main id="main-content" tabIndex={-1}>
       <h1>Test</h1>
       <button type="button" onClick={() => setOpen(true)}>
         显示答题反馈
@@ -41,6 +47,7 @@ function ControlledSheet({ onOpenChangeSpy }: { onOpenChangeSpy?: (open: boolean
           setOpen(next);
           onOpenChangeSpy?.(next);
         }}
+        dismissedContent={withDismissedContent ? <button type="button">继续训练</button> : undefined}
       >
         <p>本轮 5 题全部正确</p>
       </MobileFeedbackSheet>
@@ -64,9 +71,9 @@ describe('MobileFeedbackSheet a11y (WCAG 2.1 AA smoke)', () => {
     container.remove();
   });
 
-  const openSheet = async (spy?: (open: boolean) => void) => {
+  const openSheet = async (spy?: (open: boolean) => void, withDismissedContent = false) => {
     await act(async () => {
-      root.render(<ControlledSheet onOpenChangeSpy={spy} />);
+      root.render(<ControlledSheet onOpenChangeSpy={spy} withDismissedContent={withDismissedContent} />);
     });
     const trigger = container.querySelector('button');
     expect(trigger).toBeTruthy();
@@ -115,5 +122,17 @@ describe('MobileFeedbackSheet a11y (WCAG 2.1 AA smoke)', () => {
     expect(spy).toHaveBeenCalledWith(false);
     expect(document.querySelector('[role="dialog"]')).toBeNull();
     expect(document.activeElement).toBe(trigger);
+  });
+
+  it('keeps the injected continuation action available after dismissal', async () => {
+    const { dialog } = await openSheet(undefined, true);
+
+    await pressEscape(dialog);
+
+    const continuation = Array.from(container.querySelectorAll('button')).find(
+      (button) => button.textContent === '继续训练',
+    );
+    expect(continuation).toBeTruthy();
+    expect(continuation?.disabled).toBe(false);
   });
 });

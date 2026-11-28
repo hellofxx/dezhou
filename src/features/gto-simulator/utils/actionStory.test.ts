@@ -1,14 +1,37 @@
 import { describe, expect, it } from 'vitest';
 import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
-import { appendCurrentStreetBet, tagStreet } from './actionStory';
+import { appendCurrentStreetBet, computeHeroInvestment, tagStreet } from './actionStory';
 import { getLegalActionContext } from './legalActions';
 import { generateScenario } from './scenarioGenerator';
+import type { PreviousAction } from '../types';
 
 const PREFLOP = tagStreet([
   { position: Position.BTN, action: ActionType.Raise, amount: 2.5 },
   { position: Position.CO, action: ActionType.Call, amount: 2.5 },
 ], 'preflop');
+
+describe('computeHeroInvestment', () => {
+  it('翻前把盲注计入，并对同一位置的到注总额取 max', () => {
+    const history = tagStreet([
+      { position: Position.BTN, action: ActionType.Raise, amount: 2.5 },
+      { position: Position.BB, action: ActionType.Raise, amount: 9 },
+      { position: Position.BB, action: ActionType.Call, amount: 9 },
+    ], 'preflop');
+    expect(computeHeroInvestment(history, Position.BB, 'preflop')).toBe(9);
+    expect(computeHeroInvestment(history, Position.SB, 'preflop')).toBe(0.5);
+  });
+
+  it('翻后只累计当前街，并识别 All-In 到注额', () => {
+    const history: PreviousAction[] = [
+      { position: Position.CO, action: ActionType.Call, amount: 2.5, street: 'preflop' },
+      { position: Position.CO, action: ActionType.Call, amount: 2.1, street: 'flop' },
+      { position: Position.CO, action: ActionType.AllIn, amount: 5, street: 'turn' },
+    ];
+    expect(computeHeroInvestment(history, Position.CO, 'flop')).toBe(2.1);
+    expect(computeHeroInvestment(history, Position.CO, 'turn')).toBe(5);
+  });
+});
 
 describe('appendCurrentStreetBet', () => {
   it('Hero 后位时由前位对手下注，不额外补 Check', () => {

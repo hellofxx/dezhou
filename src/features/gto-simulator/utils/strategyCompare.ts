@@ -192,6 +192,7 @@ export function estimateHeroEquity(
  *   - Call EV = equity × (pot + call) - (1 - equity) × call
  *   - Raise EV = equity × (pot + raise) - (1 - equity) × raise
  *
+ * raiseAmount 是本次新增投入，不是 raise-to 总额；调用方须先扣除 heroInvested。
  * 注：纯 EV 公式不包含 fold equity（对手弃牌收益），用于 GTO 决策对比。
  * Fold equity 应在调用方根据对手模型动态计算，不应在基础 EV 函数中硬编码。
  */
@@ -231,15 +232,18 @@ function calculateUserRaiseEV(
   potSize: number,
   callAmount: number,
   userAmount: number | undefined,
-  gtoStrategy: HandStrategy
+  gtoStrategy: HandStrategy,
+  heroInvested: number
 ): number {
   const gtoAmount = gtoStrategy.raiseAmount ?? callAmount * 3;
-  const rA = userAmount ?? gtoAmount;
-  if (rA <= gtoAmount) {
-    return calculateEVFromAction('raise', heroEquity, potSize, callAmount, rA);
+  const raiseTo = userAmount ?? gtoAmount;
+  const investment = Math.max(0, raiseTo - heroInvested);
+  if (raiseTo <= gtoAmount) {
+    return calculateEVFromAction('raise', heroEquity, potSize, callAmount, investment);
   }
-  const evAtGto = calculateEVFromAction('raise', heroEquity, potSize, callAmount, gtoAmount);
-  const overshoot = rA - gtoAmount;
+  const gtoInvestment = Math.max(0, gtoAmount - heroInvested);
+  const evAtGto = calculateEVFromAction('raise', heroEquity, potSize, callAmount, gtoInvestment);
+  const overshoot = raiseTo - gtoAmount;
   return evAtGto - overshoot * (1 - heroEquity);
 }
 
@@ -262,11 +266,14 @@ function computeDecisionEVs(
   gtoStrategy: HandStrategy,
   heroEquity: number,
   potSize: number,
-  callAmount: number
+  callAmount: number,
+  heroInvested: number
 ): { userEV: number; optimalEV: number; evLoss: number } {
   const evFold = 0;
   const evCall = calculateEVFromAction('call', heroEquity, potSize, callAmount);
-  const evRaise = calculateEVFromAction('raise', heroEquity, potSize, callAmount, gtoStrategy.raiseAmount ?? callAmount * 3);
+  const gtoRaiseTo = gtoStrategy.raiseAmount ?? callAmount * 3;
+  const gtoRaiseInvestment = Math.max(0, gtoRaiseTo - heroInvested);
+  const evRaise = calculateEVFromAction('raise', heroEquity, potSize, callAmount, gtoRaiseInvestment);
   const supportEVs = [
     gtoStrategy.fold > 0 ? evFold : null,
     gtoStrategy.call > 0 ? evCall : null,
@@ -281,13 +288,13 @@ function computeDecisionEVs(
     case 'check': userEV = evCall; break;
     case 'raise':
     case 'allin':
-    case 'all-in': userEV = calculateUserRaiseEV(heroEquity, potSize, callAmount, userAmount, gtoStrategy); break;
+    case 'all-in': userEV = calculateUserRaiseEV(heroEquity, potSize, callAmount, userAmount, gtoStrategy, heroInvested); break;
     default: userEV = evFold;
   }
 
-  const raiseTo = userAmount ?? gtoStrategy.raiseAmount ?? callAmount * 3;
+  const raiseTo = userAmount ?? gtoRaiseTo;
   const sizingInSupport = !['raise', 'allin', 'all-in'].includes(userAction)
-    || raiseTo <= (gtoStrategy.raiseAmount ?? callAmount * 3) + 0.01;
+    || raiseTo <= gtoRaiseTo + 0.01;
   const inSupport = getActionFrequency(userAction, gtoStrategy) > 0 && sizingInSupport;
   const rawLoss = Math.max(0, optimalEV - userEV);
   const evLoss = inSupport
@@ -306,9 +313,10 @@ export function calculateEVLoss(
   gtoStrategy: HandStrategy,
   heroEquity: number,
   potSize: number,
-  callAmount: number
+  callAmount: number,
+  heroInvested: number = 0
 ): number {
-  return computeDecisionEVs(userAction, userAmount, gtoStrategy, heroEquity, potSize, callAmount).evLoss;
+  return computeDecisionEVs(userAction, userAmount, gtoStrategy, heroEquity, potSize, callAmount, heroInvested).evLoss;
 }
 
 // ─── 决策对比 ───────────────────────────────────
@@ -337,10 +345,11 @@ export function compareDecision(
   potSize: number,
   heroEquity: number = 0.5,
   callAmount: number = 1,
+  heroInvested: number = 0,
   t: TranslateFn = (key, params) => i18n.t(key, params)
 ): CompareResult {
   const { userEV, optimalEV, evLoss } = computeDecisionEVs(
-    userAction.action, userAction.amount, gtoStrategy, heroEquity, potSize, callAmount
+    userAction.action, userAction.amount, gtoStrategy, heroEquity, potSize, callAmount, heroInvested
   );
 
   // P1C-10：与五级反馈 GRADE_THRESHOLDS 对齐——evLoss < correct(0.5) 视为最优/可接受

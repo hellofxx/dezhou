@@ -15,6 +15,8 @@ import RangeTrainerHome from './RangeTrainerHome';
 import { useRangeTrainerStore, INITIAL_QUIZ_STATE } from '../store';
 import { PRESET_RANGES } from '../constants';
 import { countRangeCombos } from '../utils/rangeCombos';
+import { progressCommands } from '@/features/progress/api';
+import { useProgressStore } from '@/features/progress/store';
 
 function findButtonByText(container: HTMLElement, text: string): HTMLButtonElement {
   const btn = Array.from(container.querySelectorAll('button')).find((b) =>
@@ -57,6 +59,7 @@ describe('RangeTrainerHome 回归（RNG-002 / RNG-003）', () => {
 
   beforeEach(() => {
     resetRangeStore();
+    progressCommands.switchActiveVariant('standard');
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
@@ -66,6 +69,7 @@ describe('RangeTrainerHome 回归（RNG-002 / RNG-003）', () => {
     act(() => root.unmount());
     container.remove();
     resetRangeStore();
+    progressCommands.switchActiveVariant('standard');
   });
 
   it('RNG-002：点击已选中的位置按钮，预设自动恢复而非永久清空', () => {
@@ -88,7 +92,10 @@ describe('RangeTrainerHome 回归（RNG-002 / RNG-003）', () => {
     expect(useRangeTrainerStore.getState().learnState.selectedPreset?.id).toBe('utg-open');
   });
 
-  it('RNG-003：短牌变体下 Home 页范围占比按 630 组合计算', () => {
+  it('挂载时以 progress.activeVariant 校正本地短牌变体与题库', () => {
+    progressCommands.switchActiveVariant('short-deck');
+    expect(useRangeTrainerStore.getState().gameVariant).toBe('standard');
+
     act(() => {
       root.render(
         <MemoryRouter>
@@ -97,10 +104,25 @@ describe('RangeTrainerHome 回归（RNG-002 / RNG-003）', () => {
       );
     });
 
-    // 切换短牌变体（store action；setGameVariant 会重置 presets 并清空 selectedPreset）
+    expect(useRangeTrainerStore.getState().gameVariant).toBe('short-deck');
+    expect(useRangeTrainerStore.getState().presets.some((preset) => preset.id === 'sd-co-open')).toBe(true);
+    expect(useProgressStore.getState().activeVariant).toBe('short-deck');
+  });
+
+  it('RNG-003：点击短牌同步 progress，Home 页范围占比按 630 组合计算', () => {
     act(() => {
-      useRangeTrainerStore.getState().setGameVariant('short-deck');
+      root.render(
+        <MemoryRouter>
+          <RangeTrainerHome />
+        </MemoryRouter>,
+      );
     });
+
+    // 用户切换变体时，本地题库与 progress 活动变体必须同步。
+    click(findButtonByText(container, '短牌德州 (6+)'));
+    expect(useRangeTrainerStore.getState().gameVariant).toBe('short-deck');
+    expect(useProgressStore.getState().activeVariant).toBe('short-deck');
+
     // 短牌无 UTG 预置，切到 CO（位置切换触发预设自动匹配 sd-co-open）
     act(() => {
       useRangeTrainerStore.getState().setSelectedPosition(Position.CO);

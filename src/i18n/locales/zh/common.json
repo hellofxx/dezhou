@@ -27,7 +27,8 @@
     "retry": "再来一次",
     "backHome": "返回首页",
     "close": "关闭",
-    "feedback": "答题反馈"
+    "feedback": "答题反馈",
+    "viewFeedback": "查看反馈"
   },
   "a11y": {
     "skipToContent": "跳到主内容",

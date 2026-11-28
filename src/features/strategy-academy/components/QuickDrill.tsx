@@ -11,9 +11,13 @@ import { useAcademyLessonsForQuickDrill } from '../hooks/useAcademyLessons';
 import { deriveAcademyCourseFilesForQuickDrill } from '@/i18n/academyCourse';
 import { progressCommands, useProgressState } from '@/features/progress';
 import { getLessonMeta } from '../data/lessonMeta';
-import { computeQuickDrillScore, getQuickDrillQuestions } from '../utils/quickDrill';
+import {
+  computeQuickDrillScore,
+  getQuickDrillQuestions,
+  type QuickDrillMode,
+} from '../utils/quickDrill';
 // P1-4.2: SRS 复习队列混合（P1E-04: 混合+回填抽出为纯函数 composeQuickDrillQuestions）
-import { composeQuickDrillQuestions } from '../utils/quickDrillMix';
+import { composeQuickDrillQuestions, filterQuickDrillReviewItems } from '../utils/quickDrillMix';
 import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
 // P1E-05（专批 B）：review-* 复习题作答后回写 SRS（推进 nextReviewDate）
 import { computeReviewWriteBacks } from '../utils/quickDrillSrs';
@@ -24,7 +28,10 @@ import type { PracticeResult, PracticeDrill, QuestionDifficulty } from '../types
 // P2-5.4: Session 止损守卫
 import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
 
-type QuickDrillMode = 'range' | 'odds' | 'mixed';
+interface QuickDrillSession {
+  drill: PracticeDrill;
+  reviewCount: number;
+}
 
 /** ELO 五维（弱点维度判定与 mode 映射的遍历源） */
 const ELO_DIMENSIONS: readonly EloDimension[] = ['preflop', 'postflop', 'math', 'handReading', 'mental'];
@@ -44,6 +51,11 @@ const DIFFICULTY_LABEL_DEFAULTS: Record<QuestionDifficulty, string> = {
 export default function QuickDrill() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const resolveReviewText = useCallback(
+    (text: string, params?: Record<string, string | number>) =>
+      t(text, { ...params, defaultValue: text }),
+    [t],
+  );
   const [searchParams] = useSearchParams();
 
   // P0-5: 读取 URL query 参数支持快速模式
@@ -79,7 +91,8 @@ export default function QuickDrill() {
 
   const contentReady = useAcademyCourseI18n(deriveAcademyCourseFilesForQuickDrill());
   const lessons = useAcademyLessonsForQuickDrill();
-  const [isStarted, setIsStarted] = useState(false);
+  // 候选包随配置生成；只有点击开始时才冻结为本次会话的事实源。
+  const [session, setSession] = useState<QuickDrillSession | null>(null);
   const [isFinished, setIsFinished] = useState(false);
   const [difficulty, setDifficulty] = useState<QuestionDifficulty>('beginner');
   // P0-5: 记录训练结果用于展示 XP
@@ -132,7 +145,7 @@ export default function QuickDrill() {
     return base;
   })();
 
-  // P0-5: 快速模式固定 5 题，普通模式 8 题
+  // P0-5: 快速模式目标 5 题，普通模式目标 8 题；严格池不足时以实际题数为准
   const questionCount = isQuickMode ? 5 : 8;
 
   // 速训 range/odds 模式下弱项聚焦仍受模式维度约束，避免非该维度课程顶到题首
@@ -149,7 +162,7 @@ export default function QuickDrill() {
     for (const lessonId of focusLessonIds) {
       const lesson = lessons.find((item) => item.id === lessonId);
       if (lesson?.practice?.questions.some(
-        (question) => !question.difficulty || question.difficulty === effectiveDifficulty,
+        (question) => (question.difficulty ?? 'beginner') === effectiveDifficulty,
       )) {
         return lesson;
       }
@@ -157,8 +170,14 @@ export default function QuickDrill() {
     return null;
   }, [lessons, focusLessonIds, effectiveDifficulty]);
 
-  // P1-4.2: 今日待复习项（在 quick 模式下用于混合）
-  const todayReviewItems = useMemo(() => getTodayReviewItems(reviewItems), [reviewItems]);
+  // P1-4.2: 今日待复习项先按模式过滤，严格模式不混入异维度/未知来源
+  const todayReviewItems = useMemo(
+    () => filterQuickDrillReviewItems(
+      getTodayReviewItems(reviewItems),
+      isQuickMode ? mode : 'mixed',
+    ),
+    [reviewItems, isQuickMode, mode],
+  );
 
   // 用户最近正确率（用于 composeDailyMix 决定复习比例；快速模式下读取）
   // P1E-11: 正确率 0 是有效数据，仅无答题记录（totalQuestions === 0）时才用默认值 1.0，
@@ -173,30 +192,31 @@ export default function QuickDrill() {
   }, [isQuickMode, getStatsSummary, recordCount]);
 
   // 生成速训题目（P1-4.2: 快速模式下混合 SRS 复习题）
-  // P1E-04: 混合+缺口回填由 composeQuickDrillQuestions 纯函数完成（无 options 的
-  // 复习项被丢弃后按缺口从新题池回填，保证快速 5 题 / 普通 8 题的题数契约）
+  // P1E-04: 混合+缺口回填由 composeQuickDrillQuestions 纯函数完成；严格池不足时
+  // 只允许少题/空态，不从其他难度或维度补题。
   const { drillQuestions, reviewCount } = useMemo(() => {
+    if (session !== null || lessons === null) return { drillQuestions: [], reviewCount: 0 };
+
     const newQuestions = getQuickDrillQuestions(
-      lessons ?? [],
+      lessons,
       modeWeakAreas,
       effectiveDifficulty,
       questionCount,
       [],
       focusLessonIds,
+      isQuickMode ? mode : 'mixed',
     );
 
     if (!isQuickMode || todayReviewItems.length === 0) {
       return { drillQuestions: newQuestions, reviewCount: 0 };
     }
 
-    const mixed = composeQuickDrillQuestions(newQuestions, todayReviewItems, questionCount, userAccuracy);
+    const mixed = composeQuickDrillQuestions(newQuestions, todayReviewItems, questionCount, userAccuracy, {
+      mode: isQuickMode ? mode : 'mixed',
+      resolveText: resolveReviewText,
+    });
     return { drillQuestions: mixed.questions, reviewCount: mixed.reviewCount };
-  }, [lessons, modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, todayReviewItems, userAccuracy, focusLessonIds]);
-
-  const drill: PracticeDrill = useMemo(() => ({
-    id: `quick-drill-${Date.now()}`,
-    questions: drillQuestions,
-  }), [drillQuestions]);
+  }, [lessons, modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, mode, todayReviewItems, userAccuracy, focusLessonIds, resolveReviewText, session]);
 
   // P0-5: XP 计算 — 每题答对 +10 XP，全对额外 +20 XP
   const computeXp = useCallback((result: PracticeResult): number => {
@@ -244,8 +264,16 @@ export default function QuickDrill() {
     [recordPracticeScore, recordTrainingDay, isQuickMode, submitQuickDrillResult, recordQuickDrillCompletion]
   );
 
+  const handleStart = () => {
+    if (drillQuestions.length === 0) return;
+    setSession({
+      drill: { id: `quick-drill-${Date.now()}`, questions: drillQuestions },
+      reviewCount,
+    });
+  };
+
   const handleRestart = () => {
-    setIsStarted(false);
+    setSession(null);
     setIsFinished(false);
     setFinalResult(null);
     setIsNewRecord(false);
@@ -261,7 +289,7 @@ export default function QuickDrill() {
     return <SessionLimitGuard />;
   }
 
-  if (isStarted && drill.questions.length > 0) {
+  if (session !== null) {
     const earnedXp = finalResult ? computeXp(finalResult) : 0;
 
     return (
@@ -274,7 +302,7 @@ export default function QuickDrill() {
         />
         <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6">
           <PracticeDrillComponent
-            drill={drill}
+            drill={session.drill}
             lessonId="quick-drill"
             onComplete={handleComplete}
             // P1E-06: 题目已由 QuickDrill 按自适应难度选定（含复习题在前的顺序契约），
@@ -286,7 +314,7 @@ export default function QuickDrill() {
               open={isFinished}
               result={finalResult}
               earnedXp={earnedXp}
-              reviewCount={reviewCount}
+              reviewCount={session.reviewCount}
               isNewRecord={isNewRecord}
               freezeRewarded={freezeRewarded}
               quickDrillStreak={currentQuickDrillStreak}
@@ -379,7 +407,7 @@ export default function QuickDrill() {
                   <button
                     key={d}
                     onClick={() => setDifficulty(d)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    className={`min-h-11 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                       difficulty === d
                         ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                         : 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
@@ -452,7 +480,7 @@ export default function QuickDrill() {
 
           {/* Start button */}
           <button
-            onClick={() => setIsStarted(true)}
+            onClick={handleStart}
             disabled={drillQuestions.length === 0}
             className="w-full py-3 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >

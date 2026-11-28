@@ -68,6 +68,25 @@ describe('compareDecision', () => {
   });
 });
 
+describe('raise-to 与本次新增投入', () => {
+  const strategy: HandStrategy = { fold: 0, call: 0, raise: 1, raiseAmount: 4 };
+
+  it('compareDecision 扣除 heroInvested 后计算 EV，缺省仍为 0', () => {
+    const withBlind = compareDecision({ action: ActionType.Raise, amount: 4 }, strategy, 4, 0.6, 1.5, 1);
+    const withoutBlind = compareDecision({ action: ActionType.Raise, amount: 4 }, strategy, 4, 0.6, 1.5);
+    expect(withBlind.userEV).toBeCloseTo(calculateEVFromAction('raise', 0.6, 4, 1.5, 3), 10);
+    expect(withBlind.userEV).toBeCloseTo(3, 10);
+    expect(withoutBlind.userEV).toBeCloseTo(3.2, 10);
+  });
+
+  it('calculateEVLoss 接受 heroInvested，超注惩罚也按新增投入起算', () => {
+    expect(calculateEVLoss('raise', 4, strategy, 0.6, 4, 1.5, 1)).toBe(0);
+    const result = compareDecision({ action: ActionType.AllIn, amount: 10 }, strategy, 4, 0.6, 1.5, 1);
+    const evAtGto = calculateEVFromAction('raise', 0.6, 4, 1.5, 3);
+    expect(result.userEV).toBeCloseTo(evAtGto - 6 * (1 - 0.6), 10);
+  });
+});
+
 describe('getOptimalAction / isPureStrategy / getDominantAction', () => {
   it('getOptimalAction 返回最高频率动作', () => {
     expect(getOptimalAction(pureCall).action).toBe(ActionType.Call);

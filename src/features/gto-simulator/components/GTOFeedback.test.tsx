@@ -13,6 +13,7 @@ import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import type { ComponentProps } from 'react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { useProgressStore } from '@/features/progress/store';
+import { getOpponentProfile } from '@/shared/data/opponentProfiles';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { GTOFeedback } from './GTOFeedback';
 
@@ -229,6 +230,24 @@ describe('GTOFeedback 频率条与 Exploit 建议', () => {
     // GTO 与剥削两段频率条各自的百分比行
     expect(screen.getByText('Raise 50%')).toBeTruthy();
   });
+
+  it.each(['nit', 'maniac', 'calling_station'])(
+    '%s 对手名称使用 ivory token，画像色仅保留在 glyph 底色',
+    (opponentId) => {
+      const opponent = getOpponentProfile(opponentId);
+      renderFeedback({ exploitMode: true, selectedOpponent: opponentId });
+      const opponentName = screen.getByText(/对手:/);
+
+      expect(opponentName.className).toContain('text-[var(--ivory)]');
+      expect(opponentName.style.color).not.toBe(opponent.color);
+      expect(opponentName.getAttribute('style')).toBeNull();
+
+      const expectedBackground = document.createElement('span');
+      expectedBackground.style.backgroundColor = `${opponent.color}30`;
+      const glyphFrame = opponentName.parentElement?.parentElement?.querySelector('svg')?.parentElement;
+      expect(glyphFrame?.style.backgroundColor).toBe(expectedBackground.style.backgroundColor);
+    },
+  );
 
   it('未启用 Exploit 或缺少对手时只展示 GTO 频率条', () => {
     renderFeedback({ gtoStrategy: { fold: 0.2, call: 0.4, raise: 0.4 } });

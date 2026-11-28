@@ -45,8 +45,10 @@ import { getTodayString } from '@/shared/utils/spacedRepetition';
 import { useProgressStore } from '@/features/progress/store';
 import { DEFAULT_EMOTION_STATE } from '@/features/progress/types';
 
-const FIXED_NOW = new Date(2026, 7, 22, 10, 0, 0, 0);
+const FIXED_NOW = new Date(2026, 7, 22, 23, 59, 0, 0);
+const NEXT_NOW = new Date(2026, 7, 23, 0, 0, 0, 0);
 const TODAY_KEY = '2026-08-22';
+const NEXT_KEY = '2026-08-23';
 
 describe('DailyPuzzle 每日谜题', () => {
   let container: HTMLDivElement;
@@ -158,6 +160,29 @@ describe('DailyPuzzle 每日谜题', () => {
     expect(progressMock.recordTrainingDay).toHaveBeenCalledTimes(1);
     expect(emitMock).toHaveBeenCalledTimes(1);
     expect(text()).toContain('训练完成');
+  });
+
+  it('跨午夜完成只标记题源日；retry 刷新题源日', () => {
+    render();
+    answerCurrent(true);
+    act(() => vi.setSystemTime(NEXT_NOW));
+    expect(text()).toContain(TODAY_KEY);
+    expect(text()).not.toContain(NEXT_KEY);
+    clickNext();
+
+    for (let i = 1; i < dailyQuestions.length; i += 1) {
+      answerCurrent(true);
+      clickNext();
+    }
+    expect(usePuzzleStore.getState().dailyCompleted[TODAY_KEY]).toBe(true);
+    expect(usePuzzleStore.getState().dailyCompleted[NEXT_KEY]).toBeUndefined();
+
+    const retry = [...document.body.querySelectorAll('button')].find((btn) =>
+      btn.textContent?.includes('再试一次')
+    );
+    click(retry);
+    expect(text()).toContain(NEXT_KEY);
+    expect(text()).not.toContain(TODAY_KEY);
   });
 
   it('结果页「返回首页」跳转 /puzzle', () => {

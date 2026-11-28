@@ -189,7 +189,7 @@ export function ActionSelector({
                 key={qr.label}
                 onClick={() => setRaiseAmount(clampRaise(qr.value))}
                 className={cn(
-                  'flex-1 py-1.5 rounded text-xs font-medium transition-all font-numeric',
+                  'flex-1 min-h-11 py-1.5 rounded text-xs font-medium transition-all font-numeric',
                   Math.abs(raiseValue - qr.value) < 0.1
                     ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                     : 'bg-[var(--walnut-raised)]/60 text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15'
@@ -202,17 +202,19 @@ export function ActionSelector({
 
           {/* 滑块（a11y：aria-valuetext 读屏播报当前加注尺寸，遵循 WCAG 与 DESIGN.md） */}
           <div className="space-y-1">
-            <input
-              type="range"
-              min={minRaise}
-              max={maxRaise}
-              step={0.5}
-              value={raiseValue}
-              onChange={(e) => setRaiseAmount(Number(e.target.value))}
-              aria-label={t('gto.action.raiseSlider')}
-              aria-valuetext={`${raiseValue.toFixed(1)} BB`}
-              className="w-full h-2 bg-[var(--felt-deep)] rounded-full appearance-none cursor-pointer accent-[var(--brass)]"
-            />
+            <label className="flex min-h-11 items-center">
+              <input
+                type="range"
+                min={minRaise}
+                max={maxRaise}
+                step={0.5}
+                value={raiseValue}
+                onChange={(e) => setRaiseAmount(Number(e.target.value))}
+                aria-label={t('gto.action.raiseSlider')}
+                aria-valuetext={`${raiseValue.toFixed(1)} BB`}
+                className="w-full h-2 bg-[var(--felt-deep)] rounded-full appearance-none cursor-pointer accent-[var(--brass)]"
+              />
+            </label>
             <div className="flex justify-between text-xs text-[var(--ivory-muted)] font-numeric">
               <span>{minRaise.toFixed(1)} BB</span>
               <span className="text-[var(--brass-bright)] font-bold">{raiseValue.toFixed(1)} BB</span>

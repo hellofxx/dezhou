@@ -8,7 +8,7 @@ import { selectHandForDifficulty } from './handDifficulty';
 import { buildBoard, boardToFlat, getCbetSizingMultiplier } from './postflopStrategy';
 import { resolveSpotKey } from './spotKey';
 import { computePreflopPot, generateDecisionNodes } from './decisionNodes';
-import { appendCurrentStreetBet, tagStreet } from './actionStory';
+import { appendCurrentStreetBet, getLastStreetBetAmount, tagStreet } from './actionStory';
 import { seededRandom } from '@/shared/utils/seededShuffle';
 
 // ─── 前置动作生成（支持 Multiway）─────────────────
@@ -189,10 +189,10 @@ export function generateScenario(config: ScenarioConfig, index: number, seed?: n
       // P1C-21：turn 重算 texture（不再沿用 flop texture）
       const turnTexture = classifyBoardTexture(boardToFlat(board));
       boardTexture = turnTexture;
-      const flopBet = Math.round(preflopPot * getCbetSizingMultiplier(flopTexture) * 10) / 10;
-      potSize = Math.round((preflopPot + flopBet * 2) * 10) / 10;
       previousActions = betStory(previousActions, 'flop', preflopPot, getCbetSizingMultiplier(flopTexture));
+      const flopBet = getLastStreetBetAmount(previousActions, 'flop');
       previousActions = [...previousActions, { position: config.position, action: ActionType.Call, amount: flopBet, street: 'flop' }];
+      potSize = Math.round((preflopPot + flopBet * 2) * 10) / 10;
       previousActions = betStory(previousActions, 'turn', potSize, getCbetSizingMultiplier(turnTexture));
     } else {
       const turnCard = generateTurnCard(flopCards, variant, heroHand, rng);
@@ -201,14 +201,14 @@ export function generateScenario(config: ScenarioConfig, index: number, seed?: n
       const turnTexture = classifyBoardTexture(boardToFlat(buildBoard(flopCards, turnCard)));
       // P1C-21：river 重算 texture
       boardTexture = classifyBoardTexture(boardToFlat(board));
-      const flopBet = Math.round(preflopPot * getCbetSizingMultiplier(flopTexture) * 10) / 10;
-      const turnPot = Math.round((preflopPot + flopBet * 2) * 10) / 10;
-      const turnBet = Math.round(turnPot * 0.66 * 10) / 10;
-      potSize = Math.round((turnPot + turnBet * 2) * 10) / 10;
       previousActions = betStory(previousActions, 'flop', preflopPot, getCbetSizingMultiplier(flopTexture));
+      const flopBet = getLastStreetBetAmount(previousActions, 'flop');
       previousActions = [...previousActions, { position: config.position, action: ActionType.Call, amount: flopBet, street: 'flop' }];
+      const turnPot = Math.round((preflopPot + flopBet * 2) * 10) / 10;
       previousActions = betStory(previousActions, 'turn', turnPot, getCbetSizingMultiplier(turnTexture));
+      const turnBet = getLastStreetBetAmount(previousActions, 'turn');
       previousActions = [...previousActions, { position: config.position, action: ActionType.Call, amount: turnBet, street: 'turn' }];
+      potSize = Math.round((turnPot + turnBet * 2) * 10) / 10;
       previousActions = betStory(previousActions, 'river', potSize, getCbetSizingMultiplier(boardTexture));
     }
   }

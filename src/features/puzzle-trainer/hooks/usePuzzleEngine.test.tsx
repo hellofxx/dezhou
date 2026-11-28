@@ -1,13 +1,6 @@
 /**
- * usePuzzleEngine 状态编排测试（纯引擎逻辑已由 puzzleEngineCore.test.ts 覆盖）。
- *
- * 覆盖 hook 层独有分支：
- *  - 首题作答前不计页面加载时长（PZL-07 冻结）；
- *  - next() 未作答不前进 / 作答后前进 / 末题结束；
- *  - Rush 命数、连对奖励与奖励反馈（lastBonus / clearBonus）；
- *  - Rush 墙钟倒计时到点的 completed / failed 分流（P1D-04）；
- *  - 主题 → 相关课程 ID 映射覆盖全部 10 个主题（反馈闭环）；
- *  - reset 重建初始状态。
+ * usePuzzleEngine 状态编排测试；纯引擎逻辑由 puzzleEngineCore.test.ts 覆盖。
+ * 重点：首题计时、next、Rush 命/奖励/墙钟到期、课程映射与 reset。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act } from 'react';
@@ -16,6 +9,7 @@ import { usePuzzleEngine, type UsePuzzleEngineReturn } from './usePuzzleEngine';
 import type { PuzzleTheme, UsePuzzleEngineOptions } from '../types';
 import { getPuzzlesByTheme } from '../data/puzzleBank';
 import { getRushQuestions, RUSH_INITIAL_LIVES } from '../data/rushQuestions';
+import { getDailyKey } from '../utils/dateSeed';
 
 const FIXED_NOW = new Date(2026, 7, 22, 10, 0, 0, 0);
 const RUSH_TEST_DURATION = 60_000;
@@ -92,7 +86,9 @@ describe('usePuzzleEngine 会话编排', () => {
     expect(state.status).toBe('playing');
     expect(state.currentIndex).toBe(0);
     expect(state.lives).toBe(0);
+    expect(state.duration).toBe(0);
     expect(state.timeRemaining).toBe(0);
+    expect(state.sourceDateKey).toBeNull();
     expect(state.questions).toHaveLength(2);
     expect(state.questions.map((q) => q.id)).toEqual(
       getPuzzlesByTheme('c-bet').slice(0, 2).map((q) => q.id)
@@ -104,6 +100,7 @@ describe('usePuzzleEngine 会话编排', () => {
     expect(engine().state.questions).toHaveLength(8);
     expect(engine().state.lives).toBe(0);
     expect(engine().state.status).toBe('playing');
+    expect(engine().state.sourceDateKey).toBe(getDailyKey(FIXED_NOW));
   });
 
   it('PZL-07：首题作答前停留的页面加载时长不计入单题用时', () => {
@@ -187,6 +184,7 @@ describe('usePuzzleEngine 会话编排', () => {
     render({ mode: 'rush', duration: RUSH_TEST_DURATION });
     const { state } = engine();
     expect(state.lives).toBe(RUSH_INITIAL_LIVES);
+    expect(state.duration).toBe(RUSH_TEST_DURATION);
     expect(state.timeRemaining).toBe(RUSH_TEST_DURATION);
     expect(state.questions.map((q) => q.id)).toEqual(
       getRushQuestions(30, FIXED_NOW).map((q) => q.id)
@@ -216,6 +214,12 @@ describe('usePuzzleEngine 会话编排', () => {
 
     act(() => engine().clearBonus());
     expect(engine().lastBonus).toBe(0);
+
+    advance(RUSH_TEST_DURATION + 5_000);
+    expect(engine().state.status).toBe('playing');
+    expect(engine().state.timeRemaining).toBe(5_000);
+    advance(5_000);
+    expect(engine().state.status).toBe('completed');
   });
 
   it('rush 命耗尽后 next() 判 failed（末题同口径）', () => {
@@ -234,6 +238,35 @@ describe('usePuzzleEngine 会话编排', () => {
     advance(RUSH_TEST_DURATION + 250);
     expect(engine().state.timeRemaining).toBe(0);
     expect(engine().state.status).toBe('completed');
+  });
+
+  it('rush 到期点击在 tick 前结算且不记录答案', () => {
+    render({ mode: 'rush', duration: RUSH_TEST_DURATION });
+    const deadline = engine().state.startTime + engine().state.duration;
+    act(() => vi.setSystemTime(deadline + 1));
+    answer(correctOptionId());
+    expect(engine().state.answers).toEqual([]);
+    expect(engine().state.status).toBe('completed');
+    expect(engine().state.timeRemaining).toBe(0);
+    expect(engine().state.endTime).toBe(deadline + 1);
+  });
+
+  it('rush 末题到期 next 在 tick 前归零，不拿剩余时间分', () => {
+    render({ mode: 'rush', duration: RUSH_TEST_DURATION });
+    const total = engine().state.questions.length;
+    for (let i = 0; i < total - 1; i += 1) {
+      answer(correctOptionId());
+      next();
+    }
+    answer(correctOptionId());
+    const { startTime, duration, bonusAwarded } = engine().state;
+    const deadline = startTime + duration + bonusAwarded;
+    act(() => vi.setSystemTime(deadline + 1));
+    next();
+    expect(engine().state.status).toBe('completed');
+    expect(engine().state.timeRemaining).toBe(0);
+    expect(engine().state.endTime).toBe(deadline + 1);
+    expect(engine().buildResult().score).toBe(total * 100 + RUSH_INITIAL_LIVES * 200);
   });
 
   it('P1D-04：归零瞬间命已耗尽（停留在答错反馈）判 failed 而非 completed', () => {

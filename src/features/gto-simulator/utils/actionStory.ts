@@ -6,6 +6,38 @@ export function tagStreet(actions: PreviousAction[], street: Street): PreviousAc
   return actions.map((action) => ({ ...action, street: action.street ?? street }));
 }
 
+function isInvestmentAction(action: ActionType): boolean {
+  return action === ActionType.Raise || action === ActionType.Call || action === ActionType.AllIn;
+}
+
+/**
+ * 返回玩家在指定街的到注总额；翻前盲注也计入。
+ * raise/call/all-in 的 amount 都是该街累计到注额，因此同一玩家取 max。
+ */
+export function computeHeroInvestment(
+  actions: PreviousAction[],
+  heroPosition: Position,
+  street: Street
+): number {
+  let blind = 0;
+  if (street === 'preflop' && heroPosition === Position.SB) blind = 0.5;
+  if (street === 'preflop' && heroPosition === Position.BB) blind = 1;
+  return actions.reduce((invested, action) => {
+    const onStreet = street === 'preflop'
+      ? action.street === undefined || action.street === 'preflop'
+      : action.street === street;
+    if (action.position !== heroPosition || !onStreet || !isInvestmentAction(action.action)) return invested;
+    return Math.max(invested, action.amount ?? 0);
+  }, blind);
+}
+
+/** 读取某街实际最后一笔下注/全下的到注额；历史缺失时返回 0。 */
+export function getLastStreetBetAmount(actions: PreviousAction[], street: Exclude<Street, 'preflop'>): number {
+  return actions
+    .filter((action) => action.street === street && (action.action === ActionType.Raise || action.action === ActionType.AllIn))
+    .at(-1)?.amount ?? 0;
+}
+
 function activePositions(actions: PreviousAction[], hero: Position): Set<Position> {
   const active = new Set<Position>([hero]);
   for (const action of actions) {

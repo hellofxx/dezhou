@@ -21,7 +21,8 @@ import {
   applyAnswer,
   buildInitialState,
   buildPuzzleResult,
-  RUSH_DEFAULT_DURATION,
+  getRushDeadline,
+  settleExpiredRush,
 } from './puzzleEngineCore';
 
 /**
@@ -75,7 +76,6 @@ export function usePuzzleEngine(options: UsePuzzleEngineOptions): UsePuzzleEngin
   // PZL-07：初始为 null，首题在首次作答时定格——避免页面加载时长被计入首题用时
   const questionStartRef = useRef<number | null>(null);
 
-  const rushDuration = options.mode === 'rush' ? (options.duration ?? RUSH_DEFAULT_DURATION) : 0;
   const livesEnabled = options.mode === 'rush' && (options.enableLives ?? true);
 
   // Rush 模式倒计时
@@ -90,22 +90,15 @@ export function usePuzzleEngine(options: UsePuzzleEngineOptions): UsePuzzleEngin
 
     const intervalId = setInterval(() => {
       setState((prev) => {
-        if (prev.status !== 'playing') return prev;
-        const elapsed = Date.now() - prev.startTime;
-        const remaining = rushDuration + prev.bonusAwarded - elapsed;
-        if (remaining <= 0) {
-          // P1D-04 修复：归零瞬间若命已耗尽（如停留在答错反馈未点下一题），
-          // 应判 failed 而非 completed，与 next() 的命耗尽判定同口径
-          const status: PuzzleSessionStatus =
-            livesEnabled && prev.lives <= 0 ? 'failed' : 'completed';
-          return { ...prev, timeRemaining: 0, status, endTime: Date.now() };
-        }
-        return { ...prev, timeRemaining: remaining };
+        const now = Date.now();
+        const settled = settleExpiredRush(prev, now, livesEnabled);
+        if (settled !== prev) return settled;
+        return { ...prev, timeRemaining: Math.max(0, getRushDeadline(prev) - now) };
       });
     }, 250);
 
     return () => clearInterval(intervalId);
-  }, [options.mode, state.status, rushDuration, livesEnabled]);
+  }, [options.mode, state.status, state.duration, livesEnabled]);
 
   const currentQuestion = useMemo<PuzzleQuestion | null>(() => {
     if (state.currentIndex >= state.questions.length) return null;
@@ -135,6 +128,7 @@ export function usePuzzleEngine(options: UsePuzzleEngineOptions): UsePuzzleEngin
         const next = applyAnswer(prev, {
           optionId,
           mode: options.mode,
+          enableLives: livesEnabled,
           questionStartedAt,
           now: Date.now(),
           inferLessonId: inferPuzzleLessonId,
@@ -146,11 +140,14 @@ export function usePuzzleEngine(options: UsePuzzleEngineOptions): UsePuzzleEngin
         return next;
       });
     },
-    [options.mode]
+    [options.mode, livesEnabled]
   );
 
   const next = useCallback(() => {
     setState((prev) => {
+      const now = Date.now();
+      const settled = options.mode === 'rush' ? settleExpiredRush(prev, now, livesEnabled) : prev;
+      if (settled !== prev) return settled;
       if (prev.status !== 'playing') return prev;
       const currentId = prev.questions[prev.currentIndex]?.id;
       // 当前题未答，不允许前进
@@ -159,21 +156,21 @@ export function usePuzzleEngine(options: UsePuzzleEngineOptions): UsePuzzleEngin
       // P1D-04 修复：命耗尽判定前置于"无下一题"——
       // 末题答错致命归 0 时旧顺序会先命中"无下一题"误判 completed
       if (livesEnabled && prev.lives <= 0) {
-        return { ...prev, status: 'failed' as PuzzleSessionStatus, endTime: Date.now() };
+        return { ...prev, status: 'failed' as PuzzleSessionStatus, endTime: now };
       }
 
       const nextIndex = prev.currentIndex + 1;
 
       // 没有下一题：完成
       if (nextIndex >= prev.questions.length) {
-        return { ...prev, currentIndex: nextIndex, status: 'completed' as PuzzleSessionStatus, endTime: Date.now() };
+        return { ...prev, currentIndex: nextIndex, status: 'completed' as PuzzleSessionStatus, endTime: now };
       }
 
       // 重置当前题开始时间
-      questionStartRef.current = Date.now();
+      questionStartRef.current = now;
       return { ...prev, currentIndex: nextIndex };
     });
-  }, [livesEnabled]);
+  }, [livesEnabled, options.mode]);
 
   const reset = useCallback(() => {
     setState(buildInitialState(options));

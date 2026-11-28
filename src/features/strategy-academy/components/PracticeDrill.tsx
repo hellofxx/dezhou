@@ -37,6 +37,9 @@ import { DrillProgressHeader } from './drills/DrillProgressHeader';
 
 export type DrillMode = 'normal' | 'pressure';
 
+// 反馈态全局推进快捷键让权给原生控件及弹窗内交互，避免抢占 Enter/Space。
+const KEYBOARD_SHORTCUT_EXCLUSIONS = 'button, a, input, textarea, select, [role="dialog"]';
+
 interface PracticeDrillProps {
   drill: PracticeDrillType;
   lessonId: string;
@@ -469,6 +472,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
 
       if (isAnswered) {
         if (e.key === ' ' || e.key === 'Enter') {
+          const target = e.target;
+          if (target instanceof Element && target.closest(KEYBOARD_SHORTCUT_EXCLUSIONS)) return;
           e.preventDefault();
           handleNext();
         }
@@ -711,10 +716,13 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       </AnimatePresence>
 
       {/* Scenario display */}
-      <div className={cn(
-        'scenario-card p-5 md:p-6',
-        isPressure && 'border-[var(--danger)]/30'
-      )}>
+      <div
+        data-question-id={currentQuestion.id}
+        className={cn(
+          'scenario-card p-5 md:p-6',
+          isPressure && 'border-[var(--danger)]/30'
+        )}
+      >
 
         {/* 倒计时圆环 - 右上角 */}
         {timeLimit > 0 && !isAnswered && (

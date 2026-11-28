@@ -93,6 +93,30 @@ describe('range-trainer quiz store（P1-A 修复回归）', () => {
     });
   });
 
+  // ─── 受理幂等：同 tick 重提与暂停态提交都不得改写结果 ──────────
+  describe('answerQuestion 受理结果', () => {
+    it('首次提交返回 true，同 tick 重复提交返回 false 且不重复加权', () => {
+      setRunningState(foldQuestion);
+
+      expect(useRangeTrainerStore.getState().answerQuestion('fold')).toBe(true);
+      const accepted = useRangeTrainerStore.getState().quizState;
+      expect(useRangeTrainerStore.getState().answerQuestion('call')).toBe(false);
+      expect(useRangeTrainerStore.getState().quizState).toBe(accepted);
+      expect(accepted.answers).toEqual(['fold']);
+      expect(accepted.handWeights['72o']).toBe(1);
+    });
+
+    it('暂停态提交返回 false，答案与耗时保持不变', () => {
+      setRunningState(foldQuestion);
+      useRangeTrainerStore.getState().pauseQuiz();
+      const paused = useRangeTrainerStore.getState().quizState;
+
+      expect(useRangeTrainerStore.getState().answerQuestion('fold')).toBe(false);
+      expect(useRangeTrainerStore.getState().quizState).toBe(paused);
+      expect(paused.answers).toEqual([null]);
+    });
+  });
+
   // ─── P1A-02：超时恒判错（即使正确答案为 fold）─────────────────
   describe('P1A-02 超时判错', () => {
     it("正确答案为 fold 时，answerQuestion('timeout') 仍判错并加权", () => {

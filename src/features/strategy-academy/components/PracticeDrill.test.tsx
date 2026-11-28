@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import { cleanup, createEvent, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { PracticeDrillComponent } from './PracticeDrill';
 import { useProgressStore } from '@/features/progress/store';
@@ -46,7 +47,7 @@ const drill: PracticeDrill = {
   ],
 };
 
-function renderDrill(onComplete = vi.fn()) {
+function renderDrill(onComplete = vi.fn(), children?: ReactNode) {
   render(
     <MemoryRouter>
       <PracticeDrillComponent
@@ -55,6 +56,7 @@ function renderDrill(onComplete = vi.fn()) {
         onComplete={onComplete}
         adaptive={false}
       />
+      {children}
     </MemoryRouter>,
   );
   return onComplete;
@@ -120,7 +122,7 @@ describe('PracticeDrill：答题与结算', () => {
     expect(screen.getByText('薄弱点')).toBeTruthy();
   });
 
-  it('键盘 1 选择选项，空格进入下一题', () => {
+  it('window 键盘 1 选择选项，空格进入下一题', () => {
     const onComplete = renderDrill();
 
     fireEvent.keyDown(window, { key: '1' }); // Q1 第一项 Fold（错误）
@@ -134,6 +136,52 @@ describe('PracticeDrill：答题与结算', () => {
 
     expect(onComplete).toHaveBeenCalledTimes(1);
     expect(onComplete.mock.calls[0]![0].correctAnswers).toBe(1);
+  });
+
+  it.each([' ', 'Enter'])('body 接收反馈态快捷键 %j 时仍推进', (key) => {
+    renderDrill();
+
+    fireEvent.click(screen.getByText('Call'));
+    fireEvent.keyDown(document.body, { key });
+
+    expect(screen.getByText('2 / 2')).toBeTruthy();
+  });
+
+  it.each([' ', 'Enter'])('反馈态快捷键 %j 不劫持 button/a/表单或 dialog 内目标', (key) => {
+    renderDrill(vi.fn(), (
+      <>
+        <input aria-label="快捷键测试输入框" />
+        <textarea aria-label="快捷键测试文本域" />
+        <select aria-label="快捷键测试选择框">
+          <option>测试选项</option>
+        </select>
+        <a href="#shortcut-target">快捷键测试链接</a>
+        <div role="dialog" aria-label="快捷键测试弹窗">
+          <span tabIndex={0}>弹窗内非控件内容</span>
+        </div>
+      </>
+    ));
+
+    fireEvent.click(screen.getByText('Call'));
+    const dialog = screen.getByRole('dialog', { name: '快捷键测试弹窗' });
+    const targets = [
+      screen.getByRole('button', { name: /^下一题/ }),
+      screen.getByRole('link', { name: '快捷键测试链接' }),
+      screen.getByRole('textbox', { name: '快捷键测试输入框' }),
+      screen.getByRole('textbox', { name: '快捷键测试文本域' }),
+      screen.getByRole('combobox', { name: '快捷键测试选择框' }),
+      within(dialog).getByText('弹窗内非控件内容'),
+    ];
+
+    for (const target of targets) {
+      target.focus();
+      expect(document.activeElement).toBe(target);
+      const event = createEvent.keyDown(target, { key, cancelable: true });
+      fireEvent(target, event);
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(screen.getByText('1 / 2')).toBeTruthy();
+    }
   });
 });
 

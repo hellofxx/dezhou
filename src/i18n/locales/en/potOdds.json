@@ -240,11 +240,11 @@
       "question": "Should you call?",
       "optA": {
         "text": "Call, odds are enough",
-        "explanation": "Pot odds = 100/(200+100+100) = 25%. 12 outs after the turn ≈ 24% (12×2). Very close, plus possible backdoor chances — a call is roughly break-even to slightly profitable."
+        "explanation": "Required equity is 100/(200+100+100) = 25%, but 12 outs on the turn yield only about 24% (12×2), below break-even. The opponent is all-in, so there is no future implied profit; calling is negative EV, and folding is correct."
       },
       "optB": {
-        "text": "Fold, not enough",
-        "explanation": "12 outs ≈ 24% is very close to the required 25%. With possible extra outs and precise calculation, this is a marginal call."
+        "text": "Fold, odds are not enough",
+        "explanation": "The 12 outs on the turn yield about 24%, below the required 25%. The opponent is all-in, so no additional winnings are available later; calling is negative EV, making folding the correct decision."
       }
     },
     "q11": {

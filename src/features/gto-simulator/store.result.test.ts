@@ -150,6 +150,20 @@ describe('gto-simulator store 策略查找分支', () => {
       raiseAmount: 2.5,
     });
   });
+
+  it('Exploit 策略参与判分时决策与结果均标记 heuristic', () => {
+    store().setExploitMode(true);
+    store().setSelectedOpponent('nit');
+    store().startSession([makePreflopScenario('exploit')]);
+
+    store().submitDecision({ action: ActionType.Raise, amount: 2.5 });
+
+    expect(store().feedback!.exploitStrategy).not.toBeNull();
+    expect(store().feedback!.calibration).toBe('heuristic');
+    expect(store().session!.decisions[0]!.calibration).toBe('heuristic');
+    store().endSession();
+    expect(store().lastResult).toMatchObject({ calibration: 'heuristic', calibratedDecisions: 0 });
+  });
 });
 
 describe('gto-simulator store 结果聚合', () => {

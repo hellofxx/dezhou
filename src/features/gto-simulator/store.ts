@@ -11,6 +11,7 @@ import { estimatePostflopStrategy, boardToFlat } from './utils/postflopStrategy'
 import { classifyBoardTexture } from './utils/boardGenerator';
 import { getDecisionCalibration } from './utils/calibration';
 import { computeCallAmount } from './utils/legalActions';
+import { computeHeroInvestment } from './utils/actionStory';
 
 export { computeCallAmount, getLegalActionContext } from './utils/legalActions';
 
@@ -97,7 +98,6 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
 
     const nodes = scenario.decisionNodes;
     const node: DecisionNode | undefined = nodes?.[currentNodeIndex];
-    const calibration = getDecisionCalibration(scenario, node);
 
     // P1C-03/04: 统一 GTO 策略查找（preflop 查表 + postflop texture_strategy）
     const gtoStrategy = node ? node.gtoStrategy : getGTOStrategyForScenario(scenario);
@@ -109,6 +109,7 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
       exploitStrategy = adjustForOpponent(gtoStrategy, selectedOpponent, scenario);
     }
     const scoringStrategy = exploitStrategy ?? gtoStrategy;
+    const calibration = getDecisionCalibration(scenario, node, exploitStrategy !== null);
 
     const nodeBoard = node?.board;
     const nodeStreet = node?.street ?? scenario.street;
@@ -122,10 +123,15 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
 
     const heroEquity = estimateHeroEquity(scenario.heroHand, flatBoard, nodeStreet);
 
-    // P1C-12: 真实 callAmount（preflop: 最后一个 raise 减去 hero 已投入；postflop: pot × cbet sizing）
-    const callAmount = computeCallAmount(scenario, node, nodePotSize);
+    // P1C-12: 真实 callAmount 与 heroInvested 均从当前街历史读取。
+    const callAmount = computeCallAmount(scenario, node);
+    const heroInvested = computeHeroInvestment(
+      node?.previousActions ?? scenario.previousActions,
+      scenario.position,
+      nodeStreet
+    );
 
-    const result = compareDecision(decision, scoringStrategy, nodePotSize, heroEquity, callAmount);
+    const result = compareDecision(decision, scoringStrategy, nodePotSize, heroEquity, callAmount, heroInvested);
 
     // P1C-19: timeTaken 使用每题开始时间戳
     const gtoDecision: GTODecision = {

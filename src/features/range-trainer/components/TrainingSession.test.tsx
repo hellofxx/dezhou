@@ -52,6 +52,14 @@ function pressKey(key: string) {
   });
 }
 
+/** Radix 的聚焦与卸载收尾使用宏任务，需在 fake timers 内排空。 */
+async function flushDialogTimers() {
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(0);
+    await vi.advanceTimersByTimeAsync(0);
+  });
+}
+
 /** 模拟 BlankLayout 派发的快捷键浮层开合事件 */
 function dispatchOverlay(open: boolean) {
   act(() => {
@@ -137,6 +145,75 @@ describe('TrainingSession 会话流程', () => {
     resetRangeStore();
   });
 
+  it('顶栏窄屏可换行，Pause / X 图标按钮具有可访问名称', () => {
+    startSession(10, 10);
+    renderSession();
+
+    const pauseButton = container.querySelector<HTMLButtonElement>('button[aria-label="暂停"]');
+    const exitButton = container.querySelector<HTMLButtonElement>('button[aria-label="退出训练"]');
+    expect(pauseButton).not.toBeNull();
+    expect(exitButton).not.toBeNull();
+    expect(pauseButton?.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+    expect(exitButton?.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+
+    const header = pauseButton?.closest<HTMLElement>('div.border-b');
+    expect(header?.classList.contains('flex-wrap')).toBe(true);
+    expect(pauseButton?.parentElement?.classList.contains('shrink-0')).toBe(true);
+  });
+
+  it('暂停 Dialog 提供标题/描述与焦点陷阱，Escape 恢复后归还暂停按钮焦点', async () => {
+    startSession(10, 10);
+    renderSession();
+    answerCorrect();
+
+    const pauseButton = container.querySelector<HTMLButtonElement>('button[aria-label="暂停"]')!;
+    act(() => pauseButton.focus());
+    click(pauseButton);
+    await flushDialogTimers();
+
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+    expect(dialog).not.toBeNull();
+    const titleId = dialog!.getAttribute('aria-labelledby');
+    const descriptionId = dialog!.getAttribute('aria-describedby');
+    expect(titleId).toBeTruthy();
+    expect(descriptionId).toBeTruthy();
+    expect(document.getElementById(titleId!)?.textContent).toBe('已暂停');
+    expect(document.getElementById(descriptionId!)?.textContent).toContain('快捷键');
+    expect(dialog!.contains(document.activeElement)).toBe(true);
+
+    const resumeButton = findButtonByText(dialog!, '继续训练');
+    act(() => {
+      resumeButton.focus();
+      resumeButton.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Tab',
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      }));
+    });
+    const closeButton = dialog!.querySelector<HTMLButtonElement>('button[aria-label="关闭"]')!;
+    expect(document.activeElement).toBe(closeButton);
+
+    await act(async () => {
+      dialog!.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      }));
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    await flushDialogTimers();
+
+    expect(quizState().status).toBe('running');
+    expect(document.querySelector('[role="dialog"]')).toBeNull();
+    expect(document.activeElement).toBe(pauseButton);
+
+    act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+    expect(quizState().currentIndex).toBe(1);
+  });
+
   it('RNG-005：反馈期间暂停后，自动跳题定时器被清除，暂停遮罩下不切题', () => {
     startSession(10, 10);
     renderSession();
@@ -194,6 +271,36 @@ describe('TrainingSession 会话流程', () => {
     pressKey(' ');
 
     expect(quizState().currentIndex).toBe(1);
+  });
+
+  it('同 tick 双击只受理一次，ELO / SRS / Emotion 不重复记账', () => {
+    startSession(10, 10);
+    renderSession();
+
+    const correct = quizState().questions[0]!.correctAction;
+    const button = findButtonByText(container, correct === 'fold' ? 'Fold' : correct === 'call' ? 'Call' : 'Raise');
+    act(() => {
+      button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+
+    expect(quizState().answers[0]).toBe(correct);
+    expect(progress().eloByVariant.standard.gamesPlayed).toBe(1);
+    expect(progress().reviewItems).toHaveLength(1);
+    expect(progress().emotion.dailyQuestionsAnswered).toBe(1);
+  });
+
+  it('暂停态空格不能推进反馈题', () => {
+    startSession(10, 10);
+    renderSession();
+
+    answerWrong();
+    pressKey('Escape');
+    expect(quizState().status).toBe('paused');
+
+    pressKey(' ');
+    expect(quizState().currentIndex).toBe(0);
+    expect(quizState().status).toBe('paused');
   });
 
   it('答错不自动跳题，等待「再做一题」手动推进', () => {
@@ -266,7 +373,7 @@ describe('TrainingSession 会话流程', () => {
     click(container.querySelector<HTMLElement>('button svg.lucide-pause')!.closest('button')!);
     expect(quizState().status).toBe('paused');
 
-    click(findButtonByText(container, '继续训练'));
+    click(findButtonByText(document.body, '继续训练'));
     expect(quizState().status).toBe('running');
 
     // 恢复时若仍在自动推进反馈中，重新排 1.5 秒自动跳题（RNG-005）
@@ -282,11 +389,11 @@ describe('TrainingSession 会话流程', () => {
 
     pressKey('Escape');
     expect(quizState().status).toBe('paused');
-    expect(container.textContent).toContain('已暂停');
+    expect(document.body.textContent).toContain('已暂停');
 
     pressKey('Escape');
     expect(quizState().status).toBe('running');
-    expect(container.textContent).not.toContain('已暂停');
+    expect(document.body.textContent).not.toContain('已暂停');
   });
 
   it('暂停遮罩内「退出训练」是按钮且调用 onExit', () => {
@@ -298,7 +405,7 @@ describe('TrainingSession 会话流程', () => {
     expect(quizState().status).toBe('paused');
 
     // 次级按钮（非纯文本链接）：命中区 ≥44px 由 min-h-11 保证
-    const exitButton = findButtonByText(container, '退出训练');
+    const exitButton = findButtonByText(document.body, '退出训练');
     expect(exitButton.tagName).toBe('BUTTON');
     expect(exitButton.className).toContain('min-h-11');
 
@@ -317,7 +424,7 @@ describe('TrainingSession 会话流程', () => {
     // 浮层打开：暂停会话（暂停遮罩出现），并清除自动跳题定时器
     dispatchOverlay(true);
     expect(quizState().status).toBe('paused');
-    expect(container.textContent).toContain('已暂停');
+    expect(document.body.textContent).toContain('已暂停');
 
     act(() => {
       vi.advanceTimersByTime(1600);
@@ -327,7 +434,7 @@ describe('TrainingSession 会话流程', () => {
     // 浮层关闭：恢复运行，且重排被中断的自动推进
     dispatchOverlay(false);
     expect(quizState().status).toBe('running');
-    expect(container.textContent).not.toContain('已暂停');
+    expect(document.body.textContent).not.toContain('已暂停');
 
     act(() => {
       vi.advanceTimersByTime(1600);

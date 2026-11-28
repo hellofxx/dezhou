@@ -4,7 +4,8 @@ import { Suit, Rank } from '@/shared/types/poker';
 import { ActionType } from '@/shared/types/action';
 import { Position } from '@/shared/types/position';
 import type { Scenario, DecisionNode } from './types';
-import { computeCallAmount } from './store';
+import { computeCallAmount, useGTOSimulatorStore } from './store';
+import { calculateEVFromAction, estimateHeroEquity } from './utils/strategyCompare';
 
 // P1-01 修复回归：computeCallAmount 在多步节点（turn/river）必须按 node 实际 board
 // 重新分类 texture，而非沿用 scenario.boardTexture（flop 时刻缓存）。
@@ -66,7 +67,7 @@ describe('computeCallAmount（P1-01 node 实际 board texture）', () => {
       gtoStrategy: { fold: 0, call: 1, raise: 0 },
       previousActions: [{ position: Position.CO, action: ActionType.Raise, amount: 6.6, street: 'turn' }],
     };
-    const callAmount = computeCallAmount(scenario, node, 20);
+    const callAmount = computeCallAmount(scenario, node);
     expect(callAmount).toBe(6.6);
   });
 
@@ -75,13 +76,13 @@ describe('computeCallAmount（P1-01 node 实际 board texture）', () => {
       ...makeScenario('wet', dryBoard),
       previousActions: [{ position: Position.CO, action: ActionType.Raise, amount: 3.3, street: 'flop' as const }],
     };
-    const callAmount = computeCallAmount(scenario, undefined, 10);
+    const callAmount = computeCallAmount(scenario, undefined);
     expect(callAmount).toBe(3.3);
   });
 
   it('本街无下注时返回 0（可过牌），不再虚构 c-bet', () => {
     const scenario = makeScenario('wet', dryBoard);
-    expect(computeCallAmount(scenario, undefined, 10)).toBe(0);
+    expect(computeCallAmount(scenario, undefined)).toBe(0);
   });
 
   it('BB 面对 2.5BB open 只需再跟 1.5BB', () => {
@@ -92,7 +93,7 @@ describe('computeCallAmount（P1-01 node 实际 board texture）', () => {
       board: undefined,
       previousActions: [{ position: Position.CO, action: ActionType.Raise, amount: 2.5 }],
     };
-    expect(computeCallAmount(preflopScenario, undefined, 4)).toBe(1.5);
+    expect(computeCallAmount(preflopScenario, undefined)).toBe(1.5);
   });
 
   it('SB 未面对加注时只需补足 0.5BB', () => {
@@ -103,7 +104,7 @@ describe('computeCallAmount（P1-01 node 实际 board texture）', () => {
       board: undefined,
       previousActions: [],
     };
-    expect(computeCallAmount(preflopScenario, undefined, 1.5)).toBe(0.5);
+    expect(computeCallAmount(preflopScenario, undefined)).toBe(0.5);
   });
 
   it('hero 已 raise-to 2.5BB，面对 9BB 3-bet 需再跟 6.5BB', () => {
@@ -117,6 +118,37 @@ describe('computeCallAmount（P1-01 node 实际 board texture）', () => {
         { position: Position.BTN, action: ActionType.Raise, amount: 9 },
       ],
     };
-    expect(computeCallAmount(preflopScenario, undefined, 11.5)).toBe(6.5);
+    expect(computeCallAmount(preflopScenario, undefined)).toBe(6.5);
+  });
+
+  it('store 用 BB 实际已投入 1BB 转换 raise-to EV', () => {
+    const scenario: Scenario = {
+      ...makeScenario(undefined),
+      position: Position.BB,
+      street: 'preflop',
+      board: undefined,
+      potSize: 4,
+      previousActions: [{ position: Position.BTN, action: ActionType.Raise, amount: 2.5 }],
+      decisionNodes: [{
+        id: 'bb-raise',
+        street: 'preflop',
+        description: 'BB raise-to 4',
+        potSize: 4,
+        heroHand: makeScenario(undefined).heroHand,
+        gtoStrategy: { fold: 0, call: 0, raise: 1, raiseAmount: 4 },
+        previousActions: [{ position: Position.BTN, action: ActionType.Raise, amount: 2.5 }],
+      }],
+    };
+    const store = useGTOSimulatorStore.getState();
+    store.resetSession();
+    useGTOSimulatorStore.setState({ exploitMode: false, selectedOpponent: null });
+    store.startSession([scenario]);
+    store.submitDecision({ action: ActionType.Raise, amount: 4 });
+
+    const equity = estimateHeroEquity(scenario.heroHand, undefined, 'preflop');
+    expect(useGTOSimulatorStore.getState().feedback!.userEV).toBeCloseTo(
+      calculateEVFromAction('raise', equity, 4, 1.5, 3),
+      10
+    );
   });
 });

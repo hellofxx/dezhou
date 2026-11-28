@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
 import { Card, CardContent } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
 import { MobileFeedbackSheet } from '@/shared/components/feedback/MobileFeedbackSheet';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import ActionBoard from './ActionBoard';
@@ -167,6 +168,16 @@ export function PuzzleCard({
                 open={sheetOpen}
                 onOpenChange={setSheetOpen}
                 ariaLabel={t('puzzle.card.feedback')}
+                dismissedContent={
+                  <>
+                    <Button variant="secondary" onClick={() => setSheetOpen(true)}>
+                      {t('puzzle.card.feedback')}
+                    </Button>
+                    <Button variant="default" onClick={onNext}>
+                      {isLastQuestion ? t('puzzle.card.viewResult') : t('puzzle.card.nextQuestion')}
+                    </Button>
+                  </>
+                }
               >
                 <PuzzleCardFeedback
                   question={question}

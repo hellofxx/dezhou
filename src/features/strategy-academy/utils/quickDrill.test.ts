@@ -10,7 +10,8 @@ import type { GameContext, Lesson, PracticeQuestion, QuestionDifficulty } from '
 /**
  * 快速训练纯逻辑契约：
  * - 综合分数 = accuracy*100 + 时间奖励（每快 1s 得 3 分，封顶 30）
- * - 题池筛选：训练弱项课程 → ELO 弱点领域 → 其他课程题回填（排除课程仍生效）
+ * - 题池筛选：严格难度；range=preflop / odds=math / mixed=全维度
+ * - 合格池内按训练弱项课程 → ELO 弱点领域 → 其他课程题排序，禁止异难度/异模式回填
  * - 空题池 / 全排除 / 计数超池等退化输入返回安全结果
  */
 
@@ -137,10 +138,10 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
     expect(result.map((q) => q.id).sort()).toEqual(['l1-q1', 'l2-q1']);
   });
 
-  it('弱点维度不匹配时不进候选池（回填阶段仍会补齐题量）', () => {
-    // 所有课时维度均为 postflop，['math'] 首选池为空 → 走回填，仍返回请求题量
+  it('mixed 维度不匹配时可全维度回填，但绝不放宽难度', () => {
+    // 首选 math 为空；全维度回填只收 advanced，因此仍只有 l1-q2
     const result = getQuickDrillQuestions(lessons, ['math'], 'advanced', 3);
-    expect(result).toHaveLength(3);
+    expect(result.map((q) => q.id)).toEqual(['l1-q2']);
   });
 
   it('维度来自 lessonMeta：已登记课时按其 eloDimension 命中', () => {
@@ -157,7 +158,7 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
 
   it('按训练弱项课程、ELO 弱点、其他课程题三个层级依次选题', () => {
     const tieredLessons: Lesson[] = [
-      makeLesson('l4-bluffcatching', [makeQuestion('fallback-q', { difficulty: 'advanced' })]),
+      makeLesson('l4-bluffcatching', [makeQuestion('fallback-q', { difficulty: 'beginner' })]),
       makeLesson('l4-gto-basics', [makeQuestion('weak-q', { difficulty: 'beginner' })]),
       makeLesson('l1-basics', [makeQuestion('focus-q', { difficulty: 'beginner' })]),
     ];
@@ -247,16 +248,60 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
     )).toEqual([]);
   });
 
-  it('候选不足时放宽条件补齐，但不超过 count', () => {
+  it('候选不足时保持严格难度，只返回实际匹配题目', () => {
     const result = getQuickDrillQuestions(lessons, ['postflop'], 'advanced', 3);
-    expect(result).toHaveLength(3);
-    // 首选只有 l1-q2（advanced），因此必然包含回填题目，集合不应只含目标难度
-    expect(new Set(result.map((q) => q.id)).size).toBe(result.length);
+    expect(result.map((q) => q.id)).toEqual(['l1-q2']);
   });
 
-  it('count 大于题池时返回全部题目', () => {
+  it('count 大于严格题池时只返回全部匹配题目', () => {
     const result = getQuickDrillQuestions(lessons, [], 'beginner', 99);
-    expect(result).toHaveLength(4);
+    expect(result.map((q) => q.id).sort()).toEqual(['l1-q1', 'l2-q1']);
+  });
+
+  it.each([
+    ['range', 'l1-position', 'range-q'],
+    ['odds', 'l1-basics', 'odds-q'],
+  ] as const)('%s 仅返回本模式维度题目，聚焦异维度课程也排除', (mode, lessonId, questionId) => {
+    const otherDimensionLesson = mode === 'range'
+      ? makeLesson('drill-outs', [makeQuestion('math-q', { difficulty: 'beginner' })])
+      : makeLesson('drill-position', [makeQuestion('preflop-q', { difficulty: 'beginner' })]);
+    const modeLessons: Lesson[] = [
+      makeLesson(lessonId, [makeQuestion(questionId, { difficulty: 'beginner' })]),
+      makeLesson('l3-cbet', [makeQuestion('postflop-q', { difficulty: 'beginner' })]),
+      otherDimensionLesson,
+    ];
+    const result = getQuickDrillQuestions(
+      modeLessons,
+      [],
+      'beginner',
+      5,
+      [],
+      [mode === 'range' ? 'l1-basics' : 'l1-position'],
+      mode,
+    );
+    expect(result.map((q) => q.id)).toEqual([questionId]);
+  });
+
+  it('mixed 允许全维度回填，但仍严格匹配难度', () => {
+    const mixedLessons: Lesson[] = [
+      makeLesson('l1-basics', [makeQuestion('math-q', { difficulty: 'beginner' })]),
+      makeLesson('l1-position', [makeQuestion('preflop-q', { difficulty: 'beginner' })]),
+      makeLesson('l3-cbet', [makeQuestion('postflop-q', { difficulty: 'beginner' })]),
+      makeLesson('l1-bankroll', [makeQuestion('mental-advanced', { difficulty: 'advanced' })]),
+    ];
+    const result = getQuickDrillQuestions(mixedLessons, ['math'], 'beginner', 5, [], [], 'mixed');
+    expect(result.map((q) => q.id).sort()).toEqual(['math-q', 'postflop-q', 'preflop-q']);
+  });
+
+  it('严格模式无匹配维度时返回空数组，不跨模式补题', () => {
+    const onlyMath = [makeLesson('l1-basics', [makeQuestion('math-q', { difficulty: 'beginner' })])];
+    expect(getQuickDrillQuestions(onlyMath, [], 'beginner', 5, [], [], 'range')).toEqual([]);
+  });
+
+  it('缺省难度按 beginner 处理，不进入 advanced 严格池', () => {
+    const unmarked = [makeLesson('l1-basics', [makeQuestion('unmarked-q')])];
+    expect(getQuickDrillQuestions(unmarked, [], 'beginner', 1)).toHaveLength(1);
+    expect(getQuickDrillQuestions(unmarked, [], 'advanced', 1)).toEqual([]);
   });
 
   it('count 小于等于 0 时返回空数组', () => {

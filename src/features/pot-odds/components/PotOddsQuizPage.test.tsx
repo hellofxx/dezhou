@@ -1,12 +1,16 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act } from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { MotionGlobalConfig } from 'framer-motion';
 import PotOddsQuizPage from './PotOddsQuizPage';
 import i18n from '@/i18n/config';
 import { QUIZ_QUESTIONS } from '../data/quizQuestions';
+import potOddsZh from '@/i18n/locales/zh/potOdds.json';
+import potOddsEn from '@/i18n/locales/en/potOdds.json';
 import { orderQuizOptions } from '../utils/quizOrder';
 import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import { DEFAULT_EMOTION_STATE } from '@/features/progress/types';
 import { DEFAULT_ELO } from '@/shared/types/elo';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
@@ -103,6 +107,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
   resetProgress();
   window.matchMedia = originalMatchMedia;
 });
@@ -168,6 +173,34 @@ describe('PotOddsQuizPage 初始渲染与选项排序', () => {
     expect(container.textContent).toContain('2 / 19');
   });
 
+  it('移动端关闭 Sheet 后可重开反馈或点击下一题，且推进不重复记账', { timeout: 20000 }, async () => {
+    setMobileViewport(true);
+    const { container } = renderQuiz();
+    const q1 = QUIZ_QUESTIONS[0]!;
+
+    clickOption(container, i18n.t(q1.options.find((o) => o.isCorrect)!.text));
+    await screen.findByRole('dialog');
+    const eloAfterAnswer = mathElo();
+    const reviewCount = useProgressStore.getState().reviewItems.length;
+
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    expect(getButton(container, '查看反馈')).toBeTruthy();
+    expect(getButton(container, '下一题')).toBeTruthy();
+
+    fireEvent.click(getButton(container, '查看反馈'));
+    expect(await screen.findByRole('dialog')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+
+    fireEvent.click(getButton(container, '下一题'));
+    await waitFor(() => expect(container.textContent).toContain('2 / 19'));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(mathElo()).toBe(eloAfterAnswer);
+    expect(useProgressStore.getState().reviewItems).toHaveLength(reviewCount);
+    expect(useProgressStore.getState().emotion.dailyQuestionsAnswered).toBe(1);
+  });
+
   it('数值选项题（第 2 题）按数值升序展示，而非题库书写顺序', async () => {
     const { container } = renderQuiz();
     const q1 = QUIZ_QUESTIONS[0]!;
@@ -185,9 +218,76 @@ describe('PotOddsQuizPage 初始渲染与选项排序', () => {
     // 题库书写顺序为 8 / 9 / 约 15 / 4，渲染必须按数值升序
     expect(values).toEqual([4, 8, 9, 15]);
   });
+
+  it('q10 正确标记为 optB，双语解析明确跟注负 EV 且应弃牌', { timeout: 30000 }, async () => {
+    const q10 = QUIZ_QUESTIONS.find((question) => question.id === 10)!;
+    const optA = q10.options.find((option) => option.text === 'potOdds.quizBank.q10.optA.text')!;
+    const optB = q10.options.find((option) => option.text === 'potOdds.quizBank.q10.optB.text')!;
+    expect(optA.isCorrect).toBe(false);
+    expect(optB.isCorrect).toBe(true);
+
+    const localizedQ10 = [
+      { negativeEv: '负 EV', fold: '弃牌', marginal: '边际跟注', content: potOddsZh.quizBank.q10 },
+      { negativeEv: 'negative EV', fold: 'folding', marginal: 'marginal call', content: potOddsEn.quizBank.q10 },
+    ];
+    for (const { negativeEv, fold, marginal, content } of localizedQ10) {
+      for (const explanation of [content.optA.explanation, content.optB.explanation]) {
+        expect(explanation).toContain(negativeEv);
+        expect(explanation).toContain(fold);
+        expect(explanation).not.toContain(marginal);
+      }
+    }
+
+    const { container } = renderQuiz();
+    for (let index = 0; index < 9; index += 1) {
+      const current = QUIZ_QUESTIONS[index]!;
+      clickOption(container, i18n.t(current.options.find((option) => option.isCorrect)!.text));
+      await screen.findByText('正确！');
+      fireEvent.click(getButton(container, '下一题'));
+      await screen.findByText(i18n.t(QUIZ_QUESTIONS[index + 1]!.question));
+    }
+
+    clickOption(container, i18n.t(optB.text));
+    expect(await screen.findByText('正确！')).toBeTruthy();
+    const renderedOptB = optionButtons(container).find((button) => button.textContent?.includes(i18n.t(optB.text)));
+    expect(renderedOptB?.className).toContain('border-[var(--success)]');
+  });
 });
 
 describe('PotOddsQuizPage 答题反馈与三处同步', () => {
+  it('同 tick 双击只触发一次 ELO/SRS/Emotion，切题后重新解锁', async () => {
+    const updateElo = vi.spyOn(progressCommands, 'updateElo');
+    const addReviewItem = vi.spyOn(progressCommands, 'addReviewItem');
+    const recordAnswer = vi.spyOn(progressCommands, 'recordAnswer');
+    const { container } = renderQuiz();
+    const q1 = QUIZ_QUESTIONS[0]!;
+    const option = optionButtons(container).find((b) =>
+      b.textContent?.includes(i18n.t(q1.options.find((o) => o.isCorrect)!.text)),
+    );
+    if (!option) throw new Error('未找到首题正确选项');
+
+    act(() => {
+      option.click();
+      option.click();
+    });
+
+    expect(await screen.findByText('正确！')).toBeTruthy();
+    expect(updateElo).toHaveBeenCalledTimes(1);
+    expect(addReviewItem).toHaveBeenCalledTimes(1);
+    expect(recordAnswer).toHaveBeenCalledTimes(1);
+    expect(useProgressStore.getState().reviewItems[0]!.repetitions).toBe(1);
+
+    fireEvent.click(getButton(container, '下一题'));
+    const q2 = QUIZ_QUESTIONS[1]!;
+    await screen.findByText(i18n.t(q2.question));
+    clickOption(container, i18n.t(q2.options.find((o) => o.isCorrect)!.text));
+
+    expect(await screen.findByText('正确！')).toBeTruthy();
+    expect(updateElo).toHaveBeenCalledTimes(2);
+    expect(addReviewItem).toHaveBeenCalledTimes(2);
+    expect(recordAnswer).toHaveBeenCalledTimes(2);
+  });
+
   it('答对：显示正确反馈与最优评级，并同步 ELO(math) / SRS / Emotion', async () => {
     const { container } = renderQuiz();
     const q1 = QUIZ_QUESTIONS[0]!;

@@ -17,14 +17,14 @@
 
 | 模块 | 入口组件 | store | i18n 模块 | 测试数 | 允许跨模块引用 | 组件数 |
 |---|---|---|---|---|---|---|
-| `gto-simulator` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 30 | `progress` | 21 |
+| `gto-simulator` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 31 | `progress` | 21 |
 | `hand-history` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 28 | — | 23 |
 | `help-center` | `HelpHome` | — | `help` | 6 | — | 12 |
 | `onboarding` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |
 | `pot-odds` | `OddsStation` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
 | `progress` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 71 | — | 84 |
-| `puzzle-trainer` | `PuzzleStation` | `store.ts（persist v3）` | `feedback`, `puzzle` | 24 | `progress` | 18 |
-| `range-trainer` | `DrillHub` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 13 | `progress` | 19 |
+| `puzzle-trainer` | `PuzzleStation` | `store.ts（persist v3）` | `feedback`, `puzzle` | 25 | `progress` | 19 |
+| `range-trainer` | `DrillHub` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 15 | `progress` | 20 |
 | `strategy-academy` | `LessonRoute` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 126 | `progress` | 133 |
 | `theory-academy` | `TheoryHome` | `store.ts（persist v5）` | `academy`, `theory`, `variant` | 83 | `progress` | 72 |
 

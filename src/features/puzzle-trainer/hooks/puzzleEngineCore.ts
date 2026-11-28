@@ -14,10 +14,11 @@ import type {
   PuzzleMode,
   PuzzleQuestion,
   PuzzleResult,
+  PuzzleSessionStatus,
   PuzzleTheme,
   UsePuzzleEngineOptions,
 } from '../types';
-import { getDailyPuzzles } from '../data/dailyPuzzles';
+import { getDailyKey, getDailyPuzzles } from '../data/dailyPuzzles';
 import {
   getRushQuestions,
   RUSH_INITIAL_LIVES,
@@ -31,12 +32,14 @@ export const RUSH_DEFAULT_DURATION = 3 * 60 * 1000;
 
 /** 构建引擎初始状态（reset 时复用） */
 export function buildInitialState(opts: UsePuzzleEngineOptions): PuzzleEngineState {
+  const now = Date.now();
+  const sourceDate = new Date(now);
   let questions: PuzzleQuestion[] = [];
 
   if (opts.mode === 'rush') {
-    questions = getRushQuestions(30);
+    questions = getRushQuestions(30, sourceDate);
   } else if (opts.mode === 'daily') {
-    questions = getDailyPuzzles();
+    questions = getDailyPuzzles(sourceDate);
   } else if (opts.mode === 'theme' && opts.theme) {
     questions = getPuzzlesByTheme(opts.theme);
     if (opts.questionCount && opts.questionCount > 0) {
@@ -54,19 +57,41 @@ export function buildInitialState(opts: UsePuzzleEngineOptions): PuzzleEngineSta
     wrongCount: 0,
     lives: enableLives ? RUSH_INITIAL_LIVES : 0,
     streak: 0,
-    startTime: Date.now(),
+    startTime: now,
+    duration,
     endTime: null,
     timeRemaining: duration,
     status: 'playing',
     answers: [],
     bonusAwarded: 0,
+    sourceDateKey: opts.mode === 'daily' ? getDailyKey(sourceDate) : null,
   };
+}
+
+/** Rush 唯一 deadline 口径：初始时长与连对奖励都从同一开始时间起算。 */
+export function getRushDeadline(
+  state: Pick<PuzzleEngineState, 'startTime' | 'duration' | 'bonusAwarded'>
+): number {
+  return state.startTime + state.duration + state.bonusAwarded;
+}
+
+/** 到点结算；未到点返回原引用，供 tick / answer / next 共用。 */
+export function settleExpiredRush(
+  state: PuzzleEngineState,
+  now: number,
+  livesEnabled = true
+): PuzzleEngineState {
+  if (state.status !== 'playing' || now < getRushDeadline(state)) return state;
+  const status: PuzzleSessionStatus = livesEnabled && state.lives <= 0 ? 'failed' : 'completed';
+  return { ...state, timeRemaining: 0, status, endTime: now };
 }
 
 /** applyAnswer 入参 */
 export interface ApplyAnswerInput {
   optionId: string;
   mode: PuzzleMode;
+  /** Rush 是否启用生命；默认启用 */
+  enableLives?: boolean;
   /** 当前题开始时间戳（用于计算单题用时） */
   questionStartedAt: number;
   /** 当前时间戳（由调用方注入，便于测试） */
@@ -86,6 +111,10 @@ export interface ApplyAnswerInput {
  */
 export function applyAnswer(prev: PuzzleEngineState, input: ApplyAnswerInput): PuzzleEngineState {
   if (prev.status !== 'playing') return prev;
+  if (input.mode === 'rush') {
+    const settled = settleExpiredRush(prev, input.now, input.enableLives ?? true);
+    if (settled !== prev) return settled;
+  }
   const q = prev.questions[prev.currentIndex];
   if (!q) return prev;
   // 已答过当前题，幂等
@@ -116,16 +145,20 @@ export function applyAnswer(prev: PuzzleEngineState, input: ApplyAnswerInput): P
     bonus = RUSH_STREAK_BONUS;
   }
 
-  return {
+  const next: PuzzleEngineState = {
     ...prev,
     answers: [...prev.answers, record],
     correctCount: prev.correctCount + (option.isCorrect ? 1 : 0),
     wrongCount: prev.wrongCount + (option.isCorrect ? 0 : 1),
     streak: newStreak,
     lives: newLives,
-    timeRemaining: input.mode === 'rush' ? prev.timeRemaining + bonus : prev.timeRemaining,
+    timeRemaining: prev.timeRemaining,
     bonusAwarded: prev.bonusAwarded + bonus,
   };
+
+  return input.mode === 'rush'
+    ? { ...next, timeRemaining: Math.max(0, getRushDeadline(next) - input.now) }
+    : next;
 }
 
 /**

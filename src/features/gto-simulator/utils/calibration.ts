@@ -7,8 +7,10 @@ import { resolveSpotKey } from './spotKey';
  */
 export function getDecisionCalibration(
   scenario: Scenario,
-  node?: DecisionNode
+  node?: DecisionNode,
+  exploitAdjusted: boolean = false
 ): StrategyCalibration {
+  if (exploitAdjusted) return 'heuristic';
   const variant = scenario.gameVariant ?? 'standard';
   const street = node?.street ?? scenario.street;
   if (variant !== 'standard' || scenario.playerCount !== 6 || scenario.effectiveStack !== 100) {

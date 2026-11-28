@@ -238,4 +238,13 @@ describe('AppLayout', () => {
     expect(main).toBeTruthy();
     expect(main?.getAttribute('tabindex')).toBe('-1');
   });
+
+  it('移动端主内容为底栏与安全区预留间距，桌面恢复 md 间距', () => {
+    renderLayout();
+    const main = document.getElementById('main-content');
+
+    expect(main?.className).toContain('pb-[calc(5rem+env(safe-area-inset-bottom))]');
+    expect(main?.className).toContain('md:pb-6');
+    expect(main?.className).not.toContain('pb-20');
+  });
 });

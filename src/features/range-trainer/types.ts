@@ -75,8 +75,9 @@ export interface QuizSlice {
    * 由调用方停留在配置页；成功进入 running 时返回 true。
    */
   startQuiz: (position: Position, actionType: string, timeLimit: number, totalQuestions?: number) => boolean;
-  /** P1A-02：'timeout' 为超时显式入口，恒判错，与"选择 fold"语义区分 */
-  answerQuestion: (action: QuizAnswer) => void;
+  /** P1A-02：'timeout' 为超时显式入口，恒判错，与"选择 fold"语义区分；
+   *  仅 running 且当前题未作答时受理，返回是否已写入。 */
+  answerQuestion: (action: QuizAnswer) => boolean;
   nextQuestion: () => void;
   pauseQuiz: () => void;
   resumeQuiz: () => void;

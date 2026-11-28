@@ -2,6 +2,13 @@ import type { Lesson, PracticeQuestion, QuestionDifficulty } from '../types';
 import type { EloDimension } from '@/shared/types/elo';
 import { getLessonMeta } from '../data/lessonMeta';
 
+export type QuickDrillMode = 'range' | 'odds' | 'mixed';
+
+const MODE_DIMENSION: Record<Exclude<QuickDrillMode, 'mixed'>, EloDimension> = {
+  range: 'preflop',
+  odds: 'math',
+};
+
 /**
  * 快速训练综合分数：accuracy * 100 + 时间奖励
  * 时间奖励每比 10s/题 快 1s 得 3 分（上限 30 分）。
@@ -12,10 +19,11 @@ export function computeQuickDrillScore(accuracy: number, averageTime: number): n
 }
 
 /**
- * 从策略课程题库中按条件筛选快速训练题目。
+ * 从策略课程题库中按模式与难度筛选快速训练题目。
  *
- * 选题优先级：训练弱项课程且难度匹配 → ELO 弱点维度且难度匹配 → 其他课程题回填。
- * 每一层内随机排序；未登记 lessonMeta 的课时维度回退 postflop。
+ * range 仅收 preflop，odds 仅收 math，mixed 允许全维度；未登记 lessonMeta 的课时
+ * 维度回退 postflop。难度缺省按 beginner，与题库统计口径一致，绝不放宽难度。
+ * 合格池内优先级：训练弱项课程 → ELO 弱点维度 → 其他课程题；各层随机排序。
  */
 export function getQuickDrillQuestions(
   lessons: readonly Lesson[],
@@ -24,9 +32,11 @@ export function getQuickDrillQuestions(
   count: number = 10,
   excludeLessons: string[] = [],
   focusLessonIds: readonly string[] = [],
+  mode: QuickDrillMode = 'mixed',
 ): PracticeQuestion[] {
   if (count <= 0) return [];
 
+  const requiredDimension = mode === 'mixed' ? null : MODE_DIMENSION[mode];
   const focusRank = new Map(focusLessonIds.map((lessonId, index) => [lessonId, index]));
   const focused: Array<{ question: PracticeQuestion; rank: number }> = [];
   const weak: PracticeQuestion[] = [];
@@ -37,6 +47,7 @@ export function getQuickDrillQuestions(
     if (lessonQuestions.length === 0) continue;
 
     const dimension = getLessonMeta(lesson.id).eloDimension;
+    if (requiredDimension !== null && dimension !== requiredDimension) continue;
     if (excludeLessons.some((id) => lesson.id.startsWith(id))) continue;
     const isFocusLesson = focusLessonIds.includes(lesson.id);
     const matchesWeakArea = weakAreas.length === 0 || weakAreas.includes(dimension);
@@ -46,11 +57,12 @@ export function getQuickDrillQuestions(
         continue;
       }
 
-      const matchesDifficulty = !question.difficulty || question.difficulty === difficulty;
+      const matchesDifficulty = (question.difficulty ?? 'beginner') === difficulty;
+      if (!matchesDifficulty) continue;
 
-      if (matchesDifficulty && isFocusLesson) {
+      if (isFocusLesson) {
         focused.push({ question, rank: focusRank.get(lesson.id) ?? focusLessonIds.length });
-      } else if (matchesDifficulty && matchesWeakArea) {
+      } else if (matchesWeakArea) {
         weak.push(question);
       } else {
         fallback.push(question);

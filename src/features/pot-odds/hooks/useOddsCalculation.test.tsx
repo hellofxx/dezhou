@@ -58,12 +58,11 @@ describe('useOddsCalculation 计算口径', () => {
     expect(result.current.ev).toBeCloseTo(22, 6);
   });
 
-  it('隐含赔率并入底池：所需胜率下降为 bet/(pot+bet+bet+gain)，EV 口径不变', () => {
+  it('隐含赔率并入底池与 EV 赢额：所需胜率下降，EV 同步包含 gain', () => {
     act(() => usePotOddsStore.getState().setImpliedOddsGain(100));
     const { result } = renderHook(() => useOddsCalculation());
     expect(result.current.requiredEquity).toBeCloseTo((50 / 300) * 100, 6);
-    // P1B-02：隐含赔率只影响跟注门槛，不改变实际 EV 公式
-    expect(result.current.ev).toBeCloseTo(22, 6);
+    expect(result.current.ev).toBeCloseTo(58, 6);
   });
 
   it('街道切到 turn：Rule of 2 使估算胜率减半，跟注转为亏损', () => {

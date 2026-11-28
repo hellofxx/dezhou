@@ -112,9 +112,13 @@ export interface PuzzleEngineState {
   /** 连对数（用于奖励时间） */
   streak: number;
   startTime: number;
+  /** Puzzle Rush 初始时长（毫秒）；deadline = startTime + duration + bonusAwarded */
+  duration: number;
   endTime: number | null;
   /** Puzzle Rush 用，毫秒 */
   timeRemaining: number;
+  /** Daily 题源日期（本地时区 YYYY-MM-DD）；非 Daily 为 null */
+  sourceDateKey: string | null;
   status: PuzzleSessionStatus;
   answers: PuzzleAnswerRecord[];
   /** 累计因连对奖励的时间（毫秒） */

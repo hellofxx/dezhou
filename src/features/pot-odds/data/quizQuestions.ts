@@ -116,8 +116,8 @@ export const QUIZ_QUESTIONS: PotOddsQuizQuestion[] = [
     scenario: 'potOdds.quizBank.q10.scenario',
     question: 'potOdds.quizBank.q10.question',
     options: [
-      { text: 'potOdds.quizBank.q10.optA.text', isCorrect: true, explanation: 'potOdds.quizBank.q10.optA.explanation' },
-      { text: 'potOdds.quizBank.q10.optB.text', isCorrect: false, explanation: 'potOdds.quizBank.q10.optB.explanation' },
+      { text: 'potOdds.quizBank.q10.optA.text', isCorrect: false, explanation: 'potOdds.quizBank.q10.optA.explanation' },
+      { text: 'potOdds.quizBank.q10.optB.text', isCorrect: true, explanation: 'potOdds.quizBank.q10.optB.explanation' },
     ],
   },
   {

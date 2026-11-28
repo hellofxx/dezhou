@@ -1,14 +1,16 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import QuickDrill from './QuickDrill';
 import { useAcademyStore } from '../store';
 import { DEFAULT_STREAK_STATE, useProgressStore } from '@/features/progress/store';
 import { DEFAULT_EMOTION_STATE } from '@/features/progress/types';
 import { loadAcademyLessonsForQuickDrill } from '../data/lessons/loaders';
-import { getTodayString } from '@/shared/utils/spacedRepetition';
+import { getTodayString, type ReviewItem } from '@/shared/utils/spacedRepetition';
 import { DEFAULT_ELO } from '@/shared/types/elo';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
+import i18n from '@/i18n/config';
+import { preloadI18n } from '@/i18n/preload';
 import type { EloRating } from '@/shared/types/elo';
 import type { TrainingRecord } from '@/shared/types/training';
 
@@ -34,8 +36,8 @@ function resetStandardElo() {
 
 /**
  * 快速训练契约：
- * - quick=true：固定 5 题 / 自适应难度 / 展示 mode 与复习提示
- * - 普通模式：8 题 / 难度可手选
+ * - quick=true：目标 5 题 / 自适应难度 / 展示 mode 与复习提示
+ * - 普通模式：目标 8 题 / 难度可手选；严格池不足时以实际题数为准
  * - 完成时 recordPracticeScore(quick-drill) + recordTrainingDay + quickDrillStreak
  * - 训练事件使用独立 quick-drill 模式，课程弱项推荐需匹配当前难度
  * - 每日题量达上限时由 SessionLimitGuard 拦截
@@ -51,6 +53,51 @@ function renderAt(path: string) {
 
 function optionButtons(container: HTMLElement): HTMLButtonElement[] {
   return [...container.querySelectorAll<HTMLButtonElement>('button.action-mini')];
+}
+
+function currentQuestionId(container: HTMLElement): string | null {
+  return container.querySelector('[data-question-id]')?.getAttribute('data-question-id') ?? null;
+}
+
+function optionLabels(container: HTMLElement): string[] {
+  return optionButtons(container).map((button) => button.querySelector('span')?.textContent?.trim() ?? '');
+}
+
+function makeDueReviewItem(): ReviewItem {
+  return {
+    id: 'frozen-review',
+    label: '冻结复习题',
+    category: 'strategy',
+    easeFactor: 2.5,
+    interval: 0,
+    repetitions: 0,
+    nextReviewDate: getTodayString(),
+    metadata: {
+      front: '会话开始后是否仍保留这道复习题？',
+      options: [
+        { text: 'Fold', isCorrect: false, explanation: '保留冻结会话' },
+        { text: 'Call', isCorrect: true, explanation: '保留冻结会话' },
+        { text: 'Raise', isCorrect: false, explanation: '保留冻结会话' },
+      ],
+    },
+  };
+}
+
+function makeI18nDueReviewItem(): ReviewItem {
+  return {
+    ...makeDueReviewItem(),
+    id: 'range:standard:open:BTN:AKs',
+    metadata: {
+      source: 'range',
+      front: 'rangeTrainer.srs.howToAct',
+      params: { hand: 'AKs', position: 'BTN' },
+      options: [
+        { text: 'rangeTrainer.srs.optionFold', isCorrect: false },
+        { text: 'rangeTrainer.srs.optionCall', isCorrect: true },
+        { text: 'rangeTrainer.srs.optionRaise', isCorrect: false },
+      ],
+    },
+  };
 }
 
 function resetProgressStore() {
@@ -157,19 +204,106 @@ describe('QuickDrill：快速模式', () => {
     expect(screen.getByText('开始速训')).toBeTruthy();
   });
 
-  it('普通模式展示 5 分钟速训、难度选择与 8 题', () => {
+  it('普通模式展示 5 分钟速训、44px 难度按钮与 8 题', () => {
     const { container } = renderAt('/quick?quick=false');
 
     expect(screen.getByText('5 分钟速训')).toBeTruthy();
     expect(screen.getByText('选择难度')).toBeTruthy();
-    expect(screen.getByText('基础')).toBeTruthy();
-    expect(screen.getByText('进阶')).toBeTruthy();
-    expect(screen.getByText('高级')).toBeTruthy();
+    for (const label of ['基础', '进阶', '高级']) {
+      const button = screen.getByRole('button', { name: label });
+      expect(button.classList.contains('min-h-11')).toBe(true);
+    }
     // 8 题（题目不足时以实际题池为准，真实题库充足）
     expect(container.textContent).toContain('8');
 
     fireEvent.click(screen.getByText('开始速训'));
     expect(screen.getByText('1 / 8')).toBeTruthy();
+  });
+});
+
+describe('QuickDrill：复习题 i18n', () => {
+  it.each([
+    ['zh', 'AKs 在 BTN 该如何行动？', ['弃牌 Fold', '跟注 Call', '加注 Raise'], '开始速训'],
+    ['en', 'How should AKs act at BTN?', ['Fold', 'Call', 'Raise'], 'Start Drill'],
+  ] as const)('%s 下 front/options 解析 key 并透传 params', async (language, front, options, startLabel) => {
+    try {
+      await i18n.changeLanguage(language);
+      await preloadI18n(['quickDrill', 'academy', 'rangeTrainer']);
+      resetStandardElo();
+      useProgressStore.setState({ reviewItems: [makeI18nDueReviewItem()] });
+      const { container } = renderAt('/quick?mode=range');
+
+      fireEvent.click(await screen.findByText(startLabel));
+      expect(screen.getByText(front)).toBeTruthy();
+      expect(optionLabels(container).toSorted()).toEqual([...options].toSorted());
+      expect(container.textContent).not.toContain('rangeTrainer.srs.');
+      expect(container.textContent).not.toContain('{{');
+    } finally {
+      cleanup();
+      resetStandardElo();
+      await i18n.changeLanguage('zh');
+    }
+  });
+});
+
+describe('QuickDrill：会话冻结', () => {
+  afterEach(() => {
+    cleanup();
+    resetStandardElo();
+  });
+
+  it('开始后 ELO/情绪与父级重渲染不换题，重开按最新配置生成新会话', async () => {
+    resetStandardElo();
+    useProgressStore.setState({ reviewItems: [makeDueReviewItem()] });
+    const { container, rerender } = renderAt('/quick?mode=mixed');
+
+    fireEvent.click(screen.getByText('开始速训'));
+    const frozenQuestionId = currentQuestionId(container);
+    const frozenOptions = optionLabels(container);
+    expect(frozenQuestionId).toBe('review-frozen-review');
+
+    fireEvent.click(optionButtons(container)[0]!);
+    expect(screen.getByText('保留冻结会话')).toBeTruthy();
+    expect(currentQuestionId(container)).toBe(frozenQuestionId);
+    expect(optionLabels(container)).toEqual(frozenOptions);
+
+    act(() => {
+      setStandardElo({ preflop: 1300, postflop: 1300, math: 1300, handReading: 1300, mental: 1300 });
+      const state = useProgressStore.getState();
+      useProgressStore.setState({
+        emotion: { ...state.emotion, consecutiveWrongCount: 3 },
+        reviewItems: [],
+      });
+    });
+    rerender(
+      <MemoryRouter initialEntries={['/quick?mode=mixed']}>
+        <QuickDrill />
+      </MemoryRouter>,
+    );
+
+    expect(currentQuestionId(container)).toBe(frozenQuestionId);
+    expect(optionLabels(container)).toEqual(frozenOptions);
+    expect(screen.getByText('保留冻结会话')).toBeTruthy();
+    expect(screen.getByText('1 / 5')).toBeTruthy();
+
+    fireEvent.click(screen.getByText('下一题'));
+    for (let index = 1; index < 5; index += 1) {
+      fireEvent.click(optionButtons(container)[0]!);
+      const next = screen.queryByText('下一题') ?? screen.queryByText('查看成绩');
+      expect(next).not.toBeNull();
+      fireEvent.click(next!);
+    }
+
+    await waitFor(() => expect(screen.getByRole('heading', { level: 2, name: '训练完成' })).toBeTruthy());
+    const dialog = screen.getByRole('dialog');
+    expect(within(dialog).getByText('本次包含 1 道复习题')).toBeTruthy();
+
+    fireEvent.click(within(dialog).getByText('再来一轮'));
+    expect(screen.getByText('开始速训')).toBeTruthy();
+    fireEvent.click(screen.getByText('开始速训'));
+    expect(currentQuestionId(container)).not.toBe(frozenQuestionId);
+    expect(currentQuestionId(container)).not.toBeNull();
+    expect(screen.getByText('1 / 5')).toBeTruthy();
   });
 });
 

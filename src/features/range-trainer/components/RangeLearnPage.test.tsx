@@ -10,7 +10,7 @@
  *  - 顶部返回按钮跳转 /range-trainer
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { Position } from '@/shared/types/position';
@@ -21,6 +21,12 @@ import { useRangeTrainerStore } from '../store';
 import { PRESET_RANGES, ADVANCED_PRESET_RANGES } from '../constants';
 import { countRangeCombos } from '../utils/rangeCombos';
 import RangeLearnPage from './RangeLearnPage';
+import { RangeSelector } from './RangeSelector';
+
+vi.mock('./RangeSelector', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./RangeSelector')>();
+  return { ...actual, RangeSelector: vi.fn(actual.RangeSelector) };
+});
 
 const rangeStore = () => useRangeTrainerStore.getState();
 
@@ -80,6 +86,7 @@ function findButtonExact(container: HTMLElement, text: string): HTMLButtonElemen
 beforeEach(resetStores);
 afterEach(() => {
   cleanup();
+  vi.clearAllMocks();
   resetStores();
 });
 
@@ -136,6 +143,24 @@ describe('RangeLearnPage 位置与动作类型切换', () => {
 });
 
 describe('RangeLearnPage 网格悬停与返回', () => {
+  it('悬停只更新网格/信息卡订阅，不重渲染范围选择器', () => {
+    const { container } = renderPage();
+    const selectorRenderCount = vi.mocked(RangeSelector).mock.calls.length;
+    const cell = container.querySelector<HTMLElement>('[title="AA"]')!;
+
+    act(() => {
+      fireEvent.mouseOver(cell);
+    });
+    expect(rangeStore().learnState.highlightedHand).toBe('AA');
+    expect(vi.mocked(RangeSelector).mock.calls).toHaveLength(selectorRenderCount);
+
+    act(() => {
+      fireEvent.mouseOut(cell, { relatedTarget: document.body });
+    });
+    expect(rangeStore().learnState.highlightedHand).toBeNull();
+    expect(vi.mocked(RangeSelector).mock.calls).toHaveLength(selectorRenderCount);
+  });
+
   it('悬停网格格子写入 highlightedHand 并展示手牌详情', () => {
     const { container } = renderPage();
 

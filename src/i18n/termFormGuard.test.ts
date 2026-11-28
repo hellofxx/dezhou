@@ -100,6 +100,11 @@ const FILE_EXCEPTIONS: ReadonlyArray<{ file: string; pattern: RegExp; reason: st
     reason: 'actionType 数据值传参/断言',
   },
   {
+    file: '/src/features/range-trainer/hooks/useQuizEngine.test.tsx',
+    pattern: /'3bet'|BB 3bet|range:standard:3bet/,
+    reason: 'SRS 键与 metadata 的 actionType 数据值回归断言',
+  },
+  {
     file: '/src/features/range-trainer/components/RangeLearnPage.test.tsx',
     pattern: /toBe\('3bet'\)/,
     reason: 'actionType 数据值断言',

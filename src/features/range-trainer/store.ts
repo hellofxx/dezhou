@@ -158,7 +158,9 @@ export const useRangeTrainerStore = create<RangeTrainerStore>((set, get) => ({
     const { quizState } = get();
     const { currentIndex, questions, answers, isCorrect, timePerQuestion, handWeights, questionStartTime, pausedElapsed } = quizState;
 
-    if (currentIndex >= questions.length || answers[currentIndex] !== null) return;
+    if (quizState.status !== 'running' || currentIndex >= questions.length || answers[currentIndex] !== null) {
+      return false;
+    }
 
     const question = questions[currentIndex]!;
     const correct = action !== 'timeout' && action === question.correctAction;
@@ -190,6 +192,7 @@ export const useRangeTrainerStore = create<RangeTrainerStore>((set, get) => ({
         handWeights: newWeights,
       },
     });
+    return true;
   },
 
   nextQuestion: () => {

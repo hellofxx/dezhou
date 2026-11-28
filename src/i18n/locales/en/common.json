@@ -27,7 +27,8 @@
     "retry": "Try Again",
     "backHome": "Back to Home",
     "close": "Close",
-    "feedback": "Answer feedback"
+    "feedback": "Answer feedback",
+    "viewFeedback": "View feedback"
   },
   "a11y": {
     "skipToContent": "Skip to main content",
